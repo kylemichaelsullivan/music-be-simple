@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+	--black: #000000;
+	--orange: #ffb86a;
+	--green: #64f58d;
+	--blue: #74d4ff;
+	--white: #ffffff;
+
+	--chords: var(--orange);
+	--scales: var(--green);
+	--write: var(--blue);
+}
+
+body {
+	background-color: var(--chords);
+	color: var(--black);
+	font-family: "Inter", sans-serif;
+}
+
+.Chords {
+	background-color: var(--chords);
+}
+
+.Scales {
+	background-color: var(--scales);
+}
+
+.Write {
+	background-color: var(--write);
+}
