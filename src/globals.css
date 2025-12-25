@@ -8,12 +8,13 @@
 	--white: #ffffff;
 
 	--chords: var(--orange);
-	--scales: var(--green);
-	--write: var(--blue);
+	--scales: var(--blue);
+	--write: var(--green);
+	--background: var(--white);
 }
 
 body {
-	background-color: var(--chords);
+	background-color: var(--background);
 	color: var(--black);
 	font-family: "Inter", sans-serif;
 }
