@@ -1,7 +1,7 @@
 export function Chords() {
 	return (
-		<div className='Chords'>
+		<main className='Chords flex-1 p-4'>
 			<h1>Chords</h1>
-		</div>
+		</main>
 	);
 }

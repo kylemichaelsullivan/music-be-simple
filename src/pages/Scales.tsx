@@ -1,7 +1,7 @@
 export function Scales() {
 	return (
-		<div className='Scales'>
+		<main className='Scales flex-1 p-4'>
 			<h1>Scales</h1>
-		</div>
+		</main>
 	);
 }
