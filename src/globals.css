@@ -19,6 +19,10 @@ body {
 	font-family: "Inter", sans-serif;
 }
 
+button {
+	cursor: pointer;
+}
+
 .Chords {
 	background-color: var(--chords);
 }
