@@ -1,0 +1,368 @@
+---
+globs: **/*.tsx, **/*.ts
+exclude: **/__tests__/**, **/*.test.*, **/*.spec.*, **/routes/**, **/*.css
+alwaysApply: false
+---
+
+# React Development Standards for Music Be Simple
+
+## Component Architecture
+
+### Single-Purpose Components
+
+- **One component per file**: Each file contains exactly one React component
+- **Bite-sized components**: Components should be focused and single-purpose (one thing == one component == one file)
+- **Descriptive naming**: Use PascalCase with descriptive names indicating visual purpose
+- **Component suffixes**: Use appropriate suffixes when needed (e.g., `Container`, `Panel`, `Button`, `Display`)
+
+### Component Guidelines
+
+- **TypeScript types**: Prefer `type` over `interface` for component props and data structures
+- **Default exports**: Export components as default exports using `export default function ComponentName`
+- **Import paths**: Use `@/` path alias for imports (configured in tsconfig.json)
+- **Import order**: Type imports come before value imports (e.g., `import type { ReactNode } from 'react'` before `import { useState } from 'react'`)
+- **Props interface**: Define clear, typed props with descriptive names
+- **forwardRef usage**: Use `forwardRef` for components that need to expose DOM refs when needed
+
+### Performance Optimization
+
+#### React.memo Usage
+
+- **Memoization criteria**: Apply `memo` to components with stable props or frequent re-renders when performance is a concern
+- **Current status**: Not currently used extensively - apply only when needed for performance optimization
+- **When to use**: Use for components that receive stable props and render frequently
+
+#### Memoization Guidelines
+
+```typescript
+// ✅ Use memo when component has stable props and frequent re-renders
+import { memo } from 'react';
+
+type TopButtonProps = {
+  title: string;
+  icon: string;
+  position: 'left' | 'right';
+  onFxn: () => void;
+};
+
+function TopButton({ title, icon, position, onFxn }: TopButtonProps) {
+  return (
+    <button
+      type='button'
+      className={`...`}
+      onClick={onFxn}
+    >
+      {icon}
+    </button>
+  );
+}
+
+export default memo(TopButton);
+```
+
+**When to use React.memo:**
+
+- **UI components with stable props**: Components that receive props that don't change often
+- **Display components**: Components that render frequently but with the same data
+- **Button components**: Buttons that receive stable props
+
+**When NOT to use React.memo:**
+
+- **Layout components**: Main, Navbar (these rarely re-render)
+- **Components with frequently changing props**: Components that receive new props on every render
+- **Simple components**: Components that are already fast enough
+- **Page components**: Chords, Scales, Write (typically don't need memoization)
+
+#### Performance Optimization Patterns
+
+```typescript
+// ✅ useCallback for event handlers
+import { useCallback, useState } from 'react';
+
+import Main from '@/components/Main';
+
+export default function Chords() {
+  const [localState, setLocalState] = useState('');
+
+  const handleAction = useCallback(() => {
+    // Handle action
+    setLocalState('updated');
+  }, []);
+
+  return (
+    <Main componentName='Chords'>
+      <button onClick={handleAction}>Action</button>
+    </Main>
+  );
+}
+```
+
+```typescript
+// ✅ useMemo for expensive computations
+import { useMemo } from 'react';
+
+function SectionComponent({ data }: SectionProps) {
+  // Memoize expensive calculations
+  const processedData = useMemo(() => {
+    return data.map(item => expensiveCalculation(item));
+  }, [data]);
+
+  return <div>{/* render processed data */}</div>;
+}
+```
+
+#### Lazy Loading and Code Splitting
+
+```typescript
+// ✅ Use lazy loading for page components if needed
+import { Suspense, lazy } from 'react';
+
+const Chords = lazy(() => import('@/pages/Chords'));
+
+function LoadingPage() {
+  return (
+    <div className='flex justify-center items-center h-screen'>
+      <div className='text-lg'>Loading...</div>
+    </div>
+  );
+}
+
+export default function ChordsRoute() {
+  return (
+    <Suspense fallback={<LoadingPage />}>
+      <Chords />
+    </Suspense>
+  );
+}
+```
+
+### Performance Considerations
+
+#### Memoization
+
+- **React.memo**: Use for components with stable props when performance is a concern
+- **useMemo**: Use for expensive computations (e.g., data processing, filtering)
+- **useCallback**: Use for event handlers passed as props to memoized children
+
+### Bundle Optimization
+
+- **Tree shaking**: Import only necessary components and utilities
+- **Dynamic imports**: Use for large components when appropriate
+- **Code splitting**: Leverage Vite's automatic code splitting
+
+## State Management
+
+### Local State
+
+- **useState**: Use for component-local state
+- **State lifting**: Lift state up when multiple components need access
+- **State organization**: Keep state as close to where it's used as possible
+
+#### State Guidelines
+
+```typescript
+// ✅ Use useState for local component state
+import { useState } from 'react';
+
+function ComponentWithState() {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggle = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  return (
+    <div>
+      <button onClick={toggle}>Toggle</button>
+      {isExpanded && <div>Content</div>}
+    </div>
+  );
+}
+```
+
+### State Management
+
+- **Zustand store**: Use centralized Zustand store in `src/store/appStore.ts` for global state
+- **Persistence**: State is persisted to localStorage using Zustand's persist middleware
+- **Type safety**: All state is typed with TypeScript
+- **Store imports**: Import store hooks from `@/store/appStore`
+
+#### State Usage
+
+```typescript
+// ✅ Use Zustand store
+import Main from '@/components/Main';
+import { useAppStore } from '@/store/appStore';
+
+export default function Chords() {
+  const { chords, setChordsSelections } = useAppStore();
+  
+  // Update state
+  const handleSelection = () => {
+    setChordsSelections({ key: 'value' });
+  };
+  
+  // Read state
+  const selections = chords.selections;
+  
+  return (
+    <Main componentName='Chords'>
+      {/* Use state */}
+    </Main>
+  );
+}
+```
+
+## Accessibility Standards
+
+### ARIA and Semantics
+
+- **Proper ARIA labels**: Include appropriate ARIA labels and roles
+- **Keyboard navigation**: Support keyboard navigation with proper tabIndex
+- **Focus management**: Implement proper focus management
+- **Screen reader compatibility**: Ensure screen reader compatibility
+- **Color contrast**: Maintain proper color contrast ratios
+- **Semantic HTML**: Use semantic HTML structure (header, main, footer, nav, etc.)
+
+### Error Handling
+
+- **Error message association**: Associate error messages with form fields when applicable
+- **Loading state announcements**: Announce loading states to screen readers when needed
+- **Error boundaries**: Implement error boundaries for graceful error handling when needed
+- **Defensive programming**: Include validation and fallbacks for data integrity
+
+## Music Be Simple-Specific Guidelines
+
+### Page Components
+
+All page components follow similar patterns:
+
+- **Chords**: Chords page for chord-related functionality
+- **Scales**: Scales page for scale-related functionality
+- **Write**: Write page for writing/composition functionality
+
+### Page Component Pattern
+
+- **Main wrapper**: All pages use the `Main` component wrapper
+- **Component name**: Pass component name to Main for styling
+- **State management**: Use Zustand store for persistent state
+- **Top buttons**: Use TopButton component for page-specific actions
+
+### Layout Components
+
+- **Main**: Main content wrapper component with page-specific styling
+- **Navbar**: Navigation bar with tabs for Chords, Scales, and Write
+- **NavTab**: Individual navigation tab component using TanStack Router Link
+
+### Routing
+
+- **TanStack Router**: File-based routing in `src/routes/` directory
+- **Route structure**: Each route file exports a route definition
+- **Root route**: `__root.tsx` defines layout with Navbar and Outlet
+- **Navigation**: Use Link component from TanStack Router for navigation
+
+### Typography
+
+- **Typographic apostrophe**: Use ' instead of ' in all user-facing text
+- **CSS variables**: Typography uses CSS variables defined in globals.css
+- **Tailwind classes**: Use Tailwind typography utilities for consistent styling
+
+### Icons
+
+- **Emoji icons**: Use emoji icons for simple visual indicators (e.g., '📖' for TopButton)
+- **Icon accessibility**: Include appropriate title attributes for icon buttons
+- **Icon sizing**: Icons are sized via className on button elements
+
+### Styling
+
+- **Tailwind CSS**: Use Tailwind utility classes for styling (v4 with Vite plugin)
+- **Custom CSS**: Use custom CSS classes for page-specific styling (Chords, Scales, Write)
+- **CSS variables**: Use CSS variables for colors defined in globals.css (--chords, --scales, --write)
+- **Responsive design**: Use Tailwind responsive prefixes (sm:, md:, lg:, xl:)
+- **clsx utility**: Use `clsx` for conditional class names when needed
+
+## File Organization
+
+### Component Structure
+
+```
+src/components/
+├── Main.tsx              # Main content wrapper component
+├── Navbar.tsx            # Navigation bar component
+├── NavTab.tsx            # Navigation tab component
+└── TopButton.tsx         # Top button component
+```
+
+### Page Structure
+
+```
+src/pages/
+├── Chords/
+│   └── index.tsx         # Chords page component
+├── Scales/
+│   └── index.tsx         # Scales page component
+└── Write/
+    └── index.tsx          # Write page component
+```
+
+### Route Structure
+
+```
+src/routes/
+├── __root.tsx            # Root route layout
+├── index.tsx             # Home/index route
+├── chords.tsx            # Chords route
+├── scales.tsx            # Scales route
+└── write.tsx             # Write route
+```
+
+### Store Structure
+
+```
+src/store/
+└── appStore.ts           # Zustand store with persistence
+```
+
+### Entry Point
+
+```
+src/
+├── main.tsx              # Application entry point
+├── globals.css           # Global styles and CSS variables
+├── navigation.ts         # Navigation constants and schemas
+├── types.ts              # TypeScript type definitions
+└── routeTree.gen.ts      # Generated route tree (auto-generated)
+```
+
+## Development Workflow
+
+### Scripts
+
+- **`bun dev`**: Start development server with HMR
+- **`bun build`**: Build for production (TypeScript check + Vite build)
+- **`bun lint`**: Run Biome linter
+- **`bun lint:fix`**: Run Biome linter and auto-fix
+- **`bun format`**: Format code with Biome
+- **`bun format:check`**: Check code format
+- **`bun check`**: Run Biome formatter + linter
+- **`bun check:write`**: Run Biome formatter + linter and auto-fix
+- **`bun preview`**: Preview production build
+
+### Code Quality
+
+- **TypeScript**: Strict type checking enabled
+- **Biome**: Code formatting, linting, and import organization (replaces ESLint + Prettier)
+- **Import organization**: Use `@/` path alias for imports
+- **Vite**: Build tool with React plugin, TanStack Router plugin, and Tailwind CSS v4 integration
+
+### Performance Patterns
+
+- **Lazy loading**: Use `lazy()` and `Suspense` for code splitting page components if needed
+- **React.memo**: Use for components with stable props when performance is a concern
+- **useCallback**: Use for event handlers passed to memoized children
+- **State management**: Use Zustand store for global state with persistence
+
+### Testing
+
+- **Component testing**: Test components with React Testing Library when needed
+- **Accessibility testing**: Test accessibility features when needed

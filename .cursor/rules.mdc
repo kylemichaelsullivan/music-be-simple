@@ -1,0 +1,273 @@
+---
+alwaysApply: true
+---
+
+# Music Be Simple Project Rules
+
+## Core Principles
+
+- Write and review code like a senior developer
+- Challenge erroneous assumptions and inefficiencies
+- Use **Bun** for package management
+- Prefer `bun build` over `bun dev` for compilation
+- Use **TypeScript** with strict configuration
+- Follow **React 18** with **Vite** architecture
+- Use **TanStack Router** for routing
+- Use **Zustand** for state management with persistence
+- Use typographic apostrophe ' instead of straight apostrophe ' in ALL user-facing text
+
+## Package Management
+
+- **Package Manager**: Bun
+- **Build Command**: `bun build` (TypeScript compilation + Vite build)
+- **Development Command**: `bun dev` (Vite dev server with HMR)
+- **Lock File**: `bun.lock`
+
+## Development Scripts
+
+### Development Commands
+
+- **Development Server**: `bun dev` (Vite dev server with HMR)
+- **Production Build**: `bun build` (TypeScript compilation + Vite build)
+- **Preview Build**: `bun preview` (Preview production build locally)
+- **Linting**: `bun lint` (Run Biome linter)
+- **Lint Fix**: `bun lint:fix` (Run Biome linter and auto-fix)
+- **Formatting**: `bun format` (Format code with Biome)
+- **Format Check**: `bun format:check` (Check code format)
+- **Check All**: `bun check` (Run Biome formatter + linter)
+- **Check All Fix**: `bun check:write` (Run Biome formatter + linter and auto-fix)
+
+### Vite Benefits
+
+- **Fast HMR**: Hot Module Replacement for instant updates
+- **Optimized builds**: Production builds with code splitting
+- **TypeScript support**: Native TypeScript support
+- **Plugin ecosystem**: Rich plugin ecosystem (React, Tailwind, TanStack Router)
+
+## Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── Main.tsx         # Main content wrapper component
+│   ├── Navbar.tsx       # Navigation bar component
+│   ├── NavTab.tsx       # Navigation tab component
+│   └── TopButton.tsx    # Top button component
+├── pages/              # Page components
+│   ├── Chords/
+│   │   └── index.tsx    # Chords page
+│   ├── Scales/
+│   │   └── index.tsx    # Scales page
+│   └── Write/
+│       └── index.tsx    # Write page
+├── routes/              # TanStack Router route definitions
+│   ├── __root.tsx       # Root route layout
+│   ├── index.tsx        # Home/index route
+│   ├── chords.tsx       # Chords route
+│   ├── scales.tsx       # Scales route
+│   └── write.tsx      # Write route
+├── store/               # State management
+│   └── appStore.ts      # Zustand store with persistence
+├── main.tsx             # Application entry point
+├── navigation.ts        # Navigation constants and schemas
+├── types.ts             # TypeScript type definitions
+├── globals.css          # Global styles and CSS variables
+└── routeTree.gen.ts     # Generated route tree (auto-generated)
+```
+
+## Code Organization
+
+### Import Organization
+
+- **Defined order**: Follow specific import order, then alphabetize within each group
+- **Import order**:
+  1. Type imports (alphabetically by path, including React types)
+  2. React value imports (from 'react')
+  3. Third-party libraries (alphabetically by source)
+  4. Internal project imports (alphabetically by path)
+- **Avoid React namespace**: Import React types directly, avoid `React.` prefix
+- **Default imports**: Use default imports for components, named imports for hooks and utilities
+
+#### Import Order Example
+
+```tsx
+// 1. Type imports (alphabetically by path)
+import type { ReactNode } from 'react';
+import type { TabType } from '@/types';
+
+// 2. React value imports
+import { useState } from 'react';
+
+// 3. Third-party libraries (alphabetically by source)
+import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
+
+// 4. Internal project imports (alphabetically by path)
+import Main from '@/components/Main';
+import { useAppStore } from '@/store/appStore';
+```
+
+### File Structure
+
+```tsx
+// Standard component file structure (default export pattern)
+import type { ReactNode } from 'react';
+import { useState } from 'react';
+
+import Main from '@/components/Main';
+import { useAppStore } from '@/store/appStore';
+
+// Default export pattern (current working pattern)
+export default function ComponentName() {
+	const [localState, setLocalState] = useState('');
+	const { scales, setScalesSelections } = useAppStore();
+
+	return (
+		<Main componentName='ComponentName'>
+			{/* Component content */}
+		</Main>
+	);
+}
+
+// Alternative: Component with props
+type ComponentProps = {
+	// Required props
+	title: string;
+	// Optional props with defaults
+	variant?: 'primary' | 'secondary';
+	size?: 'sm' | 'md' | 'lg';
+	disabled?: boolean;
+	// Children
+	children?: ReactNode;
+};
+
+export default function ComponentName({
+	title,
+	variant = 'primary',
+	children,
+}: ComponentProps) {
+	return (
+		<div className='ComponentName'>
+			{/* Component content */}
+		</div>
+	);
+}
+```
+
+## Styling Guidelines
+
+### CSS and Styling
+
+- **Avoid Tailwind margin/space classes**: Do not use `space-x-*` or `space-y-*` utilities - use flex/gap instead
+- **Use flex/gap spacing**: Use `flex flex-col gap-*` for vertical spacing and `flex items-center gap-*` for horizontal spacing
+- **No !important declarations**: Avoid using `!important` in CSS
+- **CSS variables**: Use CSS variables for colors and fonts (defined in globals.css)
+- **Tailwind utilities**: Use Tailwind utility classes for styling
+- **Custom CSS**: Use custom CSS classes for complex or reusable patterns (accordion, metronome, etc.)
+
+### Spacing Examples
+
+```tsx
+// ❌ Avoid - margin-based spacing
+<div className='space-y-4'>
+  <Component />
+</div>
+
+// ✅ Good - flexbox-based spacing
+<div className='flex flex-col gap-4'>
+  <Component />
+</div>
+```
+
+### React Best Practices
+
+- **TypeScript**: Avoid using `any` type, prefer proper typing
+- **Default exports**: Use default exports for components (e.g., `export default function ComponentName`)
+- **Path aliases**: Use `@/` alias for imports (configured in tsconfig.json)
+- **State management**: Use Zustand store for global state, `useState` for local component state
+- **Router integration**: Components should work seamlessly with TanStack Router
+
+## Data Management
+
+### State Management
+
+- **Zustand store**: Centralized state management using Zustand with persistence
+- **Store location**: State is managed in `src/store/appStore.ts`
+- **Persistence**: State is persisted to localStorage using Zustand's persist middleware
+- **State structure**: Separate state for scales, chords, and write sections
+- **Type safety**: All state is typed with TypeScript
+
+### State Usage
+
+```tsx
+// ✅ Use Zustand store
+import { useAppStore } from '@/store/appStore';
+
+function Component() {
+	const { scales, setScalesSelections } = useAppStore();
+	
+	// Update state
+	setScalesSelections({ key: 'value' });
+	
+	// Read state
+	const selections = scales.selections;
+}
+```
+
+## Routing
+
+### TanStack Router
+
+- **File-based routing**: Routes are defined in `src/routes/` directory
+- **Route generation**: Route tree is auto-generated via TanStack Router plugin
+- **Route structure**: Each route file exports a route definition
+- **Root route**: `__root.tsx` defines the root layout with Navbar and Outlet
+- **Navigation**: Use `Link` component from `@tanstack/react-router` for navigation
+
+### Routing Usage
+
+```tsx
+// ✅ Use TanStack Router Link
+import { Link } from '@tanstack/react-router';
+
+<Link
+	to='/chords'
+	className='...'
+	activeProps={{ className: '...' }}
+>
+	Chords
+</Link>
+```
+
+## Comments and Documentation
+
+### Comment Guidelines
+
+- **Minimal comments**: Limit comments to non-obvious functionality
+- **Purpose comments**: Comment on oddities that have non-obvious purposes
+- **Self-documenting code**: Write code that explains itself through clear naming and structure
+- **JSDoc**: Use JSDoc comments for complex props and functions
+
+## Communication Standards
+
+### Progress Updates
+
+- **Meaningful updates only**: Avoid inane progress updates and status reports
+- **Focus on substance**: Communicate actual progress, blockers, or decisions that matter
+- **No busy work updates**: Don't report on routine tasks or obvious progress
+- **Context matters**: Provide context when updates are necessary
+- **Efficiency**: Respect time by being concise and relevant
+
+### Documentation Standards
+
+- **Documentation directory**: Place all MD documentation in appropriate directories
+- **Usage examples**: Provide clear usage examples
+- **Props documentation**: Document all props with types and descriptions
+- **Data structure documentation**: Document data file structure and usage
+
+### Documentation Updates
+
+- **Substantive changes only**: Update documentation for meaningful changes
+- **Avoid trivial updates**: Don't update docs for minor formatting or obvious changes
+- **Focus on value**: Document decisions, patterns, and changes that provide value
+- **Clear purpose**: Ensure documentation updates serve a clear purpose

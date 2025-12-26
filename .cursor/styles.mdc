@@ -1,0 +1,248 @@
+---
+globs: **/*.tsx, **/*.ts, **/*.css
+exclude: **/__tests__/**, **/*.test.*, **/*.spec.*
+alwaysApply: false
+---
+
+# Styling Standards
+
+## Typography
+
+- **Apostrophes**: ALL user-facing text MUST use the typographic apostrophe ’ instead of the straight apostrophe '
+- **Consistency**: Maintain consistent typography throughout the application
+- **System fonts**: Uses Inter font family for consistent cross-platform rendering
+- **CSS variables**: Colors use CSS variables (--chords, --scales, --write, --background, --black, --white, --orange, --green, --blue)
+
+## Tailwind CSS
+
+- **Color utilities**: Prefer color utility classes from globals.css that use CSS Custom Properties
+- **Compelling reasons**: Only avoid color utilities when there's a compelling reason not to
+- **Direct strings**: Use direct strings for simple cases without conditionals
+- **No margins**: Avoid using Tailwind margin classes (`m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`)
+- **No space utilities**: Avoid using `space-x-*` or `space-y-*` utilities - they rely on margins
+- **Biome integration**: Use Biome for formatting and linting (includes automatic class sorting)
+- **Utility function**: Use `clsx()` for conditional classes when needed
+
+### ClassName Patterns
+
+```tsx
+// Component name should be first in className for debugging
+className='ComponentName bg-white rounded-lg border p-4'
+
+// Conditional cases - use clsx
+className={clsx(
+  'ComponentName base-classes',
+  isActive && 'active-classes',
+  isDisabled && 'disabled-classes',
+  className
+)}
+
+// Component props - use clsx
+className={clsx('ComponentName base-classes', className)}
+```
+
+### JSX Attribute Order
+
+Follow this specific order for JSX attributes:
+
+1. **type** - Element type (for form elements)
+2. **className** - CSS classes
+3. **Standard HTML attributes** - (alphabetically)
+4. **Event handlers** - (alphabetically, starting with 'on')
+5. **ARIA attributes** - (alphabetically)
+6. **Custom data attributes** - (alphabetically)
+7. **ref** - React ref (penultimate)
+8. **id** - Element identifier (always last)
+
+#### JSX Attribute Order Example
+
+```tsx
+<button
+	type='button'
+	className='Button rounded-lg border bg-white p-4'
+	disabled={isDisabled}
+	title='Submit form'
+	onClick={handleClick}
+	onKeyDown={handleKeyDown}
+	aria-label='Submit form'
+	aria-describedby='submit-help'
+	data-testid='submit-button'
+	ref={buttonRef}
+	id='submit-button'
+>
+	Submit
+</button>
+```
+
+### Layout Principles
+
+- **Flexbox/Grid**: Use Flexbox and Grid for layouts
+- **Avoid margins**: Don't use CSS margins except for printing and where flex/grid won't work
+- **Avoid space- utilities**: Don't use `space-x-*` or `space-y-*` utilities - they rely on margins
+- **Use flex/gap**: Use `flex flex-col gap-*` for vertical spacing and `flex items-center gap-*` for horizontal spacing
+- **Consistent spacing**: Use Tailwind's spacing scale
+- **Theme variables**: Use CSS custom properties for page-specific colors (--chords, --scales, --write)
+
+### Spacing Patterns
+
+```tsx
+// Vertical spacing
+className = 'flex flex-col gap-2'; // Small gaps
+className = 'flex flex-col gap-4'; // Medium gaps
+className = 'flex flex-col gap-6'; // Large gaps
+
+// Horizontal spacing
+className = 'flex items-center gap-2';
+className = 'flex justify-between';
+
+// Responsive spacing
+className = 'flex flex-col gap-3 sm:gap-4';
+className = 'flex items-center gap-1.5 sm:gap-2';
+```
+
+### Component Structure
+
+- **Avoid superfluous wrappers**: Don't create unnecessary wrapper divs that add DOM complexity
+- **Simplify nesting**: Remove redundant wrapper elements when possible
+- **Keep meaningful wrappers**: Retain wrappers that serve styling, semantic, or organizational purposes
+
+#### Wrapper Removal Examples
+
+```tsx
+// ❌ Avoid - redundant wrapper
+<div className='flex flex-col gap-6'>
+  <div className='flex flex-col gap-6'>
+    <Component />
+  </div>
+</div>
+
+// ✅ Good - simplified structure
+<div className='flex flex-col gap-6'>
+  <Component />
+</div>
+```
+
+## Icons
+
+- **Emoji icons**: Use emoji icons for simple visual indicators (e.g., '📖' for TopButton)
+- **Icon accessibility**: Include appropriate title attributes for icon buttons
+- **Icon sizing**: Icons are sized via className on button elements
+- **Semantic meaning**: Choose icons that clearly represent their function
+- **Consistency**: Use similar icons for similar actions across the application
+
+#### Icon Usage Example
+
+```tsx
+<TopButton
+  title='Chords'
+  icon='📖'
+  position='left'
+  onFxn={() => {}}
+/>
+```
+
+## CSS Variables and Custom Properties
+
+- **Color variables**: Use CSS variables for colors (--chords, --scales, --write, --background, --black, --white, --orange, --green, --blue)
+- **Page-specific colors**: Each page has its own color variable (--chords, --scales, --write)
+- **Theme consistency**: Maintain consistent use of CSS variables throughout the application
+- **Custom classes**: Use custom CSS classes for page-specific styling (Chords, Scales, Write)
+
+### CSS Variable Usage
+
+```css
+/* In globals.css */
+:root {
+	--black: #000000;
+	--orange: #ffb86a;
+	--green: #64f58d;
+	--blue: #74d4ff;
+	--white: #ffffff;
+
+	--chords: var(--orange);
+	--scales: var(--blue);
+	--write: var(--green);
+	--background: var(--white);
+}
+
+.Chords {
+	background-color: var(--chords);
+}
+
+.Scales {
+	background-color: var(--scales);
+}
+
+.Write {
+	background-color: var(--write);
+}
+```
+
+```tsx
+// In components - use custom CSS classes that reference CSS variables
+<Main componentName='Chords'>
+	{/* Chords class applies --chords background color */}
+</Main>
+
+// Direct CSS variable usage when needed
+<div style={{ backgroundColor: 'var(--chords)' }}>
+	{/* Direct variable access */}
+</div>
+```
+
+## Custom CSS Patterns
+
+- **Page-specific styling**: Custom CSS classes for page-specific background colors (Chords, Scales, Write)
+- **Button styles**: Custom CSS for button component with hover states
+- **Component-specific**: Use custom CSS classes for complex or reusable patterns
+- **CSS organization**: Keep custom CSS in `globals.css` organized by component/pattern
+
+### Custom CSS Examples
+
+```css
+/* Page-specific background colors */
+.Chords {
+	background-color: var(--chords);
+}
+
+.Scales {
+	background-color: var(--scales);
+}
+
+.Write {
+	background-color: var(--write);
+}
+
+/* Button styles */
+button {
+	cursor: pointer;
+}
+```
+
+## Assets
+
+- **Emoji icons**: Use emoji icons for simple visual indicators
+- **Icon accessibility**: Include appropriate title attributes for icon buttons
+- **Icon structure**: Icons are emoji strings passed as props to button components
+
+#### Icon Usage Example
+
+```tsx
+// TopButton component with emoji icon
+<TopButton
+	title='Chords'
+	icon='📖'
+	position='left'
+	onFxn={() => {}}
+/>
+```
+
+## CSS Best Practices
+
+- **No !important**: Avoid using `!important` declarations in CSS
+- **TypeScript**: Avoid using the `any` type in TypeScript code
+- **Semantic HTML**: Use semantic HTML elements for better accessibility (header, main, nav, section, etc.)
+- **Responsive design**: Use Tailwind responsive prefixes (sm:, md:, lg:, xl:)
+- **Custom classes**: Use custom CSS classes for page-specific styling (Chords, Scales, Write)
+- **CSS organization**: Organize CSS by component/pattern, keep related styles together in globals.css
+- **Transitions**: Use CSS transitions for smooth state changes (e.g., hover states, active states)

@@ -1,0 +1,378 @@
+---
+globs: **/components/**/*.tsx, **/pages/**/*.tsx
+exclude: **/__tests__/**, **/*.test.*, **/*.spec.*
+alwaysApply: false
+---
+
+# Music Be Simple Component Development Standards
+
+## File Organization
+
+```
+src/components/
+├── Main.tsx              # Main content wrapper component
+├── Navbar.tsx            # Navigation bar component
+├── NavTab.tsx            # Navigation tab component
+└── TopButton.tsx         # Top button component
+
+src/pages/
+├── Chords/
+│   └── index.tsx         # Chords page component
+├── Scales/
+│   └── index.tsx         # Scales page component
+└── Write/
+    └── index.tsx          # Write page component
+
+src/routes/
+├── __root.tsx            # Root route layout
+├── index.tsx             # Home/index route
+├── chords.tsx            # Chords route
+├── scales.tsx            # Scales route
+└── write.tsx             # Write route
+
+src/store/
+└── appStore.ts           # Zustand store with persistence
+```
+
+## Component Structure Guidelines
+
+### Avoid Superfluous Wrappers
+
+- **Remove unnecessary wrapper divs**: Don't create wrapper divs that add DOM complexity without benefit
+- **Simplify component structure**: Remove redundant nesting when possible
+- **Keep meaningful wrappers**: Retain wrappers that serve styling, semantic, or organizational purposes
+
+### Spacing Guidelines
+
+- **Avoid `space-*` utilities**: Don't use `space-x-*` or `space-y-*` utilities - they rely on margin-based spacing
+- **Use flex/gap spacing**: Use `flex flex-col gap-*` for vertical spacing and `flex items-center gap-*` for horizontal spacing
+- **Maintain visual consistency**: All spacing changes should preserve the original visual appearance
+
+#### Spacing Examples
+
+```tsx
+// ❌ Avoid - margin-based spacing
+<div className='space-y-4'>
+  <Component />
+</div>
+
+// ✅ Good - flexbox-based spacing
+<div className='flex flex-col gap-4'>
+  <Component />
+</div>
+```
+
+```tsx
+// ❌ Avoid - redundant wrapper
+<div className='Container'>
+  <div className='flex flex-col gap-4'>
+    <Component />
+  </div>
+</div>
+
+// ✅ Good - simplified structure
+<div className='Container flex flex-col gap-4'>
+  <Component />
+</div>
+```
+
+## Utility Components
+
+Always use the project's utility components instead of creating custom HTML elements when possible:
+
+### Core UI Components
+
+- **Main** (`@/components/Main`) - Main content wrapper component with page-specific styling
+  - Required props: `componentName` (string), `children` (ReactNode)
+  - Applies page-specific background color based on componentName
+  - Provides consistent layout structure
+
+- **Navbar** (`@/components/Navbar`) - Navigation bar component
+  - Renders navigation tabs for Chords, Scales, and Write
+  - Uses NavTab components for individual tabs
+
+- **NavTab** (`@/components/NavTab`) - Navigation tab component
+  - Required props: `title` (TabType), `to` (string)
+  - Uses TanStack Router Link for navigation
+  - Supports active state styling
+
+- **TopButton** (`@/components/TopButton`) - Top button component
+  - Required props: `title` (string), `icon` (string), `position` ('left' | 'right'), `onFxn` (() => void)
+  - Positioned absolutely at top corners
+  - Uses emoji icons for visual indicators
+
+#### Example Usage
+
+```tsx
+// ✅ Use Main component wrapper
+import Main from '@/components/Main';
+
+export default function Chords() {
+  return (
+    <Main componentName='Chords'>
+      <h1>Chords</h1>
+    </Main>
+  );
+}
+
+// ✅ Use TopButton component
+import TopButton from '@/components/TopButton';
+
+<TopButton
+  title='Chords'
+  icon='📖'
+  position='left'
+  onFxn={() => {}}
+/>
+
+// ❌ Don't create custom wrapper when utility exists
+<div className='custom-wrapper'>
+  <h1>Chords</h1>
+</div>
+```
+
+## Component Guidelines
+
+### Single-Purpose Components
+
+- **One component per file**: Each file contains exactly one React component
+- **Bite-sized components**: Components should be focused and single-purpose (one thing == one component == one file)
+- **Descriptive naming**: Use PascalCase with descriptive names indicating visual purpose
+- **Component suffixes**: Use appropriate suffixes when needed (e.g., `Container`, `Panel`, `Button`, `Display`)
+
+### Component Structure
+
+```tsx
+// Pattern 1: Default export function component (most common)
+import type { ReactNode } from 'react';
+
+import Main from '@/components/Main';
+
+type ComponentProps = {
+	title: string;
+	variant?: 'primary' | 'secondary';
+	children?: ReactNode;
+};
+
+export default function ComponentName({
+	title,
+	variant = 'primary',
+	children,
+}: ComponentProps) {
+	return (
+		<Main componentName={title}>
+			{children}
+		</Main>
+	);
+}
+
+// Pattern 2: forwardRef component with default export (for DOM refs)
+import { forwardRef } from 'react';
+
+const ComponentName = forwardRef<HTMLDivElement, ComponentProps>(
+	({ title, variant = 'primary', children }, ref) => {
+		return (
+			<div
+				ref={ref}
+				className='ComponentName base-classes'
+			>
+				{children}
+			</div>
+		);
+	},
+);
+
+ComponentName.displayName = 'ComponentName';
+
+export default ComponentName;
+
+// Pattern 3: Memoized component (for performance optimization)
+import { memo } from 'react';
+
+function ComponentName({ title, variant = 'primary', children }: ComponentProps) {
+	return (
+		<div className='ComponentName base-classes'>
+			{children}
+		</div>
+	);
+}
+
+export default memo(ComponentName);
+```
+
+### Component Guidelines
+
+- **TypeScript types**: Prefer `type` over `interface` for component props and data structures
+- **Default exports**: Export components as default exports using `export default function ComponentName`
+- **Import paths**: Use `@/` path alias for imports (configured in tsconfig.json)
+- **Import order**: Type imports come before value imports (e.g., `import type { ReactNode } from 'react'` before `import { useState } from 'react'`)
+- **Props interface**: Define clear, typed props with descriptive names
+- **forwardRef usage**: Use `forwardRef` for components that need to expose DOM refs
+- **Memoization**: Use `memo` for components with stable props to prevent unnecessary re-renders
+
+## Component Patterns
+
+### Layout Components
+
+- **Main** (`@/components/Main`) - Main content wrapper component with page-specific styling
+- **Navbar** (`@/components/Navbar`) - Navigation bar with tabs for Chords, Scales, and Write
+- **NavTab** (`@/components/NavTab`) - Individual navigation tab component
+
+### Page Components
+
+All page components follow a similar pattern:
+
+- **Chords** (`@/pages/Chords`) - Chords page for chord-related functionality (default export)
+- **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (default export)
+- **Write** (`@/pages/Write`) - Write page for writing/composition functionality (default export)
+
+### Utility Components
+
+- **TopButton** (`@/components/TopButton`) - Top button component for page-specific actions
+- **NavTab** (`@/components/NavTab`) - Navigation tab component using TanStack Router Link
+
+## State Management
+
+The project uses Zustand for state management with persistence:
+
+### Store Structure
+
+- **Store file** (`@/store/appStore.ts`) - Zustand store with persist middleware
+- **State sections**: Separate state for scales, chords, and write
+- **Type safety**: All state is typed with TypeScript
+- **Persistence**: State is persisted to localStorage
+
+### Using State
+
+```tsx
+import Main from '@/components/Main';
+import { useAppStore } from '@/store/appStore';
+
+export default function Chords() {
+  const { chords, setChordsSelections } = useAppStore();
+  
+  // Update state
+  const handleSelection = () => {
+    setChordsSelections({ key: 'value' });
+  };
+  
+  // Read state
+  const selections = chords.selections;
+  
+  return (
+    <Main componentName='Chords'>
+      {/* Use state */}
+    </Main>
+  );
+}
+```
+
+## Component Best Practices
+
+### Performance
+
+- **React.memo**: Use for components with stable props when needed
+- **useMemo**: Use for expensive computations
+- **useCallback**: Use for event handlers passed as props
+- **Lazy loading**: Use `lazy()` and `Suspense` for code splitting page components if needed
+- **Tree shaking**: Import only necessary components
+- **Zustand selectors**: Use Zustand selectors to prevent unnecessary re-renders
+
+### Accessibility
+
+- **ARIA labels**: Include appropriate ARIA labels and roles
+- **Keyboard navigation**: Support keyboard navigation for interactive elements
+- **Focus management**: Implement proper focus management
+- **Screen reader compatibility**: Ensure screen reader compatibility
+- **Color contrast**: Maintain proper color contrast ratios
+- **Semantic HTML**: Use semantic HTML structure (header, main, footer, nav, section, etc.)
+- **Image alt text**: Always provide descriptive alt text for images
+- **Link titles**: Include descriptive title attributes for links
+
+### Error Handling
+
+- **Defensive programming**: Include validation and fallbacks for data integrity
+- **Graceful degradation**: Handle missing data values gracefully
+- **Null checks**: Check for null/undefined values before rendering
+
+### Icons
+
+- **Emoji icons**: Use emoji icons for simple visual indicators (e.g., '📖' for TopButton)
+- **Icon accessibility**: Include appropriate title attributes for icon buttons
+- **Icon sizing**: Icons are sized via className on button elements
+
+## Styling Guidelines
+
+### Tailwind CSS
+
+- **Utility-first**: Use Tailwind utility classes for styling
+- **Custom classes**: Use custom CSS classes for complex or reusable patterns
+- **Responsive design**: Use Tailwind responsive prefixes (sm:, md:, lg:, xl:)
+- **Dark mode**: Support dark mode if configured in Tailwind config
+
+### Class Management
+
+- **clsx**: Use `clsx` for conditional class names
+- **Component classes**: Include component name as base class for scoping
+
+```tsx
+import clsx from 'clsx';
+
+<div
+  className={clsx(
+    'ComponentName base-classes',
+    condition && 'conditional-classes',
+    variant === 'primary' && 'primary-classes',
+  )}
+>
+```
+
+## Typography
+
+- **Typographic apostrophe**: Use ' instead of ' in all user-facing text
+- **System fonts**: Uses Inter font family (defined in globals.css)
+- **Responsive typography**: Use responsive text size utilities (text-2xl, text-3xl, etc.)
+
+## Routing
+
+- **TanStack Router**: Use TanStack Router for navigation
+- **Link component**: Use Link component from `@tanstack/react-router` for navigation
+- **Active state**: Use `activeProps` prop on Link for active state styling
+- **Route structure**: Routes are defined in `src/routes/` directory
+
+```tsx
+import { Link } from '@tanstack/react-router';
+
+<Link
+  to='/chords'
+  className='px-4 py-2 rounded-t-lg hover:bg-gray-100 transition-colors'
+  activeProps={{ className: 'bg-gray-300 font-bold' }}
+  title='Chords'
+>
+  Chords
+</Link>
+```
+
+## Component Testing
+
+### Unit Testing
+
+- **Component rendering**: Test component rendering with different props
+- **User interactions**: Test user interactions and callbacks
+- **Accessibility features**: Test accessibility features
+- **Data integration**: Test components with different data values
+
+### Integration Testing
+
+- **Page integration**: Test page components within routes
+- **Navigation behavior**: Test navigation between pages
+- **Responsive behavior**: Test responsive behavior across screen sizes
+- **State persistence**: Test Zustand state persistence across page navigation
+
+### Testing Commands
+
+- Use `bun dev` for development server
+- Use `bun run build` for production build
+- Use `bun lint` for linting
+- Use `bun format` for formatting code
+- Use `bun preview` for previewing production build
