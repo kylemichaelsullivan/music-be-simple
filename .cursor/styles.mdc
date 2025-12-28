@@ -11,7 +11,7 @@ alwaysApply: false
 - **Apostrophes**: ALL user-facing text MUST use the typographic apostrophe ’ instead of the straight apostrophe '
 - **Consistency**: Maintain consistent typography throughout the application
 - **System fonts**: Uses Inter font family for consistent cross-platform rendering
-- **CSS variables**: Colors use CSS variables (--chords, --scales, --write, --background, --black, --white, --orange, --green, --blue)
+- **CSS variables**: Colors use CSS variables (--chords, --scales, --play, --background, --black, --white, --orange, --green, --blue)
 
 ## Tailwind CSS
 
@@ -81,7 +81,7 @@ Follow this specific order for JSX attributes:
 - **Avoid space- utilities**: Don't use `space-x-*` or `space-y-*` utilities - they rely on margins
 - **Use flex/gap**: Use `flex flex-col gap-*` for vertical spacing and `flex items-center gap-*` for horizontal spacing
 - **Consistent spacing**: Use Tailwind's spacing scale
-- **Theme variables**: Use CSS custom properties for page-specific colors (--chords, --scales, --write)
+- **Theme variables**: Use CSS custom properties for page-specific colors (--chords, --scales, --play)
 
 ### Spacing Patterns
 
@@ -143,10 +143,10 @@ className = 'flex items-center gap-1.5 sm:gap-2';
 
 ## CSS Variables and Custom Properties
 
-- **Color variables**: Use CSS variables for colors (--chords, --scales, --write, --background, --black, --white, --orange, --green, --blue)
-- **Page-specific colors**: Each page has its own color variable (--chords, --scales, --write)
+- **Color variables**: Use CSS variables for colors (--chords, --scales, --play, --background, --black, --white, --orange, --green, --blue)
+- **Page-specific colors**: Each page has its own color variable (--chords, --scales, --play)
 - **Theme consistency**: Maintain consistent use of CSS variables throughout the application
-- **Custom classes**: Use custom CSS classes for page-specific styling (Chords, Scales, Write)
+- **Custom classes**: Use custom CSS classes for page-specific styling (Chords, Scales, Play)
 
 ### CSS Variable Usage
 
@@ -161,7 +161,7 @@ className = 'flex items-center gap-1.5 sm:gap-2';
 
 	--chords: var(--orange);
 	--scales: var(--blue);
-	--write: var(--green);
+	--play: var(--green);
 	--background: var(--white);
 }
 
@@ -173,8 +173,8 @@ className = 'flex items-center gap-1.5 sm:gap-2';
 	background-color: var(--scales);
 }
 
-.Write {
-	background-color: var(--write);
+.Play {
+	background-color: var(--play);
 }
 ```
 
@@ -192,7 +192,7 @@ className = 'flex items-center gap-1.5 sm:gap-2';
 
 ## Custom CSS Patterns
 
-- **Page-specific styling**: Custom CSS classes for page-specific background colors (Chords, Scales, Write)
+- **Page-specific styling**: Custom CSS classes for page-specific background colors (Chords, Scales, Play)
 - **Button styles**: Custom CSS for button component with hover states
 - **Component-specific**: Use custom CSS classes for complex or reusable patterns
 - **CSS organization**: Keep custom CSS in `globals.css` organized by component/pattern
@@ -209,8 +209,8 @@ className = 'flex items-center gap-1.5 sm:gap-2';
 	background-color: var(--scales);
 }
 
-.Write {
-	background-color: var(--write);
+.Play {
+	background-color: var(--play);
 }
 
 /* Button styles */
@@ -243,6 +243,6 @@ button {
 - **TypeScript**: Avoid using the `any` type in TypeScript code
 - **Semantic HTML**: Use semantic HTML elements for better accessibility (header, main, nav, section, etc.)
 - **Responsive design**: Use Tailwind responsive prefixes (sm:, md:, lg:, xl:)
-- **Custom classes**: Use custom CSS classes for page-specific styling (Chords, Scales, Write)
+- **Custom classes**: Use custom CSS classes for page-specific styling (Chords, Scales, Play)
 - **CSS organization**: Organize CSS by component/pattern, keep related styles together in globals.css
 - **Transitions**: Use CSS transitions for smooth state changes (e.g., hover states, active states)

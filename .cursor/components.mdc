@@ -10,28 +10,43 @@ alwaysApply: false
 
 ```
 src/components/
-├── Main.tsx              # Main content wrapper component
-├── Navbar.tsx            # Navigation bar component
-├── NavTab.tsx            # Navigation tab component
-└── TopButton.tsx         # Top button component
+├── buttons/
+│   ├── TopButton.tsx
+│   └── UseFlatsButton.tsx
+├── displays/
+│   ├── Displays.tsx
+│   ├── DisplaySelector.tsx
+│   ├── DisplaysSelector.tsx
+│   ├── Modes.tsx
+│   └── instruments/
+│       ├── Instrument.tsx
+│       ├── Guitar.tsx
+│       ├── Piano.tsx
+│       ├── Banjo.tsx
+│       ├── Mandolin.tsx
+│       └── Ukulele.tsx
+├── nav/
+│   ├── Navbar.tsx
+│   └── NavTab.tsx
+├── Footer.tsx
+├── Icon.tsx
+├── Main.tsx
+└── Title.tsx
 
 src/pages/
 ├── Chords/
-│   └── index.tsx         # Chords page component
-├── Scales/
-│   └── index.tsx         # Scales page component
-└── Write/
-    └── index.tsx          # Write page component
+│   └── index.tsx
+├── Play/
+│   └── index.tsx
+└── Scales/
+    └── index.tsx
 
 src/routes/
-├── __root.tsx            # Root route layout
-├── index.tsx             # Home/index route
-├── chords.tsx            # Chords route
-├── scales.tsx            # Scales route
-└── write.tsx             # Write route
-
-src/store/
-└── appStore.ts           # Zustand store with persistence
+├── __root.tsx
+├── index.tsx
+├── chords.tsx
+├── play.tsx
+└── scales.tsx
 ```
 
 ## Component Structure Guidelines
@@ -88,7 +103,7 @@ Always use the project's utility components instead of creating custom HTML elem
   - Provides consistent layout structure
 
 - **Navbar** (`@/components/Navbar`) - Navigation bar component
-  - Renders navigation tabs for Chords, Scales, and Write
+  - Renders navigation tabs for Scales, Chords, and Play
   - Uses NavTab components for individual tabs
 
 - **NavTab** (`@/components/NavTab`) - Navigation tab component
@@ -106,17 +121,18 @@ Always use the project's utility components instead of creating custom HTML elem
 ```tsx
 // ✅ Use Main component wrapper
 import Main from '@/components/Main';
+import Title from '@/components/Title';
 
 export default function Chords() {
   return (
     <Main componentName='Chords'>
-      <h1>Chords</h1>
+      <Title title='Chords' />
     </Main>
   );
 }
 
 // ✅ Use TopButton component
-import TopButton from '@/components/TopButton';
+import TopButton from '@/components/buttons/TopButton';
 
 <TopButton
   title='Chords'
@@ -215,8 +231,24 @@ export default memo(ComponentName);
 ### Layout Components
 
 - **Main** (`@/components/Main`) - Main content wrapper component with page-specific styling
-- **Navbar** (`@/components/Navbar`) - Navigation bar with tabs for Chords, Scales, and Write
-- **NavTab** (`@/components/NavTab`) - Individual navigation tab component
+- **Navbar** (`@/components/nav/Navbar`) - Navigation bar with tabs for Scales, Chords, and Play
+- **NavTab** (`@/components/nav/NavTab`) - Individual navigation tab component
+- **Footer** (`@/components/Footer`) - Footer component with copyright information
+- **Title** (`@/components/Title`) - Title component for page headings
+
+### Button Components
+
+- **TopButton** (`@/components/buttons/TopButton`) - Top button component for page-specific actions
+- **UseFlatsButton** (`@/components/buttons/UseFlatsButton`) - Button to toggle between flats and sharps
+
+### Display Components
+
+- **Displays** (`@/components/displays/Displays`) - Container for instrument displays
+- **DisplaysSelector** (`@/components/displays/DisplaysSelector`) - Selector for choosing displays
+- **DisplaySelector** (`@/components/displays/DisplaySelector`) - Individual display selector
+- **Modes** (`@/components/displays/Modes`) - Modes display component
+- **Instrument** (`@/components/displays/instruments/Instrument`) - Base instrument display component
+- **Guitar, Piano, Banjo, Mandolin, Ukulele** - Specific instrument display components
 
 ### Page Components
 
@@ -224,45 +256,59 @@ All page components follow a similar pattern:
 
 - **Chords** (`@/pages/Chords`) - Chords page for chord-related functionality (default export)
 - **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (default export)
-- **Write** (`@/pages/Write`) - Write page for writing/composition functionality (default export)
-
-### Utility Components
-
-- **TopButton** (`@/components/TopButton`) - Top button component for page-specific actions
-- **NavTab** (`@/components/NavTab`) - Navigation tab component using TanStack Router Link
+- **Play** (`@/pages/Play`) - Play page for music playback functionality (default export)
 
 ## State Management
 
-The project uses Zustand for state management with persistence:
+The project uses React Context API for state management with custom hooks:
 
-### Store Structure
+### Context Providers
 
-- **Store file** (`@/store/appStore.ts`) - Zustand store with persist middleware
-- **State sections**: Separate state for scales, chords, and write
-- **Type safety**: All state is typed with TypeScript
-- **Persistence**: State is persisted to localStorage
+- **GlobalsContext** (`@/context/Globals`) - Global application state
+- **ScalesContext** (`@/context/Scales`) - Scales-specific state
+- **ChordsContext** (`@/context/Chords`) - Chords-specific state
+- **PlayContext** (`@/context/Play`) - Play functionality state
+
+### Custom Hooks
+
+- **useGlobals** (`@/hooks/useGlobals`) - Access global context
+- **useScales** (`@/hooks/useScales`) - Access scales context
+- **useChords** (`@/hooks/useChords`) - Access chords context
+- **usePlay** (`@/hooks/usePlay`) - Access play context
 
 ### Using State
 
 ```tsx
 import Main from '@/components/Main';
-import { useAppStore } from '@/store/appStore';
+import { useScales } from '@/hooks/useScales';
+import { useGlobals } from '@/hooks/useGlobals';
 
-export default function Chords() {
-  const { chords, setChordsSelections } = useAppStore();
-  
-  // Update state
-  const handleSelection = () => {
-    setChordsSelections({ key: 'value' });
-  };
-  
-  // Read state
-  const selections = chords.selections;
+export default function Scales() {
+  const { tonic, variant, notes, handleTonicChange } = useScales();
+  const { displays, usingFlats } = useGlobals();
   
   return (
-    <Main componentName='Chords'>
+    <Main componentName='Scales'>
       {/* Use state */}
     </Main>
+  );
+}
+```
+
+### Context Provider Pattern
+
+Context providers wrap page components at the route level:
+
+```tsx
+// Route file (src/routes/scales.tsx)
+import { ScalesContextProvider } from '@/context';
+import Scales from '@/pages/Scales';
+
+function ScalesPage() {
+  return (
+    <ScalesContextProvider>
+      <Scales />
+    </ScalesContextProvider>
   );
 }
 ```
@@ -276,7 +322,7 @@ export default function Chords() {
 - **useCallback**: Use for event handlers passed as props
 - **Lazy loading**: Use `lazy()` and `Suspense` for code splitting page components if needed
 - **Tree shaking**: Import only necessary components
-- **Zustand selectors**: Use Zustand selectors to prevent unnecessary re-renders
+- **Context hooks**: Use context hooks to access state efficiently
 
 ### Accessibility
 
@@ -367,7 +413,7 @@ import { Link } from '@tanstack/react-router';
 - **Page integration**: Test page components within routes
 - **Navigation behavior**: Test navigation between pages
 - **Responsive behavior**: Test responsive behavior across screen sizes
-- **State persistence**: Test Zustand state persistence across page navigation
+- **State persistence**: Test context state persistence across page navigation
 
 ### Testing Commands
 
