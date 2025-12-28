@@ -13,8 +13,7 @@
 		"@tanstack/react-router": "^1.79.0",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
-		"zod": "^3.24.1",
-		"zustand": "^5.0.2"
+		"zod": "^3.24.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
