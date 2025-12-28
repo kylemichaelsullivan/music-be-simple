@@ -7,10 +7,10 @@
 	--blue: #74d4ff;
 	--white: #ffffff;
 
-	--chords: var(--orange);
-	--scales: var(--blue);
-	--write: var(--green);
 	--background: var(--white);
+	--chords: var(--orange);
+	--play: var(--green);
+	--scales: var(--blue);
 }
 
 body {
@@ -31,6 +31,6 @@ button {
 	background-color: var(--scales);
 }
 
-.Write {
-	background-color: var(--write);
+.Play {
+	background-color: var(--play);
 }
