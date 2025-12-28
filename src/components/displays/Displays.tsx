@@ -1,0 +1,33 @@
+import Modes from '@/components/displays/Modes';
+import { useGlobals } from '@/hooks/useGlobals';
+import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
+import Instrument from './instruments/Instrument';
+
+type DisplaysProps = {
+	hasModes?: boolean;
+};
+
+function Displays({ hasModes = false }: DisplaysProps) {
+	const { displays } = useGlobals();
+
+	const orderedDisplays = INSTRUMENT_ORDER.filter((instrument) => {
+		const iconType = ICON_MAP[instrument];
+		return displays.includes(iconType);
+	});
+
+	const showModes = hasModes && displays.includes('stand');
+
+	return (
+		<div className='Displays flex flex-col gap-8 w-full max-w-screen-2xl mx-auto'>
+			{orderedDisplays.map((display) => (
+				<Instrument instrument={display} key={display}>
+					{display}
+				</Instrument>
+			))}
+
+			{showModes && <Modes />}
+		</div>
+	);
+}
+
+export default Displays;
