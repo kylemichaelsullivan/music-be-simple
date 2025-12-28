@@ -5,8 +5,5 @@ export default {
 		extend: {},
 	},
 	plugins: [],
-	safelist: [
-		'left-0',
-		'right-0',
-	],
+	safelist: ['left-0', 'right-0'],
 };
