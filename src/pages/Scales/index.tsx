@@ -6,6 +6,7 @@ import Displays from '@/components/displays/Displays';
 import DisplaysSelector from '@/components/displays/DisplaysSelector';
 import { useGlobals, useScales } from '@/hooks';
 import type { IconType } from '@/instruments';
+import Notes from './Notes';
 import Scales from './Scales';
 
 export default function ScalesIndex() {
@@ -25,8 +26,7 @@ export default function ScalesIndex() {
 			<UseFlatsButton />
 
 			<Scales />
-
-			<p>Notes</p>
+			<Notes />
 
 			<DisplaysSelector
 				onFxn={(icon: IconType) => handleDisplaysClick(icon)}
