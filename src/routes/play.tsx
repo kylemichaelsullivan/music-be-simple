@@ -1,11 +1,11 @@
 import { PlayContextProvider } from '@/context';
-import Play from '@/pages/Play';
+import PlayIndex from '@/pages/Play';
 import { createFileRoute } from '@tanstack/react-router';
 
-function PlayPage() {
+export default function PlayPage() {
 	return (
 		<PlayContextProvider>
-			<Play />
+			<PlayIndex />
 		</PlayContextProvider>
 	);
 }

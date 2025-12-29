@@ -1,11 +1,11 @@
 import { ScalesContextProvider } from '@/context';
-import Scales from '@/pages/Scales';
+import ScalesIndex from '@/pages/Scales';
 import { createFileRoute } from '@tanstack/react-router';
 
-function ScalesPage() {
+export default function ScalesPage() {
 	return (
 		<ScalesContextProvider>
-			<Scales />
+			<ScalesIndex />
 		</ScalesContextProvider>
 	);
 }
