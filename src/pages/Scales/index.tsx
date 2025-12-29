@@ -4,11 +4,11 @@ import TopButton from '@/components/buttons/TopButton';
 import UseFlatsButton from '@/components/buttons/UseFlatsButton';
 import Displays from '@/components/displays/Displays';
 import DisplaysSelector from '@/components/displays/DisplaysSelector';
-import { useGlobals } from '@/hooks/useGlobals';
-import { useScales } from '@/hooks/useScales';
+import { useGlobals, useScales } from '@/hooks';
 import type { IconType } from '@/instruments';
+import Scales from './Scales';
 
-export default function Scales() {
+export default function ScalesIndex() {
 	const title = 'Scales';
 	const { displays, handleDisplaysClick } = useGlobals();
 	const { showNoteLabels, toggleNoteLabels } = useScales();
@@ -24,7 +24,7 @@ export default function Scales() {
 			/>
 			<UseFlatsButton />
 
-			<p>Selects</p>
+			<Scales />
 
 			<p>Notes</p>
 

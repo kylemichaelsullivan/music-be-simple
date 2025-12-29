@@ -19,7 +19,8 @@ body {
 	font-family: "Inter", sans-serif;
 }
 
-button {
+button,
+select {
 	cursor: pointer;
 }
 
