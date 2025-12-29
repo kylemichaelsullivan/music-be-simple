@@ -1,4 +1,4 @@
-import { useButtonHandler } from '@/hooks/useButtonHandler';
+import { useButtonHandler } from '@/hooks';
 import type { XPositionType } from '@/types';
 
 type TopButtonProps = {

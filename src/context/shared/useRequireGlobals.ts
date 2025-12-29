@@ -1,4 +1,4 @@
-import type { GlobalsContextType } from '@/types/globals';
+import type { GlobalsContextType } from '@/types';
 import { useContext } from 'react';
 import { GlobalsContext } from '../Globals';
 

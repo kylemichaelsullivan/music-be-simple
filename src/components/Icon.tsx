@@ -1,11 +1,10 @@
+import type { InstrumentType } from '@/types';
 import banjoIcon from '/icons/banjo.svg';
 import guitarIcon from '/icons/guitar.svg';
 import pianoIcon from '/icons/keyboard.svg';
 import mandolinIcon from '/icons/mandolin.svg';
 import modesIcon from '/icons/stand.svg';
 import ukuleleIcon from '/icons/ukulele.svg';
-
-import type { InstrumentType } from '@/types';
 
 type IconName = InstrumentType | 'Modes';
 

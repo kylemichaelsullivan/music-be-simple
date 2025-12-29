@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-
+import type { PlayContextProviderProps } from '@/types';
 import { FREQUENCIES } from '@/utils/notes';
-
-import type { PlayContextProviderProps } from '@/types/play';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRequireGlobals } from '../shared/useRequireGlobals';
 import { PlayContext } from './PlayContext';
 

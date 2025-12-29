@@ -1,5 +1,5 @@
 import { PlayContext } from '@/context';
-import type { PlayContextType } from '@/types/play';
+import type { PlayContextType } from '@/types';
 import { useContext } from 'react';
 
 export const usePlay = (): PlayContextType => {

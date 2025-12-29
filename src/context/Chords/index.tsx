@@ -1,9 +1,11 @@
-import { initialTonic, initialVariant } from '@/context/defaults';
-import { useEscapeReset } from '@/context/shared/useEscapeReset';
-import { useRequireGlobals } from '@/context/shared/useRequireGlobals';
-import { useScaleState } from '@/context/shared/useScaleState';
-import type { Chord_Variant, border } from '@/types';
-import type { ChordsContextProviderProps } from '@/types/chords';
+import {
+	initialTonic,
+	initialVariant,
+	useEscapeReset,
+	useRequireGlobals,
+	useScaleState,
+} from '@/context';
+import type { Chord_Variant, ChordsContextProviderProps, border } from '@/types';
 import { getChordInfo } from '@/utils/chords';
 import { useCallback, useMemo } from 'react';
 import { ChordsContext } from './ChordsContext';

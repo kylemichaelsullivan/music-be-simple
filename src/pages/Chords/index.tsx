@@ -4,9 +4,9 @@ import TopButton from '@/components/buttons/TopButton';
 import UseFlatsButton from '@/components/buttons/UseFlatsButton';
 import Displays from '@/components/displays/Displays';
 import DisplaysSelector from '@/components/displays/DisplaysSelector';
-import { useGlobals } from '@/hooks/useGlobals';
+import { useGlobals } from '@/hooks';
 
-export default function Chords() {
+export default function ChordsIndex() {
 	const title = 'Chords';
 	const { displays, handleDisplaysClick, showNerdMode, toggleShowNerdMode } = useGlobals();
 

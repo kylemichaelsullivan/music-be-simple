@@ -1,5 +1,5 @@
 import { ScalesContext } from '@/context';
-import type { ScalesContextType } from '@/types/scales';
+import type { ScalesContextType } from '@/types';
 import { useContext } from 'react';
 
 export const useScales = (): ScalesContextType => {

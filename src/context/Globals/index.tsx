@@ -1,12 +1,9 @@
-import { useCallback, useMemo } from 'react';
-
-import { FLATS, SHARPS } from '@/utils/notes';
-
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
-
-import type { GlobalsContextProviderProps } from '@/types/globals';
-import { useLocalStorage } from '../shared/useLocalStorage';
+import type { GlobalsContextProviderProps } from '@/types';
+import { FLATS, SHARPS } from '@/utils/notes';
+import { useCallback, useMemo } from 'react';
+import { useLocalStorage } from '../shared';
 import { GlobalsContext } from './GlobalsContext';
 
 export { GlobalsContext };

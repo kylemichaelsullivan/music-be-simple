@@ -2,8 +2,7 @@ import { useEscapeReset } from '@/context/shared/useEscapeReset';
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
 import { useRequireGlobals } from '@/context/shared/useRequireGlobals';
 import { useScaleState } from '@/context/shared/useScaleState';
-import type { NoteIndex, ScaleMode, ScaleType } from '@/types';
-import type { ScalesContextProviderProps } from '@/types/scales';
+import type { NoteIndex, ScaleMode, ScaleType, ScalesContextProviderProps } from '@/types';
 import { useCallback, useMemo } from 'react';
 import { ScalesContext } from './ScalesContext';
 

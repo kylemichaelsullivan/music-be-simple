@@ -3,7 +3,7 @@ import Title from '@/components/Title';
 // import TopButton from '@/components/TopButton';
 import UseFlatsButton from '@/components/buttons/UseFlatsButton';
 
-export default function Play() {
+export default function PlayIndex() {
 	const title = 'Play';
 
 	return (

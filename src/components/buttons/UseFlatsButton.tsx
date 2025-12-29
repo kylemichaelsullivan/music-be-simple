@@ -1,5 +1,5 @@
 import TopButton from '@/components/buttons/TopButton';
-import { useGlobals } from '@/hooks/useGlobals';
+import { useGlobals } from '@/hooks';
 import type { XPositionType } from '@/types';
 
 type UseFlatsButtonProps = {
