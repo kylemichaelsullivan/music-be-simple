@@ -14,4 +14,6 @@ _https://www.svgrepo.com/collection/music-instrument/_
 
 _https://thenounproject.com/_
 
+- down.svg (/icon/up-7929044/)
 - mandolin.svg (/icon/mandolin-147442/)
+- up.svg (/icon/up-7929044/)
