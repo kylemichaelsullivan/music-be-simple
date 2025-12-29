@@ -1,4 +1,4 @@
-import { useButtonHandler } from '@/hooks/useButtonHandler';
+import { useButtonHandler } from '@/hooks';
 import type { InstrumentType } from '@/types';
 import { useCallback } from 'react';
 import Icon from '../Icon';
@@ -10,7 +10,7 @@ type DisplaySelectorProps = {
 	onFxn: (icon: InstrumentType | 'Modes') => void;
 };
 
-function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelectorProps) {
+export default function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelectorProps) {
 	const { handleClick, handleKeyDown } = useButtonHandler(
 		useCallback(() => {
 			onFxn(icon);
@@ -32,5 +32,3 @@ function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelectorProps) 
 		</button>
 	);
 }
-
-export default DisplaySelector;

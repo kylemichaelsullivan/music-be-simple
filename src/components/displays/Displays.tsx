@@ -1,5 +1,5 @@
 import Modes from '@/components/displays/Modes';
-import { useGlobals } from '@/hooks/useGlobals';
+import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import Instrument from './instruments/Instrument';
 
@@ -7,7 +7,7 @@ type DisplaysProps = {
 	hasModes?: boolean;
 };
 
-function Displays({ hasModes = false }: DisplaysProps) {
+export default function Displays({ hasModes = false }: DisplaysProps) {
 	const { displays } = useGlobals();
 
 	const orderedDisplays = INSTRUMENT_ORDER.filter((instrument) => {
@@ -29,5 +29,3 @@ function Displays({ hasModes = false }: DisplaysProps) {
 		</div>
 	);
 }
-
-export default Displays;

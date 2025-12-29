@@ -1,4 +1,4 @@
-function Footer() {
+export default function Footer() {
 	const year = new Date().getFullYear();
 	return (
 		<footer className='Footer font-bold text-center border-t p-2'>
@@ -6,5 +6,3 @@ function Footer() {
 		</footer>
 	);
 }
-
-export default Footer;

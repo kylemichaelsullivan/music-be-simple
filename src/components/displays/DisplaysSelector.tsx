@@ -8,7 +8,11 @@ type DisplaysSelectorProps = {
 	onFxn: (icon: IconType) => void;
 };
 
-function DisplaysSelector({ onFxn, hasModes = false, displays = [] }: DisplaysSelectorProps) {
+export default function DisplaysSelector({
+	onFxn,
+	hasModes = false,
+	displays = [],
+}: DisplaysSelectorProps) {
 	return (
 		<div className='DisplaysSelector relative border border-slate-500'>
 			<div className='flex px-4 py-1 overflow-x-auto'>
@@ -40,5 +44,3 @@ function DisplaysSelector({ onFxn, hasModes = false, displays = [] }: DisplaysSe
 		</div>
 	);
 }
-
-export default DisplaysSelector;
