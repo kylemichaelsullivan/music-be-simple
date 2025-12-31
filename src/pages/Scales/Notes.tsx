@@ -13,6 +13,7 @@ export default function Notes() {
 	}, [variant]);
 
 	const getGridClass = (count: number) => {
+		// ensure Tailwind classes are compiled
 		switch (count) {
 			case 5:
 				return 'grid-cols-5';
