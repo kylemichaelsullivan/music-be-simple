@@ -1,10 +1,25 @@
 import Modes from '@/components/displays/Modes';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
+import type { InstrumentType } from '@/types';
+import type { ReactElement } from 'react';
+import Banjo from './instruments/Banjo';
+import Guitar from './instruments/Guitar';
 import Instrument from './instruments/Instrument';
+import Mandolin from './instruments/Mandolin';
+import Piano from './instruments/Piano';
+import Ukulele from './instruments/Ukulele';
 
 type DisplaysProps = {
 	hasModes?: boolean;
+};
+
+const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
+	Banjo,
+	Guitar,
+	Mandolin,
+	Piano,
+	Ukulele,
 };
 
 export default function Displays({ hasModes = false }: DisplaysProps) {
@@ -21,7 +36,7 @@ export default function Displays({ hasModes = false }: DisplaysProps) {
 		<div className='Displays flex flex-col gap-8 w-full max-w-screen-2xl mx-auto'>
 			{orderedDisplays.map((display) => (
 				<Instrument instrument={display} key={display}>
-					{display}
+					{INSTRUMENTS[display]()}
 				</Instrument>
 			))}
 

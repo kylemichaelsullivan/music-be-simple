@@ -1,6 +1,5 @@
 import { useScales } from '@/hooks';
 import { rangeOfLength } from '@/utils/notes';
-
 import Key from './Key';
 
 export default function Piano() {
