@@ -122,6 +122,20 @@ Use for updating existing files, features, or functionality.
 - `UPDATE: Update Tailwind CSS Configuration`
 - `UPDATE: Improve Navigation Component Layout`
 
+## File Handling Guidelines
+
+### AI Chat Workflow
+
+When working with files that have uncommitted changes in an AI chat context, follow these rules:
+
+1. **No Plan Files**: Do not create any plan files or temporary planning documents. All planning should be done in commit messages or documentation, not in separate plan files.
+
+2. **Include All Uncommitted Changes**: All files with uncommitted changes must be included when grouping files for commits. Do not leave files with uncommitted changes ungrouped.
+
+3. **One Commit Per File**: Each file should only be assigned to one commit group. Files should not be split across multiple commit groups or included in multiple commits simultaneously.
+
+4. **No Staging**: Do not add or stage files. Group files with uncommitted changes logically in the AI chat for commit organization.
+
 ## Best Practices
 
 ### Message Length
