@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+	--dot-size: 0.675rem;
+
 	--black: #000000;
 	--orange: #ffb86a;
 	--green: #64f58d;
@@ -34,4 +36,157 @@ select {
 
 .Play {
 	background-color: var(--play);
+}
+
+/* Instruments */
+.fretboard {
+	background-color: var(--fretboard-color);
+}
+
+.FretString,
+.DroneString {
+	position: relative;
+	height: 2rem;
+	min-height: 1rem;
+}
+
+.FretString::after,
+.DroneString::before,
+.DroneString::after {
+	position: absolute;
+	content: "";
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.FretString::after,
+.DroneString::after {
+	background-color: silver;
+	width: 100%;
+	height: 0.25rem;
+	z-index: 2;
+}
+
+.Nut,
+.Fret {
+	position: relative;
+	cursor: pointer;
+	z-index: 3;
+}
+
+.Fret:last-child {
+	border-right: 0;
+}
+
+.Piano {
+	--width-white: min(calc((100vw - 2rem) / 7), 6.25rem);
+	--width-black: calc(var(--width-white) * 0.6);
+}
+
+.Piano .Key {
+	position: relative;
+	width: var(--width-white);
+	height: calc(var(--width-white) * 4);
+	max-height: 90vh;
+}
+
+.Piano .white {
+	background-color: white;
+}
+
+.Piano .black {
+	--margin: calc(var(--width-black) / -2);
+	background-color: black;
+	width: var(--width-black);
+	height: calc(var(--width-black) * 4);
+	margin-right: var(--margin);
+	margin-left: var(--margin);
+	z-index: 2;
+}
+
+.Piano .allowed::after {
+	bottom: 1rem;
+	transform: translateX(-50%);
+}
+
+.Guitar {
+	--fretboard-color: #ff0000;
+}
+
+.Banjo {
+	--fretboard-color: #f5f5dc;
+}
+
+.Banjo .FretString:nth-child(4) .Fret {
+	border-bottom-width: 1px;
+}
+
+.Banjo .FretString:nth-child(4) .Fret:nth-child(n + 7) {
+	border-bottom-width: 0;
+}
+
+.Banjo .DroneString.ml-1 {
+	margin-left: calc(var(--spacing) * 0.9);
+}
+
+.Banjo .DroneString .SkippedFret {
+	--tw-bg-opacity: 1;
+	border-bottom: 1px solid rgb(125 211 252 / var(--tw-bg-opacity));
+	z-index: 3;
+}
+
+.Banjo .DroneString .SkippedFret:first-child {
+	position: relative;
+}
+
+.Banjo .DroneString .SkippedFret:first-child::before {
+	--tw-bg-opacity: 1;
+	position: absolute;
+	content: "";
+	background-color: rgb(125 211 252 / var(--tw-bg-opacity));
+	width: 1rem;
+	height: 110%;
+	left: -0.5rem;
+	top: 0;
+}
+
+.Banjo .DroneString .Nut {
+	left: 0.5px;
+}
+
+.Banjo .DroneString .Fret {
+	border-bottom: 1px solid black;
+}
+
+.Ukelele {
+	--fretboard-color: yellow;
+}
+
+.Mandolin {
+	--fretboard-color: #e6d5bc;
+}
+
+/* Utility Classes */
+.text-xxxs {
+	font-size: 0.5rem;
+}
+
+.text-xxs {
+	font-size: 0.675rem;
+}
+
+@media (width >= 40rem) {
+	.sm\:text-base {
+		font-size: var(--text-base);
+		line-height: var(--tw-leading, var(--text-base--line-height));
+	}
+}
+
+/* camelCase to match React Prop */
+.hasFlat {
+	letter-spacing: -0.1875em;
+}
+
+.hasSharp {
+	letter-spacing: 0em;
 }
