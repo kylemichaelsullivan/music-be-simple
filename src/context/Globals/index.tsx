@@ -1,8 +1,8 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
 import type { GlobalsContextProviderProps } from '@/types';
-import { FLATS, SHARPS } from '@/utils/notes';
-import { useCallback, useMemo } from 'react';
+import { FLATS, FREQUENCIES, SHARPS } from '@/utils/notes';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocalStorage } from '../shared';
 import { GlobalsContext } from './GlobalsContext';
 
@@ -19,6 +19,21 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		'showNerdMode',
 		initialShowNerdMode
 	);
+
+	const [notePlaying, setNotePlaying] = useState<boolean>(false);
+	const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+
+	useEffect(() => {
+		const context = new AudioContext();
+		setAudioContext(context);
+		return () => {
+			context.close();
+		};
+	}, []);
+
+	const getFrequency = useCallback((note: number) => {
+		return FREQUENCIES[note];
+	}, []);
 
 	const handleDisplaysClick = useCallback(
 		(icon: IconType) => {
@@ -55,6 +70,27 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		[currentScale]
 	);
 
+	const playNote = useCallback(
+		(note: number) => {
+			if (!audioContext || notePlaying) return;
+
+			const oscillator = audioContext.createOscillator();
+			oscillator.type = 'sine';
+			oscillator.frequency.value = getFrequency(note);
+			oscillator.connect(audioContext.destination);
+
+			oscillator.start();
+			setNotePlaying(true);
+
+			setTimeout(() => {
+				oscillator.stop();
+				oscillator.disconnect();
+				setNotePlaying(false);
+			}, 1000);
+		},
+		[audioContext, getFrequency, notePlaying]
+	);
+
 	const contextValue = useMemo(
 		() => ({
 			usingFlats,
@@ -65,6 +101,7 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 			toggleShowNerdMode,
 			getNote,
 			capitalizeFirstLetter,
+			playNote,
 		}),
 		[
 			usingFlats,
@@ -75,6 +112,7 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 			toggleShowNerdMode,
 			getNote,
 			capitalizeFirstLetter,
+			playNote,
 		]
 	);
 

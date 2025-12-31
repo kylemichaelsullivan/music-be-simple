@@ -8,8 +8,9 @@ export type GlobalsContextType = {
 	toggleUsingFlats: () => void;
 	handleDisplaysClick: (icon: IconType) => void;
 	toggleShowNerdMode: () => void;
-	getNote: (note: number) => string;
 	capitalizeFirstLetter: (string: string) => string;
+	getNote: (note: number) => string;
+	playNote: (note: number) => void;
 };
 
 export type GlobalsContextProviderProps = {

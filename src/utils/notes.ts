@@ -37,6 +37,10 @@ export function getIntervalsForVariant(variant: string): readonly number[] {
 	return INTERVALS.major;
 }
 
+export function rangeOfLength(length: number): readonly number[] {
+	return Array.from({ length }, (_, i) => i) as readonly number[];
+}
+
 export type Notes_Flats = (typeof FLATS)[number];
 export type Notes_Sharps = (typeof SHARPS)[number];
 
