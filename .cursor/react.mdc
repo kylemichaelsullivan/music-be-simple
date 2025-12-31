@@ -377,7 +377,7 @@ src/
 ### Scripts
 
 - **`bun dev`**: Start development server with HMR
-- **`bun build`**: Build for production (TypeScript check + Vite build)
+- **`bun run build`**: Build for production (TypeScript check + Vite build)
 - **`bun lint`**: Run Biome linter
 - **`bun lint:fix`**: Run Biome linter and auto-fix
 - **`bun format`**: Format code with Biome

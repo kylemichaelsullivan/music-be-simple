@@ -8,8 +8,8 @@ alwaysApply: true
 
 - Write and review code like a senior developer
 - Challenge erroneous assumptions and inefficiencies
-- Use **Bun** for package management
-- Prefer `bun build` over `bun dev` for compilation
+- Always use **bun** for package management and all package-related operations
+- Prefer `bun run build` over `bun dev` for compilation
 - Use **TypeScript** with strict configuration
 - Follow **React 18** with **Vite** architecture
 - Use **TanStack Router** for routing
@@ -18,7 +18,7 @@ alwaysApply: true
 
 ## Package Management
 
-- **Package Manager**: Bun
+- **Package Manager**: **bun** (always use bun for all package-related operations)
 - **Build Command**: `bun build` (TypeScript compilation + Vite build)
 - **Development Command**: `bun dev` (Vite dev server with HMR)
 - **Lock File**: `bun.lock`
