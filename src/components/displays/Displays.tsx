@@ -1,14 +1,9 @@
-import Modes from '@/components/displays/Modes';
+import Modes from '@/components/displays/modes/Modes';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { InstrumentType } from '@/types';
 import type { ReactElement } from 'react';
-import Banjo from './instruments/Banjo';
-import Guitar from './instruments/Guitar';
-import Instrument from './instruments/Instrument';
-import Mandolin from './instruments/Mandolin';
-import Piano from './instruments/Piano';
-import Ukulele from './instruments/Ukulele';
+import { Banjo, Guitar, Instrument, Mandolin, Piano, Ukulele } from './instruments';
 
 type DisplaysProps = {
 	hasModes?: boolean;
