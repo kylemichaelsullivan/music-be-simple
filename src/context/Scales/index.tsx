@@ -1,8 +1,15 @@
 import { useEscapeReset } from '@/context/shared/useEscapeReset';
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
-import { useRequireGlobals } from '@/context/shared/useRequireGlobals';
 import { useScaleState } from '@/context/shared/useScaleState';
-import type { NoteIndex, ScaleMode, ScaleType, ScalesContextProviderProps } from '@/types';
+import { useGlobals } from '@/hooks';
+import type {
+	NoteIndex,
+	NoteLabelsButtonIcon,
+	ScaleMode,
+	ScaleType,
+	ScalesContextProviderProps,
+} from '@/types';
+import { getNote, isValidNoteIndex } from '@/utils';
 import { useCallback, useMemo } from 'react';
 import { ScalesContext } from './ScalesContext';
 
@@ -13,7 +20,7 @@ const initialVariant: ScaleType = 'major';
 const initialShowNoteLabels: boolean = true;
 
 export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) => {
-	const globals = useRequireGlobals();
+	const { usingFlats } = useGlobals();
 
 	const { tonic, variant, notes, handleTonicChange, handleVariantChange, makeScale, reset } =
 		useScaleState<ScaleType>({
@@ -28,7 +35,7 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 
 	const getRelativeMajor = useCallback(
 		(mode: ScaleMode) => {
-			// For each mode, calculate the relative major key that shares the same key signature
+			// For each mode, calculate the relative major key that shares the key signature
 			let relativeMajorNote: number;
 
 			switch (mode) {
@@ -57,14 +64,18 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 					relativeMajorNote = tonic;
 			}
 
-			return globals.getNote(relativeMajorNote);
+			if (!isValidNoteIndex(relativeMajorNote)) {
+				throw new Error(`Invalid note index: ${relativeMajorNote}`);
+			}
+
+			return getNote(relativeMajorNote, usingFlats);
 		},
-		[tonic, globals]
+		[tonic, usingFlats]
 	);
 
 	const getRelativeMinor = useCallback(
 		(mode: ScaleMode) => {
-			// For each mode, calculate the relative minor key that shares the same key signature
+			// For each mode, calculate the relative minor key that shares the key signature
 			let relativeMinorNote: number;
 
 			switch (mode) {
@@ -93,14 +104,28 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 					relativeMinorNote = tonic;
 			}
 
-			return globals.getNote(relativeMinorNote);
+			if (!isValidNoteIndex(relativeMinorNote)) {
+				throw new Error(`Invalid note index: ${relativeMinorNote}`);
+			}
+
+			return getNote(relativeMinorNote, usingFlats);
 		},
-		[tonic, globals]
+		[tonic, usingFlats]
 	);
 
 	const toggleNoteLabels = useCallback(() => {
 		setShowNoteLabels((prev: boolean) => !prev);
 	}, [setShowNoteLabels]);
+
+	const noteLabelsButtonTitle = useMemo(
+		() => (showNoteLabels ? 'Hide Notes?' : 'Show Notes?'),
+		[showNoteLabels]
+	);
+
+	const noteLabelsButtonIcon = useMemo<NoteLabelsButtonIcon>(
+		() => (showNoteLabels ? '📖' : '📕'),
+		[showNoteLabels]
+	);
 
 	useEscapeReset(reset);
 
@@ -116,6 +141,8 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 			getRelativeMajor,
 			getRelativeMinor,
 			toggleNoteLabels,
+			noteLabelsButtonTitle,
+			noteLabelsButtonIcon,
 			reset,
 		}),
 		[
@@ -129,6 +156,8 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 			getRelativeMajor,
 			getRelativeMinor,
 			toggleNoteLabels,
+			noteLabelsButtonTitle,
+			noteLabelsButtonIcon,
 			reset,
 		]
 	);

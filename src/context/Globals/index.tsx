@@ -1,7 +1,7 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
 import type { GlobalsContextProviderProps } from '@/types';
-import { FLATS, FREQUENCIES, SHARPS } from '@/utils/notes';
+import { FREQUENCIES } from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocalStorage } from '../shared';
 import { GlobalsContext } from './GlobalsContext';
@@ -10,15 +10,10 @@ export { GlobalsContext };
 
 const initialUsingFlats: boolean = true;
 const initialDisplays: IconType[] = INSTRUMENT_ORDER.map((instrument) => ICON_MAP[instrument]);
-const initialShowNerdMode: boolean = true;
 
 export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps) => {
 	const [usingFlats, setUsingFlats] = useLocalStorage<boolean>('usingFlats', initialUsingFlats);
 	const [displays, setDisplays] = useLocalStorage<IconType[]>('selectedDisplays', initialDisplays);
-	const [showNerdMode, setShowNerdMode] = useLocalStorage<boolean>(
-		'showNerdMode',
-		initialShowNerdMode
-	);
 
 	const [notePlaying, setNotePlaying] = useState<boolean>(false);
 	const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
@@ -51,24 +46,9 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		setUsingFlats((prev) => !prev);
 	}, [setUsingFlats]);
 
-	const toggleShowNerdMode = useCallback(() => {
-		setShowNerdMode((prev: boolean) => !prev);
-	}, [setShowNerdMode]);
-
 	const capitalizeFirstLetter = useCallback((string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}, []);
-
-	const currentScale = useMemo(() => {
-		return usingFlats ? FLATS : SHARPS;
-	}, [usingFlats]);
-
-	const getNote = useCallback(
-		(note: number) => {
-			return currentScale[note];
-		},
-		[currentScale]
-	);
 
 	const playNote = useCallback(
 		(note: number) => {
@@ -95,25 +75,12 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		() => ({
 			usingFlats,
 			displays,
-			showNerdMode,
 			toggleUsingFlats,
 			handleDisplaysClick,
-			toggleShowNerdMode,
-			getNote,
 			capitalizeFirstLetter,
 			playNote,
 		}),
-		[
-			usingFlats,
-			displays,
-			showNerdMode,
-			toggleUsingFlats,
-			handleDisplaysClick,
-			toggleShowNerdMode,
-			getNote,
-			capitalizeFirstLetter,
-			playNote,
-		]
+		[usingFlats, displays, toggleUsingFlats, handleDisplaysClick, capitalizeFirstLetter, playNote]
 	);
 
 	return <GlobalsContext.Provider value={contextValue}>{children}</GlobalsContext.Provider>;

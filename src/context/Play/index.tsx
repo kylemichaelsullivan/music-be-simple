@@ -1,56 +1,14 @@
 import type { PlayContextProviderProps } from '@/types';
-import { FREQUENCIES } from '@/utils/notes';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useRequireGlobals } from '../shared/useRequireGlobals';
 import { PlayContext } from './PlayContext';
 
 export { PlayContext };
 
 export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
-	useRequireGlobals(); // Ensure GlobalsContext is available
+	useRequireGlobals();
 
-	const [notePlaying, setNotePlaying] = useState<boolean>(false);
-	const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-
-	useEffect(() => {
-		const context = new AudioContext();
-		setAudioContext(context);
-		return () => {
-			context.close();
-		};
-	}, []);
-
-	const getFrequency = useCallback((note: number) => {
-		return FREQUENCIES[note];
-	}, []);
-
-	const playNote = useCallback(
-		(note: number) => {
-			if (!audioContext || notePlaying) return;
-
-			const oscillator = audioContext.createOscillator();
-			oscillator.type = 'sine';
-			oscillator.frequency.value = getFrequency(note);
-			oscillator.connect(audioContext.destination);
-
-			oscillator.start();
-			setNotePlaying(true);
-
-			setTimeout(() => {
-				oscillator.stop();
-				oscillator.disconnect();
-				setNotePlaying(false);
-			}, 1000);
-		},
-		[audioContext, getFrequency, notePlaying]
-	);
-
-	const contextValue = useMemo(
-		() => ({
-			playNote,
-		}),
-		[playNote]
-	);
+	const contextValue = useMemo(() => ({}), []);
 
 	return <PlayContext.Provider value={contextValue}>{children}</PlayContext.Provider>;
 };

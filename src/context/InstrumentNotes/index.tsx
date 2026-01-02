@@ -1,4 +1,4 @@
-import type { border } from '@/types';
+import type { NoteIndex, border } from '@/types';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { InstrumentNotesContext } from './InstrumentNotesContext';
@@ -6,10 +6,11 @@ import type { InstrumentNotesContextType } from './InstrumentNotesContext';
 
 type InstrumentNotesProviderProps = {
 	children: ReactNode;
-	notes: number[];
-	tonic: number;
+	notes: NoteIndex[];
+	tonic: NoteIndex;
 	showNoteLabels?: boolean;
-	getBorderStyle?: (note: number) => border;
+	getBorderStyle?: (note: NoteIndex) => border;
+	showNerdMode?: boolean;
 };
 
 export function InstrumentNotesProvider({
@@ -18,10 +19,11 @@ export function InstrumentNotesProvider({
 	tonic,
 	showNoteLabels = true,
 	getBorderStyle,
+	showNerdMode,
 }: InstrumentNotesProviderProps) {
 	const value: InstrumentNotesContextType = useMemo(
-		() => ({ notes, tonic, showNoteLabels, getBorderStyle }),
-		[notes, tonic, showNoteLabels, getBorderStyle]
+		() => ({ notes, tonic, showNoteLabels, getBorderStyle, showNerdMode }),
+		[notes, tonic, showNoteLabels, getBorderStyle, showNerdMode]
 	);
 	return (
 		<InstrumentNotesContext.Provider value={value}>{children}</InstrumentNotesContext.Provider>

@@ -1,11 +1,12 @@
-import type { border } from '@/types';
+import type { NoteIndex, border } from '@/types';
 import { createContext } from 'react';
 
 export type InstrumentNotesContextType = {
-	notes: number[];
-	tonic: number;
+	notes: NoteIndex[];
+	tonic: NoteIndex;
 	showNoteLabels?: boolean;
-	getBorderStyle?: (note: number) => border;
+	getBorderStyle?: (note: NoteIndex) => border;
+	showNerdMode?: boolean;
 };
 
 export const InstrumentNotesContext = createContext<InstrumentNotesContextType | undefined>(
