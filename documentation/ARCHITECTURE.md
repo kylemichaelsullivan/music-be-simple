@@ -172,6 +172,53 @@ TypeScript types are organized in `src/types/`:
 - `play.ts` - Play-related types
 - `scales.ts` - Scale-related types
 
+## Schema Validation System
+
+The application uses **Zod** for runtime type validation and schema definition:
+
+### Schema Organization
+
+All Zod schemas are defined in `src/schemas.ts`:
+
+- **Basic schemas**: Primitive types and enums (NoteIndex, AccidentalType, ScaleType, ScaleMode, ChordVariant)
+- **UI schemas**: UI-related types (Border, InstrumentType, IconType, TabType, PositionType)
+- **Button schemas**: Button icon types (NerdModeButtonIcon, NoteLabelsButtonIcon)
+- **Storage schemas**: localStorage data structures (GlobalsStorageSchema, ScalesStorageSchema, ChordsStorageSchema) - defined but not currently used; fields are validated individually
+- **Data schemas**: Complex data structures (ChordInfo, ChordData, ChordGroup)
+
+### Validation Usage
+
+1. **localStorage Validation**: All data loaded from localStorage is validated using Zod schemas via the `useLocalStorage` hook
+2. **Input Validation**: User inputs (form selections, user interactions) are validated using `safeParse()` before state updates
+3. **Runtime Safety**: Zod provides runtime type checking beyond TypeScript's compile-time checks
+
+### Schema Examples
+
+```typescript
+// Basic schema
+export const NoteIndexSchema = z.number().int().min(0).max(11);
+
+// Enum schema
+export const ScaleTypeSchema = z.enum(SCALE_TYPES as [string, ...string[]]);
+
+// Storage schema
+export const ScalesStorageSchema = z.object({
+  tonic: NoteIndexSchema,
+  variant: ScaleTypeSchema,
+  showNoteLabels: z.boolean(),
+});
+```
+
+### Integration with Context
+
+Context providers use Zod schemas for localStorage persistence. Each field is validated individually:
+
+- `GlobalsContext` validates `usingFlats` (with `z.boolean()`) and `selectedDisplays` (with `z.array(IconTypeSchema)`)
+- `ScalesContext` validates `showNoteLabels` (with `z.boolean()`)
+- `ChordsContext` validates `showNerdMode` (with `z.boolean()`)
+
+**Note**: Tonic and variant are managed via `useScaleState` and `useChordState` hooks and are not persisted to localStorage. The storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) are defined but not currently used - each field is validated individually rather than as a complete storage object.
+
 ## Styling
 
 The application uses Tailwind CSS for styling:
@@ -183,6 +230,7 @@ The application uses Tailwind CSS for styling:
 
 - **Vite** - Build tool and dev server
 - **TypeScript** - Type checking and compilation
+- **Zod** - Runtime type validation and schema definition
 - **Biome** - Linting and formatting
 - **TanStack Router Plugin** - Route generation
 

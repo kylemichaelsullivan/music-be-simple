@@ -34,7 +34,11 @@ function MyComponent() {
 }
 ```
 
-**Persistence**: Selected displays and flats/sharps preference are persisted to localStorage.
+**Persistence**: Selected displays and flats/sharps preference are persisted to localStorage with Zod schema validation.
+
+**Schema Validation**:
+- `usingFlats` is validated using `z.boolean()`
+- `selectedDisplays` is validated using `z.array(IconTypeSchema)`
 
 ### ScalesContext
 
@@ -68,7 +72,11 @@ function ScalesComponent() {
 }
 ```
 
-**Persistence**: Tonic, variant, and note label visibility are persisted to localStorage.
+**Persistence**: Note label visibility is persisted to localStorage with Zod schema validation. Tonic and variant are managed via `useScaleState` hook and are not persisted.
+
+**Schema Validation**:
+- `showNoteLabels` is validated using `z.boolean()`
+- Tonic and variant are managed in component state (not persisted)
 
 ### ChordsContext
 
@@ -104,7 +112,11 @@ function ChordsComponent() {
 }
 ```
 
-**Persistence**: Tonic, variant, note count, and nerd mode are persisted to localStorage.
+**Persistence**: Nerd mode is persisted to localStorage with Zod schema validation. Tonic and variant are managed via `useChordState` hook and are not persisted.
+
+**Schema Validation**:
+- `showNerdMode` is validated using `z.boolean()`
+- Tonic and variant are managed in component state (not persisted)
 
 ### PlayContext
 
@@ -158,17 +170,52 @@ function InstrumentComponent() {
 
 ### useLocalStorage
 
-Generic hook for localStorage persistence.
+Generic hook for localStorage persistence with Zod schema validation.
 
 **Location**: `@/context/shared/useLocalStorage`
+
+**Signature**:
+```typescript
+function useLocalStorage<T>(
+  key: string,
+  schema: z.ZodType<T>,
+  initialValue: T
+): [T, (value: T | ((prev: T) => T)) => void]
+```
+
+**Features**:
+- Validates data loaded from localStorage using Zod schemas
+- Validates data before saving to localStorage
+- Falls back to `initialValue` if validation fails
+- Logs validation errors to console for debugging
 
 **Usage**:
 ```typescript
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
+import { IconTypeSchema } from '@/schemas';
+import { z } from 'zod';
 
 function MyComponent() {
-  const [value, setValue] = useLocalStorage('key', defaultValue);
-  // Component logic
+  // Basic type validation
+  const [usingFlats, setUsingFlats] = useLocalStorage(
+    'usingFlats',
+    z.boolean(),
+    true
+  );
+
+  // Array validation
+  const [displays, setDisplays] = useLocalStorage(
+    'selectedDisplays',
+    z.array(IconTypeSchema),
+    initialDisplays
+  );
+
+  // Boolean validation
+  const [showNoteLabels, setShowNoteLabels] = useLocalStorage(
+    'showNoteLabels',
+    z.boolean(),
+    true
+  );
 }
 ```
 
@@ -237,8 +284,22 @@ GlobalsContextProvider (root)
 
 1. State is saved to localStorage on changes
 2. State is loaded from localStorage on mount
-3. Errors are handled gracefully (falls back to defaults)
-4. State migration can be handled in context providers
+3. **Zod schema validation**: All data is validated using Zod schemas before use
+4. Errors are handled gracefully (falls back to defaults)
+5. Validation errors are logged to console for debugging
+6. State migration can be handled in context providers
+
+### Schema Validation
+
+All localStorage data is validated using Zod schemas defined in `src/schemas.ts`. Each field is validated individually:
+
+- **GlobalsContext**: `usingFlats` (validated with `z.boolean()`), `selectedDisplays` (validated with `z.array(IconTypeSchema)`)
+- **ScalesContext**: `showNoteLabels` (validated with `z.boolean()`)
+- **ChordsContext**: `showNerdMode` (validated with `z.boolean()`)
+
+**Note**: The storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) are defined in `src/schemas.ts` but are not currently used. Each field is validated individually rather than as a complete storage object. Tonic and variant are managed via `useScaleState` and `useChordState` hooks and are not persisted to localStorage.
+
+The `useLocalStorage` hook automatically validates data on load and before save, ensuring data integrity and type safety at runtime.
 
 ## Custom Hooks
 

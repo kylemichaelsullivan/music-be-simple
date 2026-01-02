@@ -26,6 +26,45 @@ This guide covers development practices, coding standards, and workflow for the 
 - Use type inference where appropriate, but be explicit for public APIs
 - Avoid `any` type - use `unknown` if type is truly unknown
 
+### Zod Schema Validation
+
+- **Schema location**: Define all Zod schemas in `src/schemas.ts`
+- **Runtime validation**: Use Zod for runtime type validation beyond TypeScript compile-time checks
+- **localStorage validation**: Always use Zod schemas with `useLocalStorage` hook
+- **Input validation**: Validate user inputs using `safeParse()` before state updates
+- **Error handling**: Handle validation errors gracefully with fallback to defaults
+
+#### Schema Usage
+
+```typescript
+// ✅ Define schemas in schemas.ts
+export const NoteIndexSchema = z.number().int().min(0).max(11);
+export const ScaleTypeSchema = z.enum(SCALE_TYPES as [string, ...string[]]);
+
+// ✅ Use schemas with useLocalStorage (for persisted fields)
+import { useLocalStorage } from '@/context/shared/useLocalStorage';
+import { IconTypeSchema } from '@/schemas';
+import { z } from 'zod';
+
+const [usingFlats, setUsingFlats] = useLocalStorage('usingFlats', z.boolean(), true);
+const [displays, setDisplays] = useLocalStorage(
+  'selectedDisplays',
+  z.array(IconTypeSchema),
+  initialDisplays
+);
+
+// ✅ Validate user inputs
+import { NoteIndexSchema } from '@/schemas';
+
+const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const value = Number.parseInt(e.target.value, 10);
+  const result = NoteIndexSchema.safeParse(value);
+  if (result.success && isValidNoteIndex(result.data)) {
+    handleTonicChange(result.data);
+  }
+};
+```
+
 ### React
 
 - Use **React 19** features and patterns
@@ -83,9 +122,11 @@ import type { ChordData } from '@/types/chords';
 
 ### State Persistence
 
-- Use `useLocalStorage` hook for persistent state
+- Use `useLocalStorage` hook for persistent state with Zod schema validation
 - Implement persistence in context providers
-- Handle localStorage errors gracefully
+- Always provide a Zod schema when using `useLocalStorage`
+- Handle localStorage errors gracefully (validation errors fall back to defaults)
+- Log validation errors to console for debugging
 
 ### State Updates
 
@@ -217,9 +258,10 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ### Do's
 
 ✅ Use TypeScript for all code  
+✅ Use Zod schemas for runtime validation  
 ✅ Follow the established component structure  
 ✅ Use custom hooks for reusable logic  
-✅ Persist important state to localStorage  
+✅ Persist important state to localStorage with Zod validation  
 ✅ Use semantic HTML  
 ✅ Write descriptive commit messages  
 ✅ Format code before committing  
@@ -227,6 +269,7 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ### Don'ts
 
 ❌ Use `any` type  
+❌ Skip Zod schema validation for localStorage  
 ❌ Create deeply nested component structures  
 ❌ Mutate state directly  
 ❌ Use inline styles (use Tailwind)  

@@ -18,6 +18,7 @@ A simple and intuitive web application for learning and exploring music theory. 
 - **Vite** - Fast build tool and dev server
 - **TanStack Router** - Type-safe routing
 - **React Context API** - State management
+- **Zod** - Runtime type validation and schema definition
 - **Tailwind CSS** - Utility-first styling
 - **Biome** - Fast linter and formatter
 
@@ -63,11 +64,18 @@ src/
 ├── hooks/          # Custom React hooks
 ├── pages/          # Page components
 ├── routes/         # TanStack Router route definitions
+├── schemas.ts      # Zod schema definitions
 ├── types/          # TypeScript type definitions
 └── utils/          # Utility functions
 ```
 
-For detailed architecture information, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+For detailed architecture information, see [ARCHITECTURE.md](./documentation/ARCHITECTURE.md).
+
+## Schema Validation
+
+The application uses **Zod** for runtime type validation, providing an additional layer of type safety beyond TypeScript's compile-time checks. All localStorage data and user inputs are validated using Zod schemas defined in `src/schemas.ts`. This ensures data integrity and prevents runtime errors from invalid data.
+
+For more information about schema validation, see [ARCHITECTURE.md](./documentation/ARCHITECTURE.md#schema-validation-system).
 
 ## Development
 
