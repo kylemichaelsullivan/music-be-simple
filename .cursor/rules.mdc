@@ -4,14 +4,15 @@ alwaysApply: true
 
 # Music Be Simple Project Rules
 
+Music Be Simple is a web application for learning and exploring music theory. It provides interactive visualizations of scales and chords across multiple instruments (Piano, Guitar, Banjo, Ukulele, Mandolin), allowing users to understand music theory concepts through visual representation and audio playback. The app features three main sections: Scales (for exploring musical scales and modes), Chords (for chord construction and visualization), and Play (for interactive instrument exploration).
+
 ## Core Principles
 
 - Write and review code like a senior developer
 - Challenge erroneous assumptions and inefficiencies
 - Always use **bun** for package management and all package-related operations
-- Prefer `bun run build` over `bun dev` for compilation
 - Use **TypeScript** with strict configuration
-- Follow **React 18** with **Vite** architecture
+- Follow **React 19** with **Vite** architecture
 - Use **TanStack Router** for routing
 - Use **React Context API** for state management with custom hooks
 - Use typographic apostrophe ' instead of straight apostrophe ' in ALL user-facing text
@@ -19,23 +20,18 @@ alwaysApply: true
 ## Package Management
 
 - **Package Manager**: **bun** (always use bun for all package-related operations)
-- **Build Command**: `bun build` (TypeScript compilation + Vite build)
+- **Build Command**: `bun run build` (TypeScript compilation + Vite build)
 - **Development Command**: `bun dev` (Vite dev server with HMR)
 - **Lock File**: `bun.lock`
 
 ## Development Scripts
 
-### Development Commands
+### Available Commands
 
 - **Development Server**: `bun dev` (Vite dev server with HMR)
-- **Production Build**: `bun build` (TypeScript compilation + Vite build)
-- **Preview Build**: `bun preview` (Preview production build locally)
+- **Production Build**: `bun run build` (TypeScript compilation + Vite build)
 - **Linting**: `bun lint` (Run Biome linter)
-- **Lint Fix**: `bun lint:fix` (Run Biome linter and auto-fix)
 - **Formatting**: `bun format` (Format code with Biome)
-- **Format Check**: `bun format:check` (Check code format)
-- **Check All**: `bun check` (Run Biome formatter + linter)
-- **Check All Fix**: `bun check:write` (Run Biome formatter + linter and auto-fix)
 
 ### Vite Benefits
 
@@ -51,6 +47,7 @@ src/
 ├── components/          # React components
 │   ├── buttons/         # Button components
 │   │   ├── TopButton.tsx
+│   │   ├── TransposeButton.tsx
 │   │   └── UseFlatsButton.tsx
 │   ├── displays/        # Display components
 │   │   ├── Displays.tsx
@@ -70,35 +67,65 @@ src/
 │   ├── Footer.tsx       # Footer component
 │   ├── Icon.tsx         # Icon component
 │   ├── Main.tsx         # Main content wrapper component
-│   └── Title.tsx        # Title component
+│   ├── Title.tsx        # Title component
+│   ├── Tonic.tsx        # Tonic selector component
+│   ├── Variant.tsx      # Variant selector component
+│   └── notes/           # Note components
+│       └── AllowedNote.tsx
 ├── context/             # React Context providers
 │   ├── Chords/          # Chords context provider
+│   │   ├── ChordsContext.tsx
+│   │   └── index.tsx
 │   ├── Globals/         # Global context provider
+│   │   ├── GlobalsContext.tsx
+│   │   └── index.tsx
+│   ├── InstrumentNotes/ # Instrument notes context provider
+│   │   ├── InstrumentNotesContext.tsx
+│   │   └── index.tsx
 │   ├── Play/            # Play context provider
+│   │   ├── PlayContext.tsx
+│   │   └── index.tsx
 │   ├── Scales/          # Scales context provider
+│   │   ├── ScalesContext.tsx
+│   │   └── index.tsx
 │   ├── shared/          # Shared context utilities
+│   │   ├── index.ts
+│   │   ├── useChordState.ts
+│   │   ├── useEscapeReset.ts
+│   │   ├── useLocalStorage.ts
+│   │   ├── useRequireGlobals.ts
+│   │   └── useScaleState.ts
+│   ├── defaults.tsx     # Default context values
 │   └── index.ts         # Context exports
 ├── hooks/               # Custom React hooks
 │   ├── useButtonHandler.ts
 │   ├── useChords.ts
 │   ├── useGlobals.ts
+│   ├── useInstrumentNotes.ts
 │   ├── usePlay.ts
+│   ├── usePlayNote.ts
 │   └── useScales.ts
 ├── pages/               # Page components
 │   ├── Chords/
-│   │   └── index.tsx    # Chords page
+│   │   ├── index.tsx    # Chords page
+│   │   ├── Chord.tsx
+│   │   ├── ChordName.tsx
+│   │   ├── ChordNote.tsx
+│   │   ├── ChordNotes.tsx
+│   │   └── Notes.tsx
 │   ├── Play/
 │   │   └── index.tsx    # Play page
 │   └── Scales/
-│       └── index.tsx    # Scales page
+│       ├── index.tsx    # Scales page
+│       ├── Notes.tsx
+│       ├── Scale.tsx
+│       └── ScaleContainer.tsx
 ├── routes/              # TanStack Router route definitions
 │   ├── __root.tsx       # Root route layout
 │   ├── index.tsx        # Home/index route (redirects to scales)
 │   ├── chords.tsx       # Chords route with context provider
 │   ├── play.tsx         # Play route with context provider
 │   └── scales.tsx       # Scales route with context provider
-├── store/               # State management (legacy/unused)
-│   └── appStore.ts      # Zustand store with persistence
 ├── types/               # TypeScript type definitions
 │   ├── chords.ts
 │   ├── globals.ts
@@ -106,14 +133,16 @@ src/
 │   ├── play.ts
 │   └── scales.ts
 ├── utils/               # Utility functions
+│   ├── borders.ts
 │   ├── chords.ts
+│   ├── index.ts
 │   ├── notes.ts
 │   └── scales.ts
 ├── main.tsx             # Application entry point
 ├── navigation.ts        # Navigation constants and schemas
 ├── instruments.ts       # Instrument definitions
 ├── globals.css          # Global styles and CSS variables
-└── routeTree.gen.ts     # Generated route tree (auto-generated)
+└── vite-env.d.ts        # Vite environment type definitions
 ```
 
 ## Code Organization

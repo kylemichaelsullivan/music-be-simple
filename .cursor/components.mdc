@@ -12,34 +12,64 @@ alwaysApply: false
 src/components/
 ├── buttons/
 │   ├── TopButton.tsx
+│   ├── TransposeButton.tsx
 │   └── UseFlatsButton.tsx
 ├── displays/
 │   ├── Displays.tsx
 │   ├── DisplaySelector.tsx
 │   ├── DisplaysSelector.tsx
-│   ├── Modes.tsx
+│   ├── modes/
+│   │   ├── Mode.tsx
+│   │   ├── Modes.tsx
+│   │   └── ModesHeading.tsx
 │   └── instruments/
 │       ├── Instrument.tsx
-│       ├── Guitar.tsx
-│       ├── Piano.tsx
-│       ├── Banjo.tsx
-│       ├── Mandolin.tsx
-│       └── Ukulele.tsx
+│       ├── Guitar/
+│       │   └── Guitar.tsx
+│       ├── Piano/
+│       │   ├── Key.tsx
+│       │   └── Piano.tsx
+│       ├── Banjo/
+│       │   ├── Banjo.tsx
+│       │   ├── DroneString.tsx
+│       │   └── SkippedFret.tsx
+│       ├── Mandolin/
+│       │   └── Mandolin.tsx
+│       ├── Ukulele/
+│       │   └── Ukulele.tsx
+│       ├── Fret.tsx
+│       ├── FretNumbers.tsx
+│       ├── FretString.tsx
+│       ├── Label.tsx
+│       ├── Nut.tsx
+│       └── index.tsx
 ├── nav/
 │   ├── Navbar.tsx
 │   └── NavTab.tsx
 ├── Footer.tsx
 ├── Icon.tsx
 ├── Main.tsx
-└── Title.tsx
+├── Title.tsx
+├── Tonic.tsx
+├── Variant.tsx
+└── notes/
+    └── AllowedNote.tsx
 
 src/pages/
 ├── Chords/
-│   └── index.tsx
+│   ├── index.tsx
+│   ├── Chord.tsx
+│   ├── ChordName.tsx
+│   ├── ChordNote.tsx
+│   ├── ChordNotes.tsx
+│   └── Notes.tsx
 ├── Play/
 │   └── index.tsx
 └── Scales/
-    └── index.tsx
+    ├── index.tsx
+    ├── Notes.tsx
+    ├── Scale.tsx
+    └── ScaleContainer.tsx
 
 src/routes/
 ├── __root.tsx
@@ -239,6 +269,7 @@ export default memo(ComponentName);
 ### Button Components
 
 - **TopButton** (`@/components/buttons/TopButton`) - Top button component for page-specific actions
+- **TransposeButton** (`@/components/buttons/TransposeButton`) - Button to transpose scales up or down by a fifth
 - **UseFlatsButton** (`@/components/buttons/UseFlatsButton`) - Button to toggle between flats and sharps
 
 ### Display Components
@@ -246,9 +277,12 @@ export default memo(ComponentName);
 - **Displays** (`@/components/displays/Displays`) - Container for instrument displays
 - **DisplaysSelector** (`@/components/displays/DisplaysSelector`) - Selector for choosing displays
 - **DisplaySelector** (`@/components/displays/DisplaySelector`) - Individual display selector
-- **Modes** (`@/components/displays/Modes`) - Modes display component
-- **Instrument** (`@/components/displays/instruments/Instrument`) - Base instrument display component
+- **Modes** (`@/components/displays/modes/Modes`) - Modes display component
+- **Mode** (`@/components/displays/modes/Mode`) - Individual mode display component
+- **ModesHeading** (`@/components/displays/modes/ModesHeading`) - Modes section heading component
+- **Instrument** (`@/components/displays/instruments/Instrument`) - Base instrument display component wrapper
 - **Guitar, Piano, Banjo, Mandolin, Ukulele** - Specific instrument display components
+- **Fret, FretNumbers, FretString, Nut, Label** - Shared fretboard components
 
 ### Page Components
 
@@ -264,10 +298,11 @@ The project uses React Context API for state management with custom hooks:
 
 ### Context Providers
 
-- **GlobalsContext** (`@/context/Globals`) - Global application state
-- **ScalesContext** (`@/context/Scales`) - Scales-specific state
-- **ChordsContext** (`@/context/Chords`) - Chords-specific state
+- **GlobalsContext** (`@/context/Globals`) - Global application state (note display preferences, selected displays, using flats/sharps, audio context, note playback)
+- **ScalesContext** (`@/context/Scales`) - Scales-specific state (tonic, variant, notes, showNoteLabels)
+- **ChordsContext** (`@/context/Chords`) - Chords-specific state (tonic, variant, notes, chordName, noteCount, showNerdMode)
 - **PlayContext** (`@/context/Play`) - Play functionality state
+- **InstrumentNotesContext** (`@/context/InstrumentNotes`) - Instrument notes display context
 
 ### Custom Hooks
 
@@ -275,6 +310,7 @@ The project uses React Context API for state management with custom hooks:
 - **useScales** (`@/hooks/useScales`) - Access scales context
 - **useChords** (`@/hooks/useChords`) - Access chords context
 - **usePlay** (`@/hooks/usePlay`) - Access play context
+- **useInstrumentNotes** (`@/hooks/useInstrumentNotes`) - Access instrument notes context
 
 ### Using State
 
@@ -421,4 +457,3 @@ import { Link } from '@tanstack/react-router';
 - Use `bun run build` for production build
 - Use `bun lint` for linting
 - Use `bun format` for formatting code
-- Use `bun preview` for previewing production build
