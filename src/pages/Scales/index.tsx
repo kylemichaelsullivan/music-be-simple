@@ -7,25 +7,32 @@ import DisplaysSelector from '@/components/displays/DisplaysSelector';
 import { useGlobals, useScales } from '@/hooks';
 import type { IconType } from '@/instruments';
 import Notes from './Notes';
-import Scales from './Scales';
+import ScaleContainer from './ScaleContainer';
 
 export default function ScalesIndex() {
 	const title = 'Scales';
 	const { displays, handleDisplaysClick } = useGlobals();
-	const { notes, tonic, showNoteLabels, toggleNoteLabels } = useScales();
+	const {
+		notes,
+		tonic,
+		showNoteLabels,
+		toggleNoteLabels,
+		noteLabelsButtonTitle,
+		noteLabelsButtonIcon,
+	} = useScales();
 
 	return (
 		<Main componentName={title}>
 			<Title title={title} />
 			<TopButton
-				title={showNoteLabels ? 'Hide Notes?' : 'Show Notes?'}
-				icon={showNoteLabels ? '📖' : '📕'}
+				title={noteLabelsButtonTitle}
+				icon={noteLabelsButtonIcon}
 				position='left'
 				onFxn={toggleNoteLabels}
 			/>
 			<UseFlatsButton />
 
-			<Scales />
+			<ScaleContainer />
 			<Notes />
 
 			<DisplaysSelector

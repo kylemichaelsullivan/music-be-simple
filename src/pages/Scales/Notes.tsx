@@ -1,10 +1,11 @@
 import { useGlobals, useScales } from '@/hooks';
-import { INTERVALS } from '@/utils/notes';
+import type { NoteIndex } from '@/types';
+import { INTERVALS, getNote, rangeOfLength } from '@/utils';
 import { useEffect, useState } from 'react';
 
 export default function Notes() {
+	const { usingFlats } = useGlobals();
 	const { variant, notes } = useScales();
-	const { getNote } = useGlobals();
 
 	const [noteCount, setNoteCount] = useState<number>(INTERVALS[variant].length + 1);
 
@@ -33,14 +34,14 @@ export default function Notes() {
 	return (
 		<div className='Notes border border-slate-500 bg-slate-200 text-center shadow-md'>
 			<div className={`grid ${gridClass}`}>
-				{Array.from({ length: noteCount }, (_, index) => (
+				{rangeOfLength(noteCount).map((index) => (
 					<div key={`note-count-${index + 1}`}>{index + 1}</div>
 				))}
 			</div>
 
 			<div className={`grid ${gridClass}`}>
-				{notes.map((note: number) => (
-					<div key={`note-${note}`}>{getNote(note)}</div>
+				{notes.map((note: NoteIndex) => (
+					<div key={`note-${note}`}>{getNote(note, usingFlats)}</div>
 				))}
 			</div>
 		</div>

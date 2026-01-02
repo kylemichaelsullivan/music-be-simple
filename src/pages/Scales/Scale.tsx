@@ -1,11 +1,14 @@
-import Tonic from './Tonic';
-import Variant from './Variant';
+import Tonic from '@/components/Tonic';
+import Variant from '@/components/Variant';
+import { useScales } from '@/hooks';
 
 export default function Scale() {
+	const { tonic, handleTonicChange } = useScales();
+
 	return (
 		<div className='Scale flex justify-center gap-1 w-full'>
-			<Tonic />
-			<Variant />
+			<Tonic tonic={tonic} handleTonicChange={handleTonicChange} />
+			<Variant type='scale' />
 		</div>
 	);
 }
