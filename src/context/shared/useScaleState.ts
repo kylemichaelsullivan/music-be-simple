@@ -1,13 +1,13 @@
-import type { NoteIndex } from '@/types';
+import type { NoteIndex, ScaleType } from '@/types';
 import { generateNotesFromIntervals } from '@/utils/scales';
 import { useCallback, useEffect, useState } from 'react';
 
-export interface UseScaleStateOptions<Variant extends string> {
+export type UseScaleStateOptions<Variant extends ScaleType> = {
 	initialTonic: NoteIndex;
 	initialVariant: Variant;
-}
+};
 
-export interface UseScaleStateReturn<Variant extends string> {
+export type UseScaleStateReturn<Variant extends ScaleType> = {
 	tonic: NoteIndex;
 	variant: Variant;
 	notes: NoteIndex[];
@@ -17,9 +17,9 @@ export interface UseScaleStateReturn<Variant extends string> {
 	handleVariantChange: (variant: Variant) => void;
 	makeScale: (tonic: NoteIndex, variant: Variant) => void;
 	reset: () => void;
-}
+};
 
-export function useScaleState<Variant extends string>({
+export function useScaleState<Variant extends ScaleType>({
 	initialTonic,
 	initialVariant,
 }: UseScaleStateOptions<Variant>): UseScaleStateReturn<Variant> {
