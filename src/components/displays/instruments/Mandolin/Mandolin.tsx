@@ -1,11 +1,12 @@
-import { rangeOfLength } from '@/utils/notes';
+import type { NoteIndex } from '@/types';
+import { rangeOfLength } from '@/utils';
 import FretNumbers from '../FretNumbers';
 import FretString from '../FretString';
 import Label from '../Label';
 
 export default function Mandolin() {
 	// G D A E
-	const openNotes = [4, 9, 2, 7];
+	const openNotes: NoteIndex[] = [4, 9, 2, 7];
 
 	return (
 		<div className='Mandolin flex w-full justify-center gap-2 sm:gap-4'>

@@ -1,13 +1,16 @@
 import AllowedNote from '@/components/notes/AllowedNote';
 import { useGlobals, useInstrumentNotes } from '@/hooks';
+import type { NoteIndex } from '@/types';
+import { getNote } from '@/utils';
 
 type NutProps = {
-	note: number;
+	note: NoteIndex;
 };
 
 export default function Nut({ note }: NutProps) {
-	const { getNote, playNote } = useGlobals();
+	const { usingFlats, playNote } = useGlobals();
 	const { notes, tonic, getBorderStyle } = useInstrumentNotes();
+	const noteName = getNote(note, usingFlats);
 
 	const borderStyle = getBorderStyle ? getBorderStyle(note) : 'none';
 
@@ -15,7 +18,7 @@ export default function Nut({ note }: NutProps) {
 		<button
 			type='button'
 			className='Nut w-8 bg-black'
-			title={getNote(note)}
+			title={noteName}
 			onClick={() => playNote(note)}
 			onKeyDown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {
@@ -26,7 +29,7 @@ export default function Nut({ note }: NutProps) {
 			tabIndex={0}
 		>
 			{notes.includes(note) && (
-				<AllowedNote note={getNote(note)} isTonic={note === tonic} borderStyle={borderStyle} />
+				<AllowedNote note={noteName} isTonic={note === tonic} borderStyle={borderStyle} />
 			)}
 		</button>
 	);

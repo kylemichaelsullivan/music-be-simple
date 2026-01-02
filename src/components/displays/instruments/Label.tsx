@@ -1,10 +1,10 @@
-import type { IconName } from '@/components/Icon';
 import Icon from '@/components/Icon';
+import type { IconName } from '@/types';
 
-interface LabelProps {
+type LabelProps = {
 	icon: IconName;
 	title: string;
-}
+};
 
 export default function Label({ icon, title }: LabelProps) {
 	return (

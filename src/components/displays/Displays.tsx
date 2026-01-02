@@ -6,14 +6,15 @@ import type { InstrumentType } from '@/types';
 import type { ReactElement } from 'react';
 import { Banjo, Guitar, Instrument, Mandolin, Piano, Ukulele } from './instruments';
 
-import type { border } from '@/types';
+import type { NoteIndex, border } from '@/types';
 
 type DisplaysProps = {
 	hasModes?: boolean;
-	notes: number[];
-	tonic: number;
+	notes: NoteIndex[];
+	tonic: NoteIndex;
 	showNoteLabels?: boolean;
-	getBorderStyle?: (note: number) => border;
+	getBorderStyle?: (note: NoteIndex) => border;
+	showNerdMode?: boolean;
 };
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
@@ -30,6 +31,7 @@ export default function Displays({
 	tonic,
 	showNoteLabels = true,
 	getBorderStyle,
+	showNerdMode,
 }: DisplaysProps) {
 	const { displays } = useGlobals();
 
@@ -46,6 +48,7 @@ export default function Displays({
 			tonic={tonic}
 			showNoteLabels={showNoteLabels}
 			getBorderStyle={getBorderStyle}
+			showNerdMode={showNerdMode}
 		>
 			<div className='Displays flex flex-col gap-8 w-full max-w-screen-2xl mx-auto'>
 				{orderedDisplays.map((display) => (

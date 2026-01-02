@@ -1,10 +1,11 @@
-import { rangeOfLength } from '@/utils/notes';
+import type { NoteIndex } from '@/types';
+import { isValidNoteIndex, rangeOfLength } from '@/utils';
 import Fret from '../Fret';
 import Nut from '../Nut';
 import SkippedFret from './SkippedFret';
 
 type DroneStringProps = {
-	openNote: number;
+	openNote: NoteIndex;
 };
 
 export default function DroneString({ openNote }: DroneStringProps) {
@@ -18,9 +19,15 @@ export default function DroneString({ openNote }: DroneStringProps) {
 
 			<Nut note={openNote} />
 
-			{rangeOfLength(frets).map((i) => (
-				<Fret note={(openNote + 1 + i) % 12} key={`drone-fret-${i}`} />
-			))}
+			{rangeOfLength(frets)
+				.map((i) => {
+					const note = (openNote + 1 + i) % 12;
+					return { note, i };
+				})
+				.filter((item): item is { note: NoteIndex; i: number } => isValidNoteIndex(item.note))
+				.map(({ note, i }) => (
+					<Fret note={note} key={`drone-fret-${i}`} />
+				))}
 		</div>
 	);
 }

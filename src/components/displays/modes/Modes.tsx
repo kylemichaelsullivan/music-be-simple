@@ -1,37 +1,52 @@
 import { useGlobals, useScales } from '@/hooks';
-import type { ScaleMode } from '@/types';
-import { INTERVALS } from '@/utils/notes';
+import type { NoteIndex, ScaleMode } from '@/types';
+import { INTERVALS, SCALE_TYPES, getNote, isValidNoteIndex } from '@/utils';
 import { memo, useMemo } from 'react';
 import Mode from './Mode';
 import ModesHeading from './ModesHeading';
 
+function isScaleMode(mode: ScaleMode) {
+	return (
+		mode === 'ionian' ||
+		mode === 'dorian' ||
+		mode === 'phrygian' ||
+		mode === 'lydian' ||
+		mode === 'mixolydian' ||
+		mode === 'aeolian' ||
+		mode === 'locrian'
+	);
+}
+
 function Modes() {
+	const { usingFlats } = useGlobals();
 	const { tonic, variant, getRelativeMajor, getRelativeMinor } = useScales();
-	const { getNote } = useGlobals();
 
 	const generateModes = useMemo(
-		() => (tonic: number) => {
-			const modes = Object.keys(INTERVALS as Record<string, readonly number[]>).filter(
+		() => (tonic: NoteIndex) => {
+			const modes = SCALE_TYPES.filter(
 				(key) => key !== 'major' && key !== 'minor' && key !== 'pentatonic'
-			) as Array<keyof typeof INTERVALS>;
+			).filter(isScaleMode);
 
 			return modes.map((mode) => {
 				const intervals = INTERVALS[mode];
-				const modeNotes: number[] = [tonic];
+				const modeNotes: NoteIndex[] = [tonic];
 				let currentNote = tonic;
 				for (const interval of intervals) {
 					currentNote += interval * 2;
-					modeNotes.push(currentNote % 12);
+					const noteIndex = currentNote % 12;
+					if (isValidNoteIndex(noteIndex)) {
+						modeNotes.push(noteIndex);
+					}
 				}
 				return {
 					mode,
-					notes: modeNotes.map(getNote),
-					relativeMajor: getRelativeMajor(mode as ScaleMode),
-					relativeMinor: getRelativeMinor(mode as ScaleMode),
+					notes: modeNotes.map((note) => getNote(note, usingFlats)),
+					relativeMajor: getRelativeMajor(mode),
+					relativeMinor: getRelativeMinor(mode),
 				};
 			});
 		},
-		[getNote, getRelativeMajor, getRelativeMinor]
+		[usingFlats, getRelativeMajor, getRelativeMinor]
 	);
 
 	const modes = useMemo(() => generateModes(tonic), [tonic, generateModes]);
@@ -49,7 +64,7 @@ function Modes() {
 
 	return (
 		<div className='Modes border border-slate-500 text-center capitalize shadow-md'>
-			<ModesHeading tonicNote={getNote(tonic)} />
+			<ModesHeading tonicNote={getNote(tonic, usingFlats)} />
 
 			{modes.map(({ mode, notes, relativeMajor, relativeMinor }, index) => (
 				<Mode

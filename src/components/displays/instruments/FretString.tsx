@@ -1,9 +1,10 @@
-import { rangeOfLength } from '@/utils/notes';
+import type { NoteIndex } from '@/types';
+import { isValidNoteIndex, rangeOfLength } from '@/utils';
 import Fret from './Fret';
 import Nut from './Nut';
 
 type FretStringProps = {
-	openNote: number;
+	openNote: NoteIndex;
 };
 
 function FretString({ openNote }: FretStringProps) {
@@ -12,9 +13,15 @@ function FretString({ openNote }: FretStringProps) {
 	return (
 		<div className={'FretString flex justify-evenly'}>
 			<Nut note={openNote} />
-			{rangeOfLength(frets).map((i) => (
-				<Fret note={(openNote + 1 + i) % 12} key={`${openNote}-fret-${i}`} />
-			))}
+			{rangeOfLength(frets)
+				.map((i) => {
+					const note = (openNote + 1 + i) % 12;
+					return { note, i };
+				})
+				.filter((item): item is { note: NoteIndex; i: number } => isValidNoteIndex(item.note))
+				.map(({ note, i }) => (
+					<Fret note={note} key={`${openNote}-fret-${i}`} />
+				))}
 		</div>
 	);
 }

@@ -1,11 +1,12 @@
-import { rangeOfLength } from '@/utils/notes';
+import type { NoteIndex } from '@/types';
+import { rangeOfLength } from '@/utils';
 import FretNumbers from '../FretNumbers';
 import FretString from '../FretString';
 import Label from '../Label';
 
 export default function Ukelele() {
 	// G C E A
-	const openNotes = [9, 4, 0, 7];
+	const openNotes: NoteIndex[] = [9, 4, 0, 7];
 
 	return (
 		<div className='Ukelele flex w-full justify-center gap-2 sm:gap-4'>
