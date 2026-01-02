@@ -1,4 +1,4 @@
-import { useScales } from '@/hooks';
+import { useInstrumentNotes } from '@/hooks';
 import { rangeOfLength } from '@/utils/notes';
 import Key from './Key';
 
@@ -6,7 +6,7 @@ export default function Piano() {
 	const keys = 12;
 	const blackKeys = [1, 3, 6, 8, 10];
 
-	const { notes } = useScales();
+	const { notes } = useInstrumentNotes();
 
 	return (
 		<div className={'Piano relative flex min-h-24 w-full justify-center'}>
