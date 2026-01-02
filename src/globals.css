@@ -13,6 +13,11 @@
 	--chords: var(--orange);
 	--play: var(--green);
 	--scales: var(--blue);
+
+	--guitar-color: #99621e;
+	--banjo-color: #e9e9d0;
+	--mandolin-color: #e6d5bc;
+	--ukulele-color: #fff07c;
 }
 
 body {
@@ -40,7 +45,8 @@ select {
 
 /* Instruments */
 .fretboard {
-	background-color: var(--fretboard-color);
+	position: relative;
+	z-index: 1;
 }
 
 .FretString,
@@ -48,30 +54,38 @@ select {
 	position: relative;
 	height: 2rem;
 	min-height: 1rem;
+	z-index: 1;
+}
+
+.FretString {
+	background-color: var(--fretboard-color);
 }
 
 .FretString::after,
-.DroneString::before,
-.DroneString::after {
+.DroneString .Fret::after {
 	position: absolute;
 	content: "";
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-.FretString::after,
-.DroneString::after {
 	background-color: silver;
 	width: 100%;
 	height: 0.25rem;
-	z-index: 2;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 3;
+}
+
+.DroneString .Fret::after {
+	transform: translateX(-50%);
 }
 
 .Nut,
 .Fret {
 	position: relative;
 	cursor: pointer;
-	z-index: 3;
+	z-index: 4;
+}
+
+.AllowedNote {
+	z-index: 4;
 }
 
 .Fret:last-child {
@@ -110,11 +124,28 @@ select {
 }
 
 .Guitar {
-	--fretboard-color: #ff0000;
+	--fretboard-color: var(--guitar-color);
 }
 
 .Banjo {
-	--fretboard-color: #f5f5dc;
+	--fretboard-color: var(--banjo-color);
+}
+
+.Banjo .FretString,
+.Banjo .DroneString {
+	border-right: 1px solid black;
+}
+
+.Banjo .FretString:first-of-type {
+	border-top: 1px solid black;
+}
+
+.Banjo .DroneString .Nut,
+.Banjo .DroneString .Fret {
+	background-color: var(--banjo-color);
+	border-bottom: 1px solid black;
+	height: 2rem;
+	z-index: 3;
 }
 
 .Banjo .FretString:nth-child(4) .Fret {
@@ -125,45 +156,24 @@ select {
 	border-bottom-width: 0;
 }
 
-.Banjo .DroneString.ml-1 {
-	margin-left: calc(var(--spacing) * 0.9);
-}
-
-.Banjo .DroneString .SkippedFret {
-	--tw-bg-opacity: 1;
-	border-bottom: 1px solid rgb(125 211 252 / var(--tw-bg-opacity));
-	z-index: 3;
-}
-
-.Banjo .DroneString .SkippedFret:first-child {
-	position: relative;
-}
-
-.Banjo .DroneString .SkippedFret:first-child::before {
-	--tw-bg-opacity: 1;
-	position: absolute;
-	content: "";
-	background-color: rgb(125 211 252 / var(--tw-bg-opacity));
-	width: 1rem;
-	height: 110%;
-	left: -0.5rem;
-	top: 0;
-}
-
 .Banjo .DroneString .Nut {
-	left: 0.5px;
+	background-color: transparent;
+	border-right: 4px solid black;
+	border-bottom: 0;
+	margin-left: 1px;
+	z-index: 4;
 }
 
-.Banjo .DroneString .Fret {
-	border-bottom: 1px solid black;
+.Banjo .DroneString .Nut .AllowedNote {
+	margin-left: 3px;
 }
 
 .Ukelele {
-	--fretboard-color: yellow;
+	--fretboard-color: var(--ukulele-color);
 }
 
 .Mandolin {
-	--fretboard-color: #e6d5bc;
+	--fretboard-color: var(--mandolin-color);
 }
 
 /* Utility Classes */

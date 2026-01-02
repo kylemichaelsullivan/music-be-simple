@@ -13,7 +13,7 @@ export default function Banjo() {
 			<Label icon='Banjo' title='Banjo' />
 			<div className='flex w-full flex-col'>
 				<FretNumbers />
-				<div className='fretboard flex w-full flex-col border border-b-0 border-black'>
+				<div className='fretboard flex w-full flex-col'>
 					{rangeOfLength(openNotes.length).map((i) => (
 						<FretString openNote={openNotes[i]} key={`banjo-string-${i}`} />
 					))}
