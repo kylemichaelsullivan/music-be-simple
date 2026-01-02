@@ -1,14 +1,15 @@
-import { useGlobals, useScales } from '@/hooks';
-
 import AllowedNote from '@/components/notes/AllowedNote';
+import { useGlobals, useInstrumentNotes } from '@/hooks';
 
 type FretProps = {
 	note: number;
 };
 
 export default function Fret({ note }: FretProps) {
-	const { notes, tonic } = useScales();
+	const { notes, tonic, getBorderStyle } = useInstrumentNotes();
 	const { getNote, playNote } = useGlobals();
+
+	const borderStyle = getBorderStyle ? getBorderStyle(note) : 'none';
 
 	return (
 		<button
@@ -24,7 +25,9 @@ export default function Fret({ note }: FretProps) {
 			}}
 			tabIndex={0}
 		>
-			{notes.includes(note) && <AllowedNote note={getNote(note)} isTonic={note === tonic} />}
+			{notes.includes(note) && (
+				<AllowedNote note={getNote(note)} isTonic={note === tonic} borderStyle={borderStyle} />
+			)}
 		</button>
 	);
 }

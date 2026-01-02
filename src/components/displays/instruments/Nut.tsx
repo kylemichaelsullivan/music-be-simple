@@ -1,14 +1,15 @@
-import { useGlobals, useScales } from '@/hooks';
-
 import AllowedNote from '@/components/notes/AllowedNote';
+import { useGlobals, useInstrumentNotes } from '@/hooks';
 
 type NutProps = {
 	note: number;
 };
 
 export default function Nut({ note }: NutProps) {
-	const { notes, tonic } = useScales();
 	const { getNote, playNote } = useGlobals();
+	const { notes, tonic, getBorderStyle } = useInstrumentNotes();
+
+	const borderStyle = getBorderStyle ? getBorderStyle(note) : 'none';
 
 	return (
 		<button
@@ -24,7 +25,9 @@ export default function Nut({ note }: NutProps) {
 			}}
 			tabIndex={0}
 		>
-			{notes.includes(note) && <AllowedNote note={getNote(note)} isTonic={note === tonic} />}
+			{notes.includes(note) && (
+				<AllowedNote note={getNote(note)} isTonic={note === tonic} borderStyle={borderStyle} />
+			)}
 		</button>
 	);
 }
