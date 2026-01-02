@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 
-export type PlayContextType = {
-	playNote: (note: number) => void;
-};
+// keyWord
+export type PlayContextType = Record<string, never>;
 
 export type PlayContextProviderProps = {
 	children: ReactNode;
