@@ -1,4 +1,5 @@
 import { useScales } from '@/hooks';
+import { isValidNoteIndex } from '@/utils';
 import downIcon from '/icons/down.svg';
 import upIcon from '/icons/up.svg';
 
@@ -11,12 +12,16 @@ export default function TransposeButton({ direction }: TransposeButtonProps) {
 
 	function transposeUp() {
 		const transposed = (tonic + 7 + 12) % 12;
-		handleTonicChange(transposed);
+		if (isValidNoteIndex(transposed)) {
+			handleTonicChange(transposed);
+		}
 	}
 
 	function transposeDown() {
 		const transposed = (tonic - 7 + 12) % 12;
-		handleTonicChange(transposed);
+		if (isValidNoteIndex(transposed)) {
+			handleTonicChange(transposed);
+		}
 	}
 
 	const isUp = direction === 'up';
@@ -32,7 +37,7 @@ export default function TransposeButton({ direction }: TransposeButtonProps) {
 			title={title}
 			onClick={onClick}
 		>
-			<img src={icon} className='Icon w-6 h-6 sm:w-8 sm:h-8' alt={componentName} />
+			<img src={icon} className='w-4 h-4 sm:w-6 sm:h-6' alt={isUp ? 'Up' : 'Down'} />
 		</button>
 	);
 }
