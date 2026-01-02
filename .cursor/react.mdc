@@ -23,6 +23,7 @@ alwaysApply: false
 - **Import order**: Type imports come before value imports (e.g., `import type { ReactNode } from 'react'` before `import { useState } from 'react'`)
 - **Props interface**: Define clear, typed props with descriptive names
 - **forwardRef usage**: Use `forwardRef` for components that need to expose DOM refs when needed
+- **JSX attribute order**: The `key` attribute must be the last attribute in any JSX element
 
 ### Performance Optimization
 
