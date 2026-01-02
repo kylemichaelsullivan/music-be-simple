@@ -223,10 +223,32 @@ export default function ComponentName({
 ### React Best Practices
 
 - **TypeScript**: Avoid using `any` type, prefer proper typing
+- **Type assertions**: Avoid type assertions (`as Type`) except for `as const`. Use type guards and proper type narrowing instead
 - **Default exports**: Use default exports for components (e.g., `export default function ComponentName`)
 - **Path aliases**: Use `@/` alias for imports (configured in tsconfig.json)
 - **State management**: Use React Context API with custom hooks for global state, `useState` for local component state
 - **Router integration**: Components should work seamlessly with TanStack Router
+
+#### Type Assertion Guidelines
+
+```tsx
+// ❌ Avoid - type assertions
+const value = someValue as NoteIndex;
+const mode = someMode as ScaleMode;
+
+// ✅ Good - use type guards
+function isValidNoteIndex(value: number): value is NoteIndex {
+	return value >= 0 && value <= 11 && Number.isInteger(value);
+}
+
+if (isValidNoteIndex(value)) {
+	// value is now properly typed as NoteIndex
+	handleNoteChange(value);
+}
+
+// ✅ Allowed - as const for literal types
+export const FLATS = ['C', 'D♭', 'D'] as const;
+```
 
 ## Data Management
 
