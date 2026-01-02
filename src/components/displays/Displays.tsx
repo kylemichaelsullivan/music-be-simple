@@ -1,23 +1,36 @@
 import Modes from '@/components/displays/modes/Modes';
+import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { InstrumentType } from '@/types';
 import type { ReactElement } from 'react';
 import { Banjo, Guitar, Instrument, Mandolin, Piano, Ukulele } from './instruments';
 
+import type { border } from '@/types';
+
 type DisplaysProps = {
 	hasModes?: boolean;
+	notes: number[];
+	tonic: number;
+	showNoteLabels?: boolean;
+	getBorderStyle?: (note: number) => border;
 };
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
-	Banjo,
-	Guitar,
-	Mandolin,
-	Piano,
-	Ukulele,
+	Banjo: () => <Banjo />,
+	Guitar: () => <Guitar />,
+	Mandolin: () => <Mandolin />,
+	Piano: () => <Piano />,
+	Ukulele: () => <Ukulele />,
 };
 
-export default function Displays({ hasModes = false }: DisplaysProps) {
+export default function Displays({
+	hasModes = false,
+	notes,
+	tonic,
+	showNoteLabels = true,
+	getBorderStyle,
+}: DisplaysProps) {
 	const { displays } = useGlobals();
 
 	const orderedDisplays = INSTRUMENT_ORDER.filter((instrument) => {
@@ -28,14 +41,21 @@ export default function Displays({ hasModes = false }: DisplaysProps) {
 	const showModes = hasModes && displays.includes('stand');
 
 	return (
-		<div className='Displays flex flex-col gap-8 w-full max-w-screen-2xl mx-auto'>
-			{orderedDisplays.map((display) => (
-				<Instrument instrument={display} key={display}>
-					{INSTRUMENTS[display]()}
-				</Instrument>
-			))}
+		<InstrumentNotesProvider
+			notes={notes}
+			tonic={tonic}
+			showNoteLabels={showNoteLabels}
+			getBorderStyle={getBorderStyle}
+		>
+			<div className='Displays flex flex-col gap-8 w-full max-w-screen-2xl mx-auto'>
+				{orderedDisplays.map((display) => (
+					<Instrument instrument={display} key={display}>
+						{INSTRUMENTS[display]()}
+					</Instrument>
+				))}
 
-			{showModes && <Modes />}
-		</div>
+				{showModes && <Modes />}
+			</div>
+		</InstrumentNotesProvider>
 	);
 }

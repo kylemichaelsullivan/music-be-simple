@@ -12,7 +12,7 @@ import Scales from './Scales';
 export default function ScalesIndex() {
 	const title = 'Scales';
 	const { displays, handleDisplaysClick } = useGlobals();
-	const { showNoteLabels, toggleNoteLabels } = useScales();
+	const { notes, tonic, showNoteLabels, toggleNoteLabels } = useScales();
 
 	return (
 		<Main componentName={title}>
@@ -33,7 +33,7 @@ export default function ScalesIndex() {
 				displays={displays}
 				hasModes
 			/>
-			<Displays hasModes />
+			<Displays hasModes notes={notes} tonic={tonic} showNoteLabels={showNoteLabels} />
 		</Main>
 	);
 }

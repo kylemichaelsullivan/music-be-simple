@@ -4,11 +4,12 @@ import TopButton from '@/components/buttons/TopButton';
 import UseFlatsButton from '@/components/buttons/UseFlatsButton';
 import Displays from '@/components/displays/Displays';
 import DisplaysSelector from '@/components/displays/DisplaysSelector';
-import { useGlobals } from '@/hooks';
+import { useChords, useGlobals } from '@/hooks';
 
 export default function ChordsIndex() {
 	const title = 'Chords';
 	const { displays, handleDisplaysClick, showNerdMode, toggleShowNerdMode } = useGlobals();
+	const { notes, tonic, getBorderStyle } = useChords();
 
 	return (
 		<Main componentName={title}>
@@ -26,7 +27,7 @@ export default function ChordsIndex() {
 			<p>Notes</p>
 
 			<DisplaysSelector onFxn={handleDisplaysClick} displays={displays} />
-			<Displays />
+			<Displays notes={notes} tonic={tonic} getBorderStyle={getBorderStyle} />
 		</Main>
 	);
 }

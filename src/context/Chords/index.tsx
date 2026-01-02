@@ -6,14 +6,14 @@ import {
 	useScaleState,
 } from '@/context';
 import type { Chord_Variant, ChordsContextProviderProps, border } from '@/types';
-import { getChordInfo } from '@/utils/chords';
+import { getChordInfo, getChordSymbol } from '@/utils/chords';
 import { useCallback, useMemo } from 'react';
 import { ChordsContext } from './ChordsContext';
 
 export { ChordsContext };
 
 export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) => {
-	useRequireGlobals(); // Ensure GlobalsContext is available
+	const globals = useRequireGlobals(); // Ensure GlobalsContext is available
 
 	const { tonic, variant, notes, handleTonicChange, handleVariantChange, makeScale, reset } =
 		useScaleState<Chord_Variant>({
@@ -23,29 +23,36 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 
 	const getBorderStyle = useCallback(
 		(note: number): border => {
-			// For chords, get the border style from the chord info
-			try {
-				const chordInfo = getChordInfo(variant);
-				const noteIndex = notes.indexOf(note);
-				if (noteIndex >= 0 && noteIndex < chordInfo.intervals.length) {
-					return chordInfo.intervals[noteIndex][2];
-				}
-			} catch {
-				// If variant is not a chord variant, return default
+			if (globals.showNerdMode || note === tonic) {
+				return 'none';
 			}
+
+			const chordInfo = getChordInfo(variant);
+			let currentSemitones = 0;
+
+			for (let i = 0; i < chordInfo.intervals.length; i++) {
+				const [interval, , style] = chordInfo.intervals[i];
+				currentSemitones += interval * 2;
+				const noteIndex = (tonic + currentSemitones) % 12;
+
+				if (noteIndex === note) {
+					return style;
+				}
+			}
+
 			return 'solid';
 		},
-		[variant, notes]
+		[tonic, variant, globals.showNerdMode]
 	);
 
 	const chordName = useMemo(() => {
-		try {
-			const chordInfo = getChordInfo(variant);
-			return chordInfo.display;
-		} catch {
-			return '';
+		const note = globals.getNote(tonic);
+		if (variant === 'major') {
+			return note;
 		}
-	}, [variant]);
+		const symbol = getChordSymbol(variant, globals.showNerdMode);
+		return `${note}${symbol}`;
+	}, [tonic, variant, globals]);
 
 	const noteCount = useMemo(() => notes.length, [notes]);
 
