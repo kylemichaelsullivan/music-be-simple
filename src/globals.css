@@ -6,10 +6,12 @@
 	--black: #000000;
 	--orange: #ffb86a;
 	--green: #64f58d;
+	--cyan: #53eafd;
 	--blue: #74d4ff;
 	--white: #ffffff;
 
 	--background: var(--white);
+	--border: var(--black);
 	--chords: var(--orange);
 	--play: var(--green);
 	--scales: var(--blue);
@@ -41,6 +43,10 @@ select {
 
 .Play {
 	background-color: var(--play);
+}
+
+.ChordContainer {
+	max-width: calc(100vw - 2rem);
 }
 
 /* Instruments */
@@ -85,6 +91,7 @@ select {
 }
 
 .AllowedNote {
+	border-color: var(--border);
 	z-index: 4;
 }
 
@@ -174,6 +181,47 @@ select {
 
 .Mandolin {
 	--fretboard-color: var(--mandolin-color);
+}
+
+/* Jazz Mode Note Border Classes */
+.Piano .AllowedNote {
+	--border: var(--cyan);
+}
+
+.AllowedNote.border-dotted {
+	border-color: hsl(from var(--border) h s l / 0.25);
+}
+
+.AllowedNote.border-dashed {
+	border-color: hsl(from var(--border) h s l / 0.5);
+}
+
+.AllowedNote.border-solid {
+	border-color: hsl(from var(--border) h s l / 0.75);
+}
+
+.AllowedNote.border-double {
+	border-color: hsl(from var(--border) h s l / 1.0);
+}
+
+.ChordNote {
+	--border: var(--black);
+}
+
+.ChordNote.border-dotted {
+	border-color: hsl(from var(--border) h s l / 0.125);
+}
+
+.ChordNote.border-dashed {
+	border-color: hsl(from var(--border) h s l / 0.25);
+}
+
+.ChordNote.border-solid {
+	border-color: hsl(from var(--border) h s l / 0.5);
+}
+
+.ChordNote.border-double {
+	border-color: hsl(from var(--border) h s l / 1.0);
 }
 
 /* Utility Classes */
