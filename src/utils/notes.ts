@@ -1,3 +1,5 @@
+import type { NoteIndex } from '@/types';
+
 export const FLATS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'] as const;
 
 export const SHARPS = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'] as const;
@@ -21,15 +23,22 @@ export const INTERVALS = {
 
 export type IntervalKey = keyof typeof INTERVALS;
 
+function getIntervalKeys(): IntervalKey[] {
+	const keys = Object.keys(INTERVALS);
+	return keys.filter((key) => key in INTERVALS) as IntervalKey[];
+}
+
+export const SCALE_TYPES: readonly IntervalKey[] = getIntervalKeys();
+
 export function getIntervals(key: IntervalKey): readonly number[] {
 	return INTERVALS[key];
 }
 
-function isIntervalKey(variant: string): variant is IntervalKey {
+function isIntervalKey(variant: IntervalKey) {
 	return variant in INTERVALS;
 }
 
-export function getIntervalsForVariant(variant: string): readonly number[] {
+export function getIntervalsForVariant(variant: IntervalKey) {
 	if (isIntervalKey(variant)) {
 		return INTERVALS[variant];
 	}
@@ -38,11 +47,20 @@ export function getIntervalsForVariant(variant: string): readonly number[] {
 }
 
 export function rangeOfLength(length: number): readonly number[] {
-	return Array.from({ length }, (_, i) => i) as readonly number[];
+	return Array.from({ length }, (_, i) => i);
 }
 
 export type Notes_Flats = (typeof FLATS)[number];
 export type Notes_Sharps = (typeof SHARPS)[number];
+
+export function getNote(note: NoteIndex, usingFlats: boolean): string {
+	const scale = usingFlats ? FLATS : SHARPS;
+	return scale[note];
+}
+
+export function isValidNoteIndex(value: number): value is NoteIndex {
+	return value >= 0 && value <= 11;
+}
 
 /*
  *  0: C
