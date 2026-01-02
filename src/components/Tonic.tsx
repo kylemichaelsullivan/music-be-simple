@@ -1,4 +1,5 @@
 import { useGlobals } from '@/hooks';
+import { NoteIndexSchema } from '@/schemas';
 import type { NoteIndex } from '@/types';
 import { getNote, isValidNoteIndex, rangeOfLength } from '@/utils';
 import type { ChangeEvent } from 'react';
@@ -17,8 +18,9 @@ export default function Tonic({ tonic, handleTonicChange }: TonicProps) {
 
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const value = Number.parseInt(e.target.value, 10);
-		if (isValidNoteIndex(value)) {
-			handleTonicChange(value);
+		const result = NoteIndexSchema.safeParse(value);
+		if (result.success && isValidNoteIndex(result.data)) {
+			handleTonicChange(result.data);
 		}
 	};
 

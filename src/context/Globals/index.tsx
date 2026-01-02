@@ -1,8 +1,10 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
+import { IconTypeSchema } from '@/schemas';
 import type { GlobalsContextProviderProps } from '@/types';
 import { FREQUENCIES } from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { z } from 'zod';
 import { useLocalStorage } from '../shared';
 import { GlobalsContext } from './GlobalsContext';
 
@@ -12,8 +14,12 @@ const initialUsingFlats: boolean = true;
 const initialDisplays: IconType[] = INSTRUMENT_ORDER.map((instrument) => ICON_MAP[instrument]);
 
 export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps) => {
-	const [usingFlats, setUsingFlats] = useLocalStorage<boolean>('usingFlats', initialUsingFlats);
-	const [displays, setDisplays] = useLocalStorage<IconType[]>('selectedDisplays', initialDisplays);
+	const [usingFlats, setUsingFlats] = useLocalStorage('usingFlats', z.boolean(), initialUsingFlats);
+	const [displays, setDisplays] = useLocalStorage(
+		'selectedDisplays',
+		z.array(IconTypeSchema),
+		initialDisplays
+	);
 
 	const [notePlaying, setNotePlaying] = useState<boolean>(false);
 	const [audioContext, setAudioContext] = useState<AudioContext | null>(null);

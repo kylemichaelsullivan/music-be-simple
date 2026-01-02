@@ -1,21 +1,10 @@
 import { useGlobals, useScales } from '@/hooks';
+import { ScaleModeSchema } from '@/schemas';
 import type { NoteIndex, ScaleMode } from '@/types';
 import { INTERVALS, SCALE_TYPES, getNote, isValidNoteIndex } from '@/utils';
 import { memo, useMemo } from 'react';
 import Mode from './Mode';
 import ModesHeading from './ModesHeading';
-
-function isScaleMode(mode: ScaleMode) {
-	return (
-		mode === 'ionian' ||
-		mode === 'dorian' ||
-		mode === 'phrygian' ||
-		mode === 'lydian' ||
-		mode === 'mixolydian' ||
-		mode === 'aeolian' ||
-		mode === 'locrian'
-	);
-}
 
 function Modes() {
 	const { usingFlats } = useGlobals();
@@ -25,7 +14,7 @@ function Modes() {
 		() => (tonic: NoteIndex) => {
 			const modes = SCALE_TYPES.filter(
 				(key) => key !== 'major' && key !== 'minor' && key !== 'pentatonic'
-			).filter(isScaleMode);
+			).filter((key): key is ScaleMode => ScaleModeSchema.safeParse(key).success);
 
 			return modes.map((mode) => {
 				const intervals = INTERVALS[mode];

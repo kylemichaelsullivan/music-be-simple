@@ -4,6 +4,7 @@ import { useGlobals } from '@/hooks';
 import type { ChordsContextProviderProps, NerdModeButtonIcon, NoteIndex, border } from '@/types';
 import { getChordSymbol, getNote } from '@/utils';
 import { useCallback, useMemo } from 'react';
+import { z } from 'zod';
 import { ChordsContext } from './ChordsContext';
 
 export { ChordsContext };
@@ -13,8 +14,9 @@ const initialShowNerdMode: boolean = true;
 export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) => {
 	const { usingFlats } = useGlobals();
 
-	const [showNerdMode, setShowNerdMode] = useLocalStorage<boolean>(
+	const [showNerdMode, setShowNerdMode] = useLocalStorage(
 		'showNerdMode',
+		z.boolean(),
 		initialShowNerdMode
 	);
 

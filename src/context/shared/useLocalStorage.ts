@@ -1,15 +1,22 @@
 import { useCallback, useState } from 'react';
+import type { z } from 'zod';
 
 export const useLocalStorage = <T>(
 	key: string,
+	schema: z.ZodType<T>,
 	initialValue: T
 ): [T, (value: T | ((prev: T) => T)) => void] => {
 	const [storedValue, setStoredValue] = useState<T>(() => {
 		try {
 			const item = localStorage.getItem(key);
-			return item ? JSON.parse(item) : initialValue;
+			if (!item) {
+				return initialValue;
+			}
+			const parsed = JSON.parse(item);
+			const validated = schema.parse(parsed);
+			return validated;
 		} catch (error) {
-			console.error(error);
+			console.error(`Failed to parse or validate localStorage key "${key}":`, error);
 			return initialValue;
 		}
 	});
@@ -19,14 +26,15 @@ export const useLocalStorage = <T>(
 			try {
 				setStoredValue((prev) => {
 					const newValue = typeof value === 'function' ? (value as (prev: T) => T)(prev) : value;
-					localStorage.setItem(key, JSON.stringify(newValue));
-					return newValue;
+					const validated = schema.parse(newValue);
+					localStorage.setItem(key, JSON.stringify(validated));
+					return validated;
 				});
 			} catch (error) {
-				console.error(error);
+				console.error(`Failed to validate or save localStorage key "${key}":`, error);
 			}
 		},
-		[key]
+		[key, schema]
 	);
 
 	return [storedValue, setValue];

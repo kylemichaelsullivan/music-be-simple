@@ -11,6 +11,7 @@ import type {
 } from '@/types';
 import { getNote, isValidNoteIndex } from '@/utils';
 import { useCallback, useMemo } from 'react';
+import { z } from 'zod';
 import { ScalesContext } from './ScalesContext';
 
 export { ScalesContext };
@@ -28,8 +29,9 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 			initialVariant,
 		});
 
-	const [showNoteLabels, setShowNoteLabels] = useLocalStorage<boolean>(
+	const [showNoteLabels, setShowNoteLabels] = useLocalStorage(
 		'showNoteLabels',
+		z.boolean(),
 		initialShowNoteLabels
 	);
 
