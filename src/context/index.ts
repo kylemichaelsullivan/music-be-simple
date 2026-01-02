@@ -16,6 +16,7 @@ export { useScaleState } from './shared/useScaleState';
 // Contexts
 export { ChordsContext } from './Chords';
 export { GlobalsContext } from './Globals';
+export { InstrumentNotesContext, InstrumentNotesProvider } from './InstrumentNotes';
 export { PlayContext } from './Play';
 export { ScalesContext } from './Scales';
 
