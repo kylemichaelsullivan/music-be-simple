@@ -8,7 +8,7 @@ export default function Navbar() {
 	};
 
 	return (
-		<nav className='Navbar flex flex-col gap-4 border-b p-4 sm:flex-row sm:pb-0'>
+		<nav className='Navbar flex flex-col gap-4 border-b p-4 sm:flex-row sm:pb-0 scroll-snap-align-start'>
 			{TABS.map((tab: TabType) => (
 				<NavTab to={tabToRoute(tab)} title={tab} key={tab} />
 			))}
