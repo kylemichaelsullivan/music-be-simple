@@ -189,7 +189,7 @@ select {
 }
 
 .AllowedNote.border-dotted {
-	border-color: hsl(from var(--border) h s l / 0.25);
+	border-color: hsl(from var(--border) h s l / 0.375);
 }
 
 .AllowedNote.border-dashed {
@@ -209,7 +209,7 @@ select {
 }
 
 .ChordNote.border-dotted {
-	border-color: hsl(from var(--border) h s l / 0.125);
+	border-color: hsl(from var(--border) h s l / 0.2);
 }
 
 .ChordNote.border-dashed {

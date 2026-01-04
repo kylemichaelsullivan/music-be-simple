@@ -4,7 +4,6 @@ import { CHORDS } from '@/utils/chords';
 import { SCALE_TYPES } from '@/utils/notes';
 import { z } from 'zod';
 
-// Extract all chord variants from CHORDS
 const chordVariantKeys = new Set<string>();
 for (const group of Object.values(CHORDS)) {
 	for (const key of Object.keys(group)) {
