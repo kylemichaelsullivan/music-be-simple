@@ -9,7 +9,7 @@ type TopButtonProps = {
 };
 
 export default function TopButton({ title, icon, position, onFxn }: TopButtonProps) {
-	const ComponentTitle = title.replace(' ', '-');
+	const ComponentTitle = title.replace(/[\s?]/g, '');
 	const { handleClick, handleKeyDown } = useButtonHandler(onFxn);
 
 	// ensure Tailwind classes are compiled
