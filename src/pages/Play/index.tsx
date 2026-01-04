@@ -9,7 +9,7 @@ import type { NoteIndex } from '@/types';
 
 export default function PlayIndex() {
 	const title = 'Play';
-	// Play route doesn't have notes/tonic, so use empty arrays
+	// Play route doesn't have notes/tonic, so use empty arrays and default tonic
 	const notes: NoteIndex[] = [];
 	const tonic: NoteIndex = 0;
 	const { displays, handleDisplaysClick } = useGlobals();

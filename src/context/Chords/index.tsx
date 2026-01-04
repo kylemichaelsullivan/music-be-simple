@@ -1,9 +1,17 @@
-import { initialTonic, initialVariant, useChordState, useEscapeReset } from '@/context';
-import { useLocalStorage } from '@/context/shared';
+import { useEscapeReset } from '@/context/shared/useEscapeReset';
+import { useLocalStorage } from '@/context/shared/useLocalStorage';
 import { useGlobals } from '@/hooks';
-import type { ChordsContextProviderProps, NerdModeButtonIcon, NoteIndex, border } from '@/types';
-import { getChordSymbol, getNote } from '@/utils';
-import { useCallback, useMemo } from 'react';
+import { useChordsStore } from '@/stores/chordsStore';
+import type {
+	Chord_Tonic,
+	Chord_Variant,
+	ChordsContextProviderProps,
+	NerdModeButtonIcon,
+	NoteIndex,
+	border,
+} from '@/types';
+import { generateChordNotes, getChordInfo, getChordSymbol, getNote } from '@/utils';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { ChordsContext } from './ChordsContext';
 
@@ -13,26 +21,72 @@ const initialShowNerdMode: boolean = true;
 
 export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) => {
 	const { usingFlats } = useGlobals();
+	const { tonic, variant, setTonic, setVariant, reset: resetStore } = useChordsStore();
+
+	const [notes, setNotes] = useState<NoteIndex[]>(
+		() => generateChordNotes(tonic, variant) as NoteIndex[]
+	);
+
+	useEffect(() => {
+		const chordNotes = generateChordNotes(tonic, variant);
+		setNotes(chordNotes as NoteIndex[]);
+	}, [tonic, variant]);
+
+	const handleTonicChange = useCallback(
+		(newTonic: Chord_Tonic) => {
+			setTonic(newTonic);
+		},
+		[setTonic]
+	);
+
+	const handleVariantChange = useCallback(
+		(newVariant: Chord_Variant) => {
+			setVariant(newVariant);
+		},
+		[setVariant]
+	);
+
+	const makeChord = useCallback(
+		(chordTonic: Chord_Tonic, chordVariant: Chord_Variant) => {
+			setTonic(chordTonic);
+			setVariant(chordVariant);
+		},
+		[setTonic, setVariant]
+	);
+
+	const getBorderStyleFromState = useCallback(
+		(note: number, showNerdMode: boolean): border => {
+			if (showNerdMode || note === tonic) {
+				return 'none';
+			}
+
+			const chordInfo = getChordInfo(variant);
+			let currentSemitones = 0;
+
+			for (let i = 0; i < chordInfo.intervals.length; i++) {
+				const [interval, , style] = chordInfo.intervals[i];
+				currentSemitones += interval * 2;
+				const noteIndex = (tonic + currentSemitones) % 12;
+
+				if (noteIndex === note) {
+					return style;
+				}
+			}
+
+			return 'solid';
+		},
+		[tonic, variant]
+	);
+
+	const reset = useCallback(() => {
+		resetStore();
+	}, [resetStore]);
 
 	const [showNerdMode, setShowNerdMode] = useLocalStorage(
 		'showNerdMode',
 		z.boolean(),
 		initialShowNerdMode
 	);
-
-	const {
-		tonic,
-		variant,
-		notes,
-		handleTonicChange,
-		handleVariantChange,
-		makeChord,
-		getBorderStyle: getBorderStyleFromState,
-		reset,
-	} = useChordState({
-		initialTonic,
-		initialVariant,
-	});
 
 	const getBorderStyle = useMemo(
 		() =>

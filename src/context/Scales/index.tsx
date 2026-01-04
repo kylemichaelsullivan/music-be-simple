@@ -1,7 +1,7 @@
 import { useEscapeReset } from '@/context/shared/useEscapeReset';
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
-import { useScaleState } from '@/context/shared/useScaleState';
 import { useGlobals } from '@/hooks';
+import { useScalesStore } from '@/stores/scalesStore';
 import type {
 	NoteIndex,
 	NoteLabelsButtonIcon,
@@ -9,25 +9,51 @@ import type {
 	ScaleType,
 	ScalesContextProviderProps,
 } from '@/types';
-import { getNote, isValidNoteIndex } from '@/utils';
-import { useCallback, useMemo } from 'react';
+import { generateNotesFromIntervals, getNote, isValidNoteIndex } from '@/utils';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { ScalesContext } from './ScalesContext';
 
 export { ScalesContext };
 
-const initialTonic: NoteIndex = 0;
-const initialVariant: ScaleType = 'major';
 const initialShowNoteLabels: boolean = true;
 
 export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) => {
 	const { usingFlats } = useGlobals();
+	const { tonic, variant, setTonic, setVariant, reset: resetStore } = useScalesStore();
 
-	const { tonic, variant, notes, handleTonicChange, handleVariantChange, makeScale, reset } =
-		useScaleState<ScaleType>({
-			initialTonic,
-			initialVariant,
-		});
+	const [notes, setNotes] = useState<NoteIndex[]>(() => generateNotesFromIntervals(tonic, variant));
+
+	useEffect(() => {
+		const scaleNotes = generateNotesFromIntervals(tonic, variant);
+		setNotes(scaleNotes);
+	}, [tonic, variant]);
+
+	const handleTonicChange = useCallback(
+		(newTonic: NoteIndex) => {
+			setTonic(newTonic);
+		},
+		[setTonic]
+	);
+
+	const handleVariantChange = useCallback(
+		(newVariant: ScaleType) => {
+			setVariant(newVariant);
+		},
+		[setVariant]
+	);
+
+	const makeScale = useCallback(
+		(scaleTonic: NoteIndex, scaleVariant: ScaleType) => {
+			setTonic(scaleTonic);
+			setVariant(scaleVariant);
+		},
+		[setTonic, setVariant]
+	);
+
+	const reset = useCallback(() => {
+		resetStore();
+	}, [resetStore]);
 
 	const [showNoteLabels, setShowNoteLabels] = useLocalStorage(
 		'showNoteLabels',
@@ -37,7 +63,6 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 
 	const getRelativeMajor = useCallback(
 		(mode: ScaleMode) => {
-			// For each mode, calculate the relative major key that shares the key signature
 			let relativeMajorNote: number;
 
 			switch (mode) {
@@ -77,7 +102,6 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 
 	const getRelativeMinor = useCallback(
 		(mode: ScaleMode) => {
-			// For each mode, calculate the relative minor key that shares the key signature
 			let relativeMinorNote: number;
 
 			switch (mode) {
