@@ -30,7 +30,8 @@ This guide covers development practices, coding standards, and workflow for the 
 
 - **Schema location**: Define all Zod schemas in `src/schemas.ts`
 - **Runtime validation**: Use Zod for runtime type validation beyond TypeScript compile-time checks
-- **localStorage validation**: Always use Zod schemas with `useLocalStorage` hook
+- **localStorage validation**: Always use Zod schemas with `useLocalStorage` hook (individual field validation)
+- **Combined data validation**: Context providers validate combined storage data using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in `useEffect` hooks for monitoring
 - **Input validation**: Validate user inputs using `safeParse()` before state updates
 - **Error handling**: Handle validation errors gracefully with fallback to defaults
 
@@ -41,7 +42,7 @@ This guide covers development practices, coding standards, and workflow for the 
 export const NoteIndexSchema = z.number().int().min(0).max(11);
 export const ScaleTypeSchema = z.enum(SCALE_TYPES as [string, ...string[]]);
 
-// ✅ Use schemas with useLocalStorage (for persisted fields)
+// ✅ Use schemas with useLocalStorage (individual field validation)
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
 import { IconTypeSchema } from '@/schemas';
 import { z } from 'zod';
@@ -52,6 +53,21 @@ const [displays, setDisplays] = useLocalStorage(
   z.array(IconTypeSchema),
   initialDisplays
 );
+
+// ✅ Validate combined storage data (for monitoring/debugging)
+import { GlobalsStorageSchema } from '@/schemas';
+import { useEffect } from 'react';
+
+useEffect(() => {
+  const combinedData = {
+    usingFlats,
+    selectedDisplays: displays,
+  };
+  const result = GlobalsStorageSchema.safeParse(combinedData);
+  if (!result.success) {
+    console.warn('Globals storage data validation failed:', result.error.format());
+  }
+}, [usingFlats, displays]);
 
 // ✅ Validate user inputs
 import { NoteIndexSchema } from '@/schemas';

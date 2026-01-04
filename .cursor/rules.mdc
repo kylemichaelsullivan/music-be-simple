@@ -342,10 +342,10 @@ const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 - **Basic schemas**: `NoteIndexSchema`, `AccidentalTypeSchema`, `ScaleTypeSchema`, `ScaleModeSchema`, `ChordVariantSchema`
 - **UI schemas**: `BorderSchema`, `InstrumentTypeSchema`, `IconTypeSchema`, `TabTypeSchema`, `PositionTypeSchema`
 - **Button schemas**: `NerdModeButtonIconSchema`, `NoteLabelsButtonIconSchema`
-- **Storage schemas**: `GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema` (defined but not currently used; fields are validated individually)
+- **Storage schemas**: `GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema` (used for combined data validation in context providers via `useEffect` hooks)
 - **Data schemas**: `ChordInfoSchema`, `ChordDataSchema`, `ChordGroupSchema`
 
-**Note**: Storage schemas are defined for potential future use, but currently each localStorage field is validated individually (e.g., `z.boolean()` for `usingFlats`, `z.array(IconTypeSchema)` for `selectedDisplays`).
+**Note**: Storage schemas are used for combined data validation in context providers (for monitoring and debugging), while individual localStorage fields are validated individually via `useLocalStorage` hook (e.g., `z.boolean()` for `usingFlats`, `z.array(IconTypeSchema)` for `selectedDisplays`).
 
 ### Store Structure
 

@@ -215,14 +215,15 @@ All Zod schemas are defined in `src/schemas.ts`:
 - **Basic schemas**: Primitive types and enums (NoteIndex, AccidentalType, ScaleType, ScaleMode, ChordVariant)
 - **UI schemas**: UI-related types (Border, InstrumentType, IconType, TabType, PositionType)
 - **Button schemas**: Button icon types (NerdModeButtonIcon, NoteLabelsButtonIcon)
-- **Storage schemas**: localStorage data structures (GlobalsStorageSchema, ScalesStorageSchema, ChordsStorageSchema) - defined but not currently used; fields are validated individually
+- **Storage schemas**: localStorage data structures (GlobalsStorageSchema, ScalesStorageSchema, ChordsStorageSchema) - used for combined data validation in context providers via `useEffect` hooks (fields are also validated individually)
 - **Data schemas**: Complex data structures (ChordInfo, ChordData, ChordGroup)
 
 ### Validation Usage
 
-1. **localStorage Validation**: All data loaded from localStorage is validated using Zod schemas via the `useLocalStorage` hook
-2. **Input Validation**: User inputs (form selections, user interactions) are validated using `safeParse()` before state updates
-3. **Runtime Safety**: Zod provides runtime type checking beyond TypeScript's compile-time checks
+1. **localStorage Validation**: All data loaded from localStorage is validated using Zod schemas via the `useLocalStorage` hook (individual field validation)
+2. **Combined Data Validation**: Context providers validate combined storage data using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in `useEffect` hooks for monitoring and debugging
+3. **Input Validation**: User inputs (form selections, user interactions) are validated using `safeParse()` before state updates
+4. **Runtime Safety**: Zod provides runtime type checking beyond TypeScript's compile-time checks
 
 ### Schema Examples
 
@@ -246,15 +247,19 @@ export const ScalesStorageSchema = z.object({
 Context providers and Zustand stores use Zod schemas for persistence:
 
 **localStorage (via useLocalStorage hook)**:
-- `GlobalsContext` validates `usingFlats` (with `z.boolean()`) and `selectedDisplays` (with `z.array(IconTypeSchema)`)
-- `ScalesContext` validates `showNoteLabels` (with `z.boolean()`)
-- `ChordsContext` validates `showNerdMode` (with `z.boolean()`)
+- `GlobalsContext` validates `usingFlats` (with `z.boolean()`) and `selectedDisplays` (with `z.array(IconTypeSchema)`) individually
+- `ScalesContext` validates `showNoteLabels` (with `z.boolean()`) individually
+- `ChordsContext` validates `showNerdMode` (with `z.boolean()`) individually
+- Context providers also validate combined storage data using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in `useEffect` hooks for monitoring and debugging
 
 **sessionStorage (via Zustand stores)**:
 - `scalesStore` validates `tonic` (with `NoteIndexSchema`) and `variant` (with `ScaleTypeSchema`)
 - `chordsStore` validates `tonic` (with `NoteIndexSchema`) and `variant` (with `ChordVariantSchema`)
 
-**Note**: The storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) are defined in `src/schemas.ts` but are not currently used - each field is validated individually rather than as a complete storage object.
+**Validation Strategy**:
+- Individual fields are validated when loaded/saved via `useLocalStorage` hook
+- Combined storage data is validated using storage schemas in `useEffect` hooks for runtime monitoring
+- Both validation approaches work together to ensure data integrity
 
 ## Styling
 

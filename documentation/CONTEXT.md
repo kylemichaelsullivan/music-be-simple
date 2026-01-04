@@ -37,8 +37,9 @@ function MyComponent() {
 **Persistence**: Selected displays and flats/sharps preference are persisted to localStorage with Zod schema validation.
 
 **Schema Validation**:
-- `usingFlats` is validated using `z.boolean()`
-- `selectedDisplays` is validated using `z.array(IconTypeSchema)`
+- `usingFlats` is validated using `z.boolean()` (individual field validation)
+- `selectedDisplays` is validated using `z.array(IconTypeSchema)` (individual field validation)
+- Combined data is validated using `GlobalsStorageSchema` in a `useEffect` hook for monitoring
 
 ### ScalesContext
 
@@ -80,8 +81,9 @@ function ScalesComponent() {
 - `tonic` and `variant` are persisted to sessionStorage via `scalesStore` (Zustand) - persists during navigation but clears on page refresh
 
 **Schema Validation**:
-- `showNoteLabels` is validated using `z.boolean()` (localStorage)
+- `showNoteLabels` is validated using `z.boolean()` (localStorage - individual field validation)
 - `tonic` and `variant` are validated using `NoteIndexSchema` and `ScaleTypeSchema` in the store (sessionStorage)
+- Combined data (tonic, variant, showNoteLabels) is validated using `ScalesStorageSchema` in a `useEffect` hook for monitoring
 
 ### ChordsContext
 
@@ -124,8 +126,9 @@ function ChordsComponent() {
 - `tonic` and `variant` are persisted to sessionStorage via `chordsStore` (Zustand) - persists during navigation but clears on page refresh
 
 **Schema Validation**:
-- `showNerdMode` is validated using `z.boolean()` (localStorage)
+- `showNerdMode` is validated using `z.boolean()` (localStorage - individual field validation)
 - `tonic` and `variant` are validated using `NoteIndexSchema` and `ChordVariantSchema` in the store (sessionStorage)
+- Combined data (tonic, variant, showNerdMode) is validated using `ChordsStorageSchema` in a `useEffect` hook for monitoring
 
 ### PlayContext
 
@@ -373,10 +376,11 @@ The application uses two persistence strategies:
 - Survives browser restarts (until cleared)
 
 **Validation**: All data is validated using Zod schemas before loading and saving:
-- `usingFlats` - validated with `z.boolean()`
-- `selectedDisplays` - validated with `z.array(IconTypeSchema)`
-- `showNoteLabels` - validated with `z.boolean()`
-- `showNerdMode` - validated with `z.boolean()`
+- `usingFlats` - validated with `z.boolean()` (individual field validation)
+- `selectedDisplays` - validated with `z.array(IconTypeSchema)` (individual field validation)
+- `showNoteLabels` - validated with `z.boolean()` (individual field validation)
+- `showNerdMode` - validated with `z.boolean()` (individual field validation)
+- Combined storage data is also validated using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in context providers via `useEffect` hooks for monitoring and debugging
 
 ### Persistence Strategy
 

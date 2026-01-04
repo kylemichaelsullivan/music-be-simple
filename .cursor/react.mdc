@@ -215,7 +215,8 @@ function ComponentWithState() {
 All context providers and Zustand stores use Zod schemas for runtime validation:
 
 - **sessionStorage validation**: Data loaded from sessionStorage (in Zustand stores) is validated using Zod schemas in custom storage implementations
-- **localStorage validation**: Data loaded from localStorage is validated using Zod schemas (each field validated individually)
+- **localStorage validation**: Data loaded from localStorage is validated using Zod schemas (each field validated individually via `useLocalStorage` hook)
+- **Combined data validation**: Context providers also validate combined storage data using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in `useEffect` hooks for monitoring and debugging
 - **Input validation**: User inputs are validated using `safeParse()` before state updates
 - **Schema location**: All schemas are defined in `src/schemas.ts`
 - **Error handling**: Validation errors are logged and fall back to default values gracefully
@@ -224,7 +225,7 @@ All context providers and Zustand stores use Zod schemas for runtime validation:
   - **localStorage**: `usingFlats`, `selectedDisplays`, `showNoteLabels`, `showNerdMode` (persists across refreshes)
 
 ```typescript
-// ✅ Schema validation in context providers (localStorage)
+// ✅ Schema validation in context providers (localStorage - individual fields)
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
 import { IconTypeSchema } from '@/schemas';
 import { z } from 'zod';
@@ -234,6 +235,20 @@ const [displays, setDisplays] = useLocalStorage(
   z.array(IconTypeSchema),
   initialDisplays
 );
+
+// ✅ Combined data validation in context providers (for monitoring/debugging)
+import { GlobalsStorageSchema } from '@/schemas';
+
+useEffect(() => {
+  const combinedData = {
+    usingFlats,
+    selectedDisplays: displays,
+  };
+  const result = GlobalsStorageSchema.safeParse(combinedData);
+  if (!result.success) {
+    console.warn('Globals storage data validation failed:', result.error.format());
+  }
+}, [usingFlats, displays]);
 
 // ✅ Schema validation in Zustand stores (sessionStorage)
 import { NoteIndexSchema, ScaleTypeSchema } from '@/schemas';
