@@ -268,6 +268,69 @@ The application uses Tailwind CSS for styling:
 - Custom configuration in `tailwind.config.js`
 - Global styles in `src/globals.css`
 
+## Testing Infrastructure
+
+The application uses a comprehensive testing setup with multiple testing strategies:
+
+### Testing Stack
+
+- **Vitest** - Unit and component testing framework
+- **React Testing Library** - Component testing utilities
+- **Playwright** - End-to-end testing framework
+- **Vitest Coverage (v8)** - Code coverage reporting
+
+### Test Organization
+
+```
+src/
+├── utils/__tests__/        # Unit tests for utility functions
+├── components/__tests__/   # Component tests
+├── hooks/__tests__/       # Hook tests
+└── test/
+    ├── setup.ts           # Test setup and mocks
+    └── test-utils.tsx     # Testing utilities and helpers
+
+e2e/
+├── scales.spec.ts         # E2E tests for scales page
+├── chords.spec.ts         # E2E tests for chords page
+├── play.spec.ts           # E2E tests for play page
+└── navigation.spec.ts     # E2E tests for navigation
+```
+
+### Test Configuration
+
+**Vitest** (`vitest.config.ts`):
+- Environment: jsdom for DOM testing
+- Setup file: `src/test/setup.ts` for global mocks and configuration
+- Coverage: v8 provider with HTML, JSON, and text reporters
+- Path aliases: `@/` alias configured for imports
+
+**Playwright** (`playwright.config.ts`):
+- Test directory: `e2e/`
+- Browsers: Chromium, Firefox, WebKit
+- Base URL: `http://localhost:5173`
+- Web server: Automatically starts dev server before tests
+
+### Test Utilities
+
+**test-utils.tsx**:
+- Custom `render` function that includes TanStack Router context
+- Wraps components with necessary providers for testing
+
+**setup.ts**:
+- Configures `@testing-library/jest-dom` matchers
+- Mocks `window.matchMedia` for responsive design testing
+- Mocks `IntersectionObserver` for intersection-based features
+- Mocks `AudioContext` and related Web Audio API for audio testing
+- Automatic cleanup after each test
+
+### Testing Patterns
+
+1. **Unit Tests**: Test pure functions and utilities in isolation
+2. **Component Tests**: Test React components with React Testing Library
+3. **E2E Tests**: Test complete user flows with Playwright
+4. **Coverage**: Track code coverage to ensure comprehensive testing
+
 ## Build System
 
 - **Vite** - Build tool and dev server
@@ -276,6 +339,8 @@ The application uses Tailwind CSS for styling:
 - **Zustand** - State management for tonic/variant state
 - **Biome** - Linting and formatting
 - **TanStack Router Plugin** - Route generation
+- **Vitest** - Unit and component testing
+- **Playwright** - End-to-end testing
 
 ## Development Workflow
 

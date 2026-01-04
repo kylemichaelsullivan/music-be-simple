@@ -21,6 +21,9 @@ A simple and intuitive web application for learning and exploring music theory. 
 - **Zod** - Runtime type validation and schema definition
 - **Tailwind CSS** - Utility-first styling
 - **Biome** - Fast linter and formatter
+- **Vitest** - Unit and component testing
+- **React Testing Library** - Component testing utilities
+- **Playwright** - End-to-end testing
 
 ## Getting Started
 
@@ -54,19 +57,39 @@ bun dev
 - `bun run build` - Build for production
 - `bun lint` - Run Biome linter
 - `bun format` - Format code with Biome
+- `bun test` - Run unit and component tests in watch mode
+- `bun test:ui` - Run tests with Vitest UI
+- `bun test:run` - Run tests once (CI mode)
+- `bun test:coverage` - Run tests with coverage report
+- `bun test:e2e` - Run end-to-end tests with Playwright
+- `bun test:e2e:ui` - Run E2E tests with Playwright UI
+- `bun test:e2e:headed` - Run E2E tests in headed mode (visible browser)
+- `bun test:all` - Run both unit and E2E tests
 
 ## Project Structure
 
 ```
 src/
 ├── components/     # React components
+│   └── __tests__/  # Component tests
 ├── context/        # React Context providers
 ├── hooks/          # Custom React hooks
+│   └── __tests__/  # Hook tests
 ├── pages/          # Page components
 ├── routes/         # TanStack Router route definitions
 ├── schemas.ts      # Zod schema definitions
+├── test/           # Test utilities and setup
+│   ├── setup.ts    # Test setup and mocks
+│   └── test-utils.tsx # Testing utilities
 ├── types/          # TypeScript type definitions
 └── utils/          # Utility functions
+    └── __tests__/  # Unit tests
+
+e2e/                # End-to-end tests
+├── scales.spec.ts
+├── chords.spec.ts
+├── play.spec.ts
+└── navigation.spec.ts
 ```
 
 For detailed architecture information, see [ARCHITECTURE.md](./documentation/ARCHITECTURE.md).
@@ -77,21 +100,46 @@ The application uses **Zod** for runtime type validation, providing an additiona
 
 For more information about schema validation, see [ARCHITECTURE.md](./documentation/ARCHITECTURE.md#schema-validation-system).
 
+## Testing
+
+The project uses a comprehensive testing setup with multiple testing strategies:
+
+- **Unit Tests**: Vitest + React Testing Library for utility functions and hooks
+- **Component Tests**: Vitest + React Testing Library for React components
+- **E2E Tests**: Playwright for end-to-end user flow testing
+- **Coverage**: Vitest Coverage (v8) for code coverage reports
+
+See [TESTING.md](./TESTING.md) for detailed testing documentation.
+
+### Quick Test Commands
+
+```bash
+# Run unit and component tests
+bun test
+
+# Run E2E tests
+bun test:e2e
+
+# Run all tests
+bun test:all
+```
+
 ## Development
 
-See [DEVELOPMENT.md](./DEVELOPMENT.md) for development guidelines and best practices.
+See [DEVELOPMENT.md](./documentation/DEVELOPMENT.md) for development guidelines and best practices.
 
 ## Contributing
 
-When contributing to this project, please follow the commit message format outlined in [GIT_COMMITS.md](./GIT_COMMITS.md).
+When contributing to this project, please follow the commit message format outlined in [GIT_COMMITS.md](./documentation/GIT_COMMITS.md).
 
 ## Documentation
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Project structure and architecture
-- [DEVELOPMENT.md](./DEVELOPMENT.md) - Development guidelines
-- [COMPONENTS.md](./COMPONENTS.md) - Component documentation
-- [CONTEXT.md](./CONTEXT.md) - Context API and state management
-- [GIT_COMMITS.md](./GIT_COMMITS.md) - Commit message guidelines
+- [ARCHITECTURE.md](./documentation/ARCHITECTURE.md) - Project structure and architecture
+- [DEVELOPMENT.md](./documentation/DEVELOPMENT.md) - Development guidelines
+- [COMPONENTS.md](./documentation/COMPONENTS.md) - Component documentation
+- [CONTEXT.md](./documentation/CONTEXT.md) - Context API and state management
+- [GIT_COMMITS.md](./documentation/GIT_COMMITS.md) - Commit message guidelines
+- [TESTING.md](./TESTING.md) - Testing guide and best practices
 
 ## License
 

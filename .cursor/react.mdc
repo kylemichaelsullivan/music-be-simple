@@ -508,5 +508,55 @@ src/
 
 ### Testing
 
-- **Component testing**: Test components with React Testing Library when needed
-- **Accessibility testing**: Test accessibility features when needed
+The project uses a comprehensive testing setup with Vitest and Playwright:
+
+- **Unit Tests**: Vitest + React Testing Library for utility functions and hooks
+- **Component Tests**: Vitest + React Testing Library for React components
+- **E2E Tests**: Playwright for end-to-end user flow testing
+- **Coverage**: Vitest Coverage (v8) for code coverage reports
+
+#### Test Structure
+
+- Unit tests: `src/utils/__tests__/`, `src/hooks/__tests__/`
+- Component tests: `src/components/__tests__/`
+- E2E tests: `e2e/`
+- Test utilities: `src/test/test-utils.tsx` (custom render with router context)
+- Test setup: `src/test/setup.ts` (mocks and global configuration)
+
+#### Testing Best Practices
+
+- **Test behavior, not implementation**: Focus on what users see and do
+- **Use semantic queries**: Prefer `getByRole`, `getByLabelText` over `getByTestId`
+- **Keep tests isolated**: Each test should be independent
+- **Write descriptive test names**: Use clear descriptions of what is being tested
+- **Test user interactions**: Use `@testing-library/user-event` for interactions
+- **Mock external dependencies**: Mock APIs, localStorage, etc.
+- **Keep E2E tests focused**: Test critical user flows, not every detail
+
+#### Test Utilities
+
+- Use `render` from `@/test/test-utils` for components that need router context
+- Test setup includes mocks for `matchMedia`, `IntersectionObserver`, and `AudioContext`
+- Coverage reports are generated in the `coverage/` directory
+
+#### Running Tests
+
+```bash
+# Run unit and component tests in watch mode
+bun test
+
+# Run tests with UI
+bun test:ui
+
+# Run tests once (CI mode)
+bun test:run
+
+# Run tests with coverage
+bun test:coverage
+
+# Run E2E tests
+bun test:e2e
+
+# Run all tests
+bun test:all
+```

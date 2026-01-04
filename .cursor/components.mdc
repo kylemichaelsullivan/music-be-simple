@@ -483,3 +483,6 @@ import { Link } from '@tanstack/react-router';
 - Use `bun run build` for production build
 - Use `bun lint` for linting
 - Use `bun format` for formatting code
+- Use `bun test` for running unit and component tests
+- Use `bun test:e2e` for running end-to-end tests
+- Use `bun test:all` for running all tests

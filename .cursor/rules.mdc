@@ -32,6 +32,14 @@ Music Be Simple is a web application for learning and exploring music theory. It
 - **Production Build**: `bun run build` (TypeScript compilation + Vite build)
 - **Linting**: `bun lint` (Run Biome linter)
 - **Formatting**: `bun format` (Format code with Biome)
+- **Testing**: `bun test` (Run unit and component tests in watch mode)
+- **Test UI**: `bun test:ui` (Run tests with Vitest UI)
+- **Test Run**: `bun test:run` (Run tests once, CI mode)
+- **Test Coverage**: `bun test:coverage` (Run tests with coverage report)
+- **E2E Tests**: `bun test:e2e` (Run end-to-end tests with Playwright)
+- **E2E UI**: `bun test:e2e:ui` (Run E2E tests with Playwright UI)
+- **E2E Headed**: `bun test:e2e:headed` (Run E2E tests in headed mode)
+- **All Tests**: `bun test:all` (Run both unit and E2E tests)
 
 ### Vite Benefits
 
@@ -45,6 +53,7 @@ Music Be Simple is a web application for learning and exploring music theory. It
 ```
 src/
 ├── components/          # React components
+│   ├── __tests__/       # Component tests
 │   ├── buttons/         # Button components
 │   │   ├── TopButton.tsx
 │   │   ├── TransposeButton.tsx
@@ -95,6 +104,7 @@ src/
 │   ├── defaults.tsx     # Default context values
 │   └── index.ts         # Context exports
 ├── hooks/               # Custom React hooks
+│   ├── __tests__/       # Hook tests
 │   ├── useButtonHandler.ts
 │   ├── useChords.ts
 │   ├── useGlobals.ts
@@ -135,16 +145,26 @@ src/
 │   ├── play.ts
 │   └── scales.ts
 ├── utils/               # Utility functions
+│   ├── __tests__/       # Unit tests for utility functions
 │   ├── borders.ts
 │   ├── chords.ts
 │   ├── index.ts
 │   ├── notes.ts
 │   └── scales.ts
+├── test/                # Test utilities and setup
+│   ├── setup.ts         # Test setup and mocks
+│   └── test-utils.tsx   # Testing utilities and helpers
 ├── main.tsx             # Application entry point
 ├── navigation.ts        # Navigation constants and schemas
 ├── instruments.ts       # Instrument definitions
 ├── globals.css          # Global styles and CSS variables
 └── vite-env.d.ts        # Vite environment type definitions
+
+e2e/                     # End-to-end tests
+├── scales.spec.ts       # E2E tests for scales page
+├── chords.spec.ts       # E2E tests for chords page
+├── play.spec.ts         # E2E tests for play page
+└── navigation.spec.ts   # E2E tests for navigation
 ```
 
 ## Code Organization
@@ -416,6 +436,39 @@ import { Link } from '@tanstack/react-router';
 	Chords
 </Link>
 ```
+
+## Testing
+
+The project uses a comprehensive testing setup:
+
+- **Unit Tests**: Vitest + React Testing Library for utility functions and hooks
+- **Component Tests**: Vitest + React Testing Library for React components
+- **E2E Tests**: Playwright for end-to-end user flow testing
+- **Coverage**: Vitest Coverage (v8) for code coverage reports
+
+### Test Structure
+
+- Unit tests: `src/utils/__tests__/`, `src/hooks/__tests__/`
+- Component tests: `src/components/__tests__/`
+- E2E tests: `e2e/`
+- Test utilities: `src/test/test-utils.tsx` (custom render with router context)
+- Test setup: `src/test/setup.ts` (mocks and global configuration)
+
+### Testing Best Practices
+
+- **Test behavior, not implementation**: Focus on what users see and do
+- **Use semantic queries**: Prefer `getByRole`, `getByLabelText` over `getByTestId`
+- **Keep tests isolated**: Each test should be independent
+- **Write descriptive test names**: Use clear descriptions of what is being tested
+- **Test user interactions**: Use `@testing-library/user-event` for interactions
+- **Mock external dependencies**: Mock APIs, localStorage, etc.
+- **Keep E2E tests focused**: Test critical user flows, not every detail
+
+### Test Utilities
+
+- Use `render` from `@/test/test-utils` for components that need router context
+- Test setup includes mocks for `matchMedia`, `IntersectionObserver`, and `AudioContext`
+- Coverage reports are generated in the `coverage/` directory
 
 ## Comments and Documentation
 

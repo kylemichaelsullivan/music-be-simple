@@ -238,6 +238,120 @@ export const useScalesStore = create<ScalesStore>()(
 
 ## Testing
 
+The project uses a comprehensive testing setup with Vitest and Playwright. See [TESTING.md](../TESTING.md) for detailed documentation.
+
+### Test Commands
+
+```bash
+# Run unit and component tests in watch mode
+bun test
+
+# Run tests with Vitest UI
+bun test:ui
+
+# Run tests once (CI mode)
+bun test:run
+
+# Run tests with coverage report
+bun test:coverage
+
+# Run E2E tests with Playwright
+bun test:e2e
+
+# Run E2E tests with Playwright UI
+bun test:e2e:ui
+
+# Run E2E tests in headed mode (visible browser)
+bun test:e2e:headed
+
+# Run both unit and E2E tests
+bun test:all
+```
+
+### Test Structure
+
+```
+src/
+├── utils/
+│   └── __tests__/          # Unit tests for utility functions
+├── components/
+│   └── __tests__/          # Component tests
+├── hooks/
+│   └── __tests__/          # Hook tests
+└── test/
+    ├── setup.ts            # Test setup and mocks
+    └── test-utils.tsx      # Testing utilities and helpers
+
+e2e/
+├── scales.spec.ts          # E2E tests for scales page
+├── chords.spec.ts          # E2E tests for chords page
+├── play.spec.ts            # E2E tests for play page
+└── navigation.spec.ts      # E2E tests for navigation
+```
+
+### Writing Tests
+
+#### Unit Tests
+
+Unit tests are for pure functions and utilities:
+
+```typescript
+import { describe, expect, it } from 'vitest';
+import { getNote } from '../notes';
+
+describe('getNote', () => {
+  it('should return correct note using sharps', () => {
+    expect(getNote(0, false)).toBe('C');
+  });
+});
+```
+
+#### Component Tests
+
+Component tests use React Testing Library:
+
+```typescript
+import { render, screen } from '../../test/test-utils';
+import MyComponent from '../MyComponent';
+
+describe('MyComponent', () => {
+  it('should render correctly', () => {
+    render(<MyComponent />);
+    expect(screen.getByText('Hello')).toBeInTheDocument();
+  });
+});
+```
+
+#### E2E Tests
+
+E2E tests use Playwright:
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('should navigate to scales page', async ({ page }) => {
+  await page.goto('/scales');
+  await expect(page).toHaveURL(/.*scales/);
+});
+```
+
+### Test Utilities
+
+- **test-utils.tsx**: Provides a custom `render` function that includes router context and other providers
+- **setup.ts**: Configures `@testing-library/jest-dom` matchers, mocks browser APIs (matchMedia, IntersectionObserver, AudioContext), and cleanup after each test
+
+### Testing Best Practices
+
+1. **Test behavior, not implementation**: Focus on what users see and do
+2. **Use semantic queries**: Prefer `getByRole`, `getByLabelText` over `getByTestId`
+3. **Keep tests isolated**: Each test should be independent
+4. **Write descriptive test names**: Use clear descriptions of what is being tested
+5. **Test user interactions**: Use `@testing-library/user-event` for interactions
+6. **Mock external dependencies**: Mock APIs, localStorage, etc.
+7. **Keep E2E tests focused**: Test critical user flows, not every detail
+
+### Code Quality
+
 ### Running Linter
 
 ```bash
