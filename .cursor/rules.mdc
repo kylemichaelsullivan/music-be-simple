@@ -14,7 +14,7 @@ Music Be Simple is a web application for learning and exploring music theory. It
 - Use **TypeScript** with strict configuration
 - Follow **React 19** with **Vite** architecture
 - Use **TanStack Router** for routing
-- Use **React Context API** for state management with custom hooks
+- Use **Zustand stores** and **React Context API** for state management (hybrid approach)
 - Use typographic apostrophe ' instead of straight apostrophe ' in ALL user-facing text
 
 ## Package Management
@@ -55,23 +55,22 @@ src/
 │   │   ├── DisplaysSelector.tsx
 │   │   ├── Modes.tsx
 │   │   └── instruments/ # Instrument display components
-│   │       ├── Instrument.tsx
-│   │       ├── Guitar.tsx
-│   │       ├── Piano.tsx
 │   │       ├── Banjo.tsx
+│   │       ├── Guitar.tsx
+│   │       ├── Instrument.tsx
 │   │       ├── Mandolin.tsx
+│   │       ├── Piano.tsx
 │   │       └── Ukulele.tsx
 │   ├── nav/             # Navigation components
 │   │   ├── Navbar.tsx
 │   │   └── NavTab.tsx
+│   ├── AllowedNote.tsx  # Note display component
 │   ├── Footer.tsx       # Footer component
 │   ├── Icon.tsx         # Icon component
 │   ├── Main.tsx         # Main content wrapper component
 │   ├── Title.tsx        # Title component
 │   ├── Tonic.tsx        # Tonic selector component
-│   ├── Variant.tsx      # Variant selector component
-│   └── notes/           # Note components
-│       └── AllowedNote.tsx
+│   └── Variant.tsx      # Variant selector component
 ├── context/             # React Context providers
 │   ├── Chords/          # Chords context provider
 │   │   ├── ChordsContext.tsx
@@ -90,11 +89,9 @@ src/
 │   │   └── index.tsx
 │   ├── shared/          # Shared context utilities
 │   │   ├── index.ts
-│   │   ├── useChordState.ts
 │   │   ├── useEscapeReset.ts
 │   │   ├── useLocalStorage.ts
-│   │   ├── useRequireGlobals.ts
-│   │   └── useScaleState.ts
+│   │   └── useRequireGlobals.ts
 │   ├── defaults.tsx     # Default context values
 │   └── index.ts         # Context exports
 ├── hooks/               # Custom React hooks
@@ -126,6 +123,11 @@ src/
 │   ├── chords.tsx       # Chords route with context provider
 │   ├── play.tsx         # Play route with context provider
 │   └── scales.tsx       # Scales route with context provider
+├── stores/              # Zustand stores for state management
+│   ├── chordsStore.ts   # Chords tonic/variant store
+│   ├── scalesStore.ts   # Scales tonic/variant store
+│   ├── playStore.ts     # Play functionality store
+│   └── index.ts         # Store exports
 ├── types/               # TypeScript type definitions
 │   ├── chords.ts
 │   ├── globals.ts
@@ -283,15 +285,19 @@ export const FLATS = ['C', 'D♭', 'D'] as const;
 
 ### State Management
 
-The project uses **React Context API** for state management with custom hooks:
+The project uses a **hybrid approach** combining **Zustand stores** and **React Context API**:
 
-- **Context providers**: Separate context providers for Chords, Scales, Play, and Globals
-- **Provider location**: Context providers are in `src/context/` directory
+- **Zustand stores**: Manage tonic and variant state for scales and chords (in `src/stores/`)
+- **Context providers**: Provide computed values, UI state, and additional functionality (in `src/context/`)
+- **Provider location**: Context providers are in `src/context/` directory, stores in `src/stores/`
 - **Provider usage**: Context providers wrap page components at the route level
 - **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`) to access context values
-- **Persistence**: Local storage persistence via `useLocalStorage` hook in shared context utilities
-- **Type safety**: All context values are typed with TypeScript
-- **Schema validation**: Zod schemas validate data at runtime, especially for localStorage persistence
+- **Store hooks**: Use store hooks (`useChordsStore`, `useScalesStore`, `usePlayStore`) to access store state
+- **Persistence**: 
+  - **sessionStorage** (via Zustand): Tonic and variant state (persists during navigation, clears on refresh)
+  - **localStorage** (via `useLocalStorage`): UI preferences (persists across refreshes)
+- **Type safety**: All context values and store state are typed with TypeScript
+- **Schema validation**: Zod schemas validate data at runtime for both sessionStorage and localStorage
 
 ### Schema Validation with Zod
 
@@ -299,6 +305,7 @@ The project uses **Zod** for runtime type validation and schema definition:
 
 - **Schema location**: All schemas are defined in `src/schemas.ts`
 - **Validation**: Zod schemas validate data at runtime, ensuring type safety beyond TypeScript compile-time checks
+- **sessionStorage validation**: All sessionStorage data (in Zustand stores) is validated using Zod schemas in custom storage implementations
 - **localStorage validation**: All localStorage data is validated using Zod schemas via `useLocalStorage` hook
 - **Input validation**: User inputs (e.g., form selections) are validated using Zod schemas with `safeParse()`
 - **Schema types**: Schemas include basic types (NoteIndex, AccidentalType), enums (ScaleType, ChordVariant, InstrumentType), and complex objects (storage schemas)
@@ -340,11 +347,17 @@ const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 
 **Note**: Storage schemas are defined for potential future use, but currently each localStorage field is validated individually (e.g., `z.boolean()` for `usingFlats`, `z.array(IconTypeSchema)` for `selectedDisplays`).
 
+### Store Structure
+
+- **chordsStore**: Chords tonic and variant state (sessionStorage)
+- **scalesStore**: Scales tonic and variant state (sessionStorage)
+- **playStore**: Play functionality state (sessionStorage)
+
 ### Context Structure
 
-- **GlobalsContext**: Global application state (note display preferences, selected displays, etc.)
-- **ScalesContext**: Scales-specific state (tonic, variant, notes, display options)
-- **ChordsContext**: Chords-specific state (tonic, variant, notes, chord info)
+- **GlobalsContext**: Global application state (note display preferences, selected displays, etc.) - uses localStorage
+- **ScalesContext**: Scales-specific state (uses scalesStore for tonic/variant, computed notes, display options) - showNoteLabels in localStorage
+- **ChordsContext**: Chords-specific state (uses chordsStore for tonic/variant, computed notes, chord info) - showNerdMode in localStorage
 - **PlayContext**: Play functionality state (audio context, note playing)
 
 ### State Usage

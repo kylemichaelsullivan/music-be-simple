@@ -23,37 +23,36 @@ src/components/
 │   │   ├── Modes.tsx
 │   │   └── ModesHeading.tsx
 │   └── instruments/
-│       ├── Instrument.tsx
-│       ├── Guitar/
-│       │   └── Guitar.tsx
-│       ├── Piano/
-│       │   ├── Key.tsx
-│       │   └── Piano.tsx
 │       ├── Banjo/
 │       │   ├── Banjo.tsx
 │       │   ├── DroneString.tsx
 │       │   └── SkippedFret.tsx
+│       ├── Guitar/
+│       │   └── Guitar.tsx
 │       ├── Mandolin/
 │       │   └── Mandolin.tsx
+│       ├── Piano/
+│       │   ├── Key.tsx
+│       │   └── Piano.tsx
 │       ├── Ukulele/
 │       │   └── Ukulele.tsx
 │       ├── Fret.tsx
 │       ├── FretNumbers.tsx
 │       ├── FretString.tsx
+│       ├── Instrument.tsx
 │       ├── Label.tsx
 │       ├── Nut.tsx
 │       └── index.tsx
 ├── nav/
 │   ├── Navbar.tsx
 │   └── NavTab.tsx
+├── AllowedNote.tsx
 ├── Footer.tsx
 ├── Icon.tsx
 ├── Main.tsx
 ├── Title.tsx
 ├── Tonic.tsx
-├── Variant.tsx
-└── notes/
-    └── AllowedNote.tsx
+└── Variant.tsx
 
 src/pages/
 ├── Chords/
@@ -132,16 +131,16 @@ Always use the project's utility components instead of creating custom HTML elem
   - Applies page-specific background color based on componentName
   - Provides consistent layout structure
 
-- **Navbar** (`@/components/Navbar`) - Navigation bar component
+- **Navbar** (`@/components/nav/Navbar`) - Navigation bar component
   - Renders navigation tabs for Scales, Chords, and Play
   - Uses NavTab components for individual tabs
 
-- **NavTab** (`@/components/NavTab`) - Navigation tab component
+- **NavTab** (`@/components/nav/NavTab`) - Navigation tab component
   - Required props: `title` (TabType), `to` (string)
   - Uses TanStack Router Link for navigation
   - Supports active state styling
 
-- **TopButton** (`@/components/TopButton`) - Top button component
+- **TopButton** (`@/components/buttons/TopButton`) - Top button component
   - Required props: `title` (string), `icon` (string), `position` ('left' | 'right'), `onFxn` (() => void)
   - Positioned absolutely at top corners
   - Uses emoji icons for visual indicators
@@ -275,49 +274,56 @@ export default memo(ComponentName);
 ### Display Components
 
 - **Displays** (`@/components/displays/Displays`) - Container for instrument displays
-- **DisplaysSelector** (`@/components/displays/DisplaysSelector`) - Selector for choosing displays
 - **DisplaySelector** (`@/components/displays/DisplaySelector`) - Individual display selector
-- **Modes** (`@/components/displays/modes/Modes`) - Modes display component
+- **DisplaysSelector** (`@/components/displays/DisplaysSelector`) - Selector for choosing displays
 - **Mode** (`@/components/displays/modes/Mode`) - Individual mode display component
+- **Modes** (`@/components/displays/modes/Modes`) - Modes display component
 - **ModesHeading** (`@/components/displays/modes/ModesHeading`) - Modes section heading component
 - **Instrument** (`@/components/displays/instruments/Instrument`) - Base instrument display component wrapper
-- **Guitar, Piano, Banjo, Mandolin, Ukulele** - Specific instrument display components
-- **Fret, FretNumbers, FretString, Nut, Label** - Shared fretboard components
+- **Banjo, Guitar, Mandolin, Piano, Ukulele** - Specific instrument display components
+- **Fret, FretNumbers, FretString, Label, Nut** - Shared fretboard components
 
 ### Page Components
 
 All page components follow a similar pattern:
 
 - **Chords** (`@/pages/Chords`) - Chords page for chord-related functionality (default export)
-- **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (default export)
 - **Play** (`@/pages/Play`) - Play page for music playback functionality (default export)
+- **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (default export)
 
 ## State Management
 
-The project uses React Context API for state management with custom hooks:
+The project uses a hybrid approach combining Zustand stores and React Context API:
+
+### Zustand Stores
+
+- **useChordsStore** (`@/stores/chordsStore`) - Chords tonic and variant state (sessionStorage)
+- **useScalesStore** (`@/stores/scalesStore`) - Scales tonic and variant state (sessionStorage)
+- **usePlayStore** (`@/stores/playStore`) - Play functionality state (sessionStorage)
 
 ### Context Providers
 
-- **GlobalsContext** (`@/context/Globals`) - Global application state (note display preferences, selected displays, using flats/sharps, audio context, note playback)
-- **ScalesContext** (`@/context/Scales`) - Scales-specific state (tonic, variant, notes, showNoteLabels)
-- **ChordsContext** (`@/context/Chords`) - Chords-specific state (tonic, variant, notes, chordName, noteCount, showNerdMode)
-- **PlayContext** (`@/context/Play`) - Play functionality state
+- **ChordsContext** (`@/context/Chords`) - Chords-specific state (uses chordsStore for tonic/variant, computed notes, chordName, noteCount, showNerdMode) - showNerdMode in localStorage
+- **GlobalsContext** (`@/context/Globals`) - Global application state (note display preferences, selected displays, using flats/sharps, audio context, note playback) - uses localStorage
 - **InstrumentNotesContext** (`@/context/InstrumentNotes`) - Instrument notes display context
+- **PlayContext** (`@/context/Play`) - Play functionality state
+- **ScalesContext** (`@/context/Scales`) - Scales-specific state (uses scalesStore for tonic/variant, computed notes, showNoteLabels) - showNoteLabels in localStorage
 
 ### Custom Hooks
 
-- **useGlobals** (`@/hooks/useGlobals`) - Access global context
-- **useScales** (`@/hooks/useScales`) - Access scales context
 - **useChords** (`@/hooks/useChords`) - Access chords context
-- **usePlay** (`@/hooks/usePlay`) - Access play context
+- **useGlobals** (`@/hooks/useGlobals`) - Access global context
 - **useInstrumentNotes** (`@/hooks/useInstrumentNotes`) - Access instrument notes context
+- **usePlay** (`@/hooks/usePlay`) - Access play context
+- **useScales** (`@/hooks/useScales`) - Access scales context
 
 ### Using State
 
 ```tsx
+// ✅ Use context hooks (recommended - provides computed values)
 import Main from '@/components/Main';
-import { useScales } from '@/hooks/useScales';
 import { useGlobals } from '@/hooks/useGlobals';
+import { useScales } from '@/hooks/useScales';
 
 export default function Scales() {
   const { tonic, variant, notes, handleTonicChange } = useScales();
@@ -329,6 +335,19 @@ export default function Scales() {
     </Main>
   );
 }
+
+// ✅ Use store hooks directly (if you only need tonic/variant)
+import { useScalesStore } from '@/stores/scalesStore';
+
+export default function MyComponent() {
+  const { tonic, variant, setTonic, setVariant } = useScalesStore();
+  
+  return (
+    <div>
+      {/* Use store state */}
+    </div>
+  );
+}
 ```
 
 ### Context Provider Pattern
@@ -337,6 +356,8 @@ Context providers wrap page components at the route level:
 
 ```tsx
 // Route file (src/routes/scales.tsx)
+import { createFileRoute } from '@tanstack/react-router';
+
 import { ScalesContextProvider } from '@/context';
 import Scales from '@/pages/Scales';
 
@@ -347,6 +368,10 @@ function ScalesPage() {
     </ScalesContextProvider>
   );
 }
+
+export const Route = createFileRoute('/scales')({
+  component: ScalesPage,
+});
 ```
 
 ## Component Best Practices
@@ -359,6 +384,7 @@ function ScalesPage() {
 - **Lazy loading**: Use `lazy()` and `Suspense` for code splitting page components if needed
 - **Tree shaking**: Import only necessary components
 - **Context hooks**: Use context hooks to access state efficiently
+- **Zustand stores**: Use store hooks directly when you only need tonic/variant state (avoids unnecessary context re-renders)
 
 ### Accessibility
 
@@ -449,7 +475,7 @@ import { Link } from '@tanstack/react-router';
 - **Page integration**: Test page components within routes
 - **Navigation behavior**: Test navigation between pages
 - **Responsive behavior**: Test responsive behavior across screen sizes
-- **State persistence**: Test context state persistence across page navigation
+- **State persistence**: Test context state persistence (localStorage) and store state persistence (sessionStorage) across page navigation
 
 ### Testing Commands
 
