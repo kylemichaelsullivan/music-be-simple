@@ -20,6 +20,7 @@ function ScaleVariant() {
 		<select
 			className='Variant flex-auto border border-slate-500 rounded-none min-w-16 min-h-12 px-1 hover:ring-1'
 			value={variant}
+			name='Scale Variant'
 			onChange={handleChange}
 		>
 			{SCALE_TYPES.map((variantOption) => (
@@ -45,6 +46,7 @@ function ChordVariant() {
 		<select
 			className='Variant flex-auto border border-slate-500 rounded-none min-w-16 min-h-12 px-1 hover:ring-1'
 			value={variant}
+			name='Chord Variant'
 			onChange={handleChange}
 		>
 			{Object.entries(CHORDS).map(([groupName, group]: [string, ChordGroup]) => (
