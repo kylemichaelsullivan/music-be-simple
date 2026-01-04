@@ -4,7 +4,7 @@ This document describes the React Context API usage and state management in the 
 
 ## Overview
 
-The application uses React Context API for state management, organized by feature domain. Each context provides a custom hook for easy consumption and includes state persistence where appropriate.
+The application uses a hybrid state management approach combining **Zustand stores** and **React Context API**. Zustand stores manage tonic and variant state (persisted in sessionStorage), while React Context provides computed values, UI state, and additional functionality. Each context provides a custom hook for easy consumption and includes state persistence where appropriate.
 
 ## Context Providers
 
@@ -51,32 +51,37 @@ Scales-specific state and functionality.
 **Hook**: `useScales()`
 
 **State**:
-- `tonic` - Selected tonic note (NoteIndex)
-- `variant` - Selected scale variant/type (ScaleType)
+- `tonic` - Selected tonic note (NoteIndex) - from `scalesStore`
+- `variant` - Selected scale variant/type (ScaleType) - from `scalesStore`
 - `notes` - Calculated scale notes
-- `showNoteLabels` - Boolean for note label visibility
+- `showNoteLabels` - Boolean for note label visibility - persisted to localStorage
 
 **Methods**:
-- `setTonic(tonic: NoteIndex)` - Set the tonic note
-- `setVariant(variant: ScaleType)` - Set the scale variant
-- `setShowNoteLabels(show: boolean)` - Toggle note labels
-- `transpose(direction: 'up' | 'down')` - Transpose by a fifth
+- `handleTonicChange(tonic: NoteIndex)` - Set the tonic note (updates store)
+- `handleVariantChange(variant: ScaleType)` - Set the scale variant (updates store)
+- `toggleNoteLabels()` - Toggle note labels
+- `makeScale(tonic: NoteIndex, variant: ScaleType)` - Set both tonic and variant
+- `reset()` - Reset tonic and variant to defaults
+- `getRelativeMajor(mode: ScaleMode)` - Get relative major for a mode
+- `getRelativeMinor(mode: ScaleMode)` - Get relative minor for a mode
 
 **Usage**:
 ```typescript
 import { useScales } from '@/hooks/useScales';
 
 function ScalesComponent() {
-  const { tonic, variant, notes, setTonic, setVariant } = useScales();
+  const { tonic, variant, notes, handleTonicChange, handleVariantChange } = useScales();
   // Component logic
 }
 ```
 
-**Persistence**: Note label visibility is persisted to localStorage with Zod schema validation. Tonic and variant are managed via `useScaleState` hook and are not persisted.
+**Persistence**: 
+- `showNoteLabels` is persisted to localStorage with Zod schema validation
+- `tonic` and `variant` are persisted to sessionStorage via `scalesStore` (Zustand) - persists during navigation but clears on page refresh
 
 **Schema Validation**:
-- `showNoteLabels` is validated using `z.boolean()`
-- Tonic and variant are managed in component state (not persisted)
+- `showNoteLabels` is validated using `z.boolean()` (localStorage)
+- `tonic` and `variant` are validated using `NoteIndexSchema` and `ScaleTypeSchema` in the store (sessionStorage)
 
 ### ChordsContext
 
@@ -89,34 +94,38 @@ Chords-specific state and functionality.
 **Hook**: `useChords()`
 
 **State**:
-- `tonic` - Selected tonic note (NoteIndex)
-- `variant` - Selected chord variant/type (Chord_Variant)
+- `tonic` - Selected tonic note (NoteIndex) - from `chordsStore`
+- `variant` - Selected chord variant/type (Chord_Variant) - from `chordsStore`
 - `notes` - Calculated chord notes
 - `chordName` - Generated chord name
 - `noteCount` - Number of notes in chord
-- `showNerdMode` - Boolean for nerd mode display
+- `showNerdMode` - Boolean for nerd mode display - persisted to localStorage
 
 **Methods**:
-- `setTonic(tonic: NoteIndex)` - Set the tonic note
-- `setVariant(variant: Chord_Variant)` - Set the chord variant
-- `setNoteCount(count: number)` - Set the note count
-- `setShowNerdMode(show: boolean)` - Toggle nerd mode
+- `handleTonicChange(tonic: Chord_Tonic)` - Set the tonic note (updates store)
+- `handleVariantChange(variant: Chord_Variant)` - Set the chord variant (updates store)
+- `toggleNerdMode()` - Toggle nerd mode
+- `makeScale(tonic: Chord_Tonic, variant: Chord_Variant)` - Set both tonic and variant
+- `getBorderStyle(note: NoteIndex)` - Get border style for a note
+- `reset()` - Reset tonic and variant to defaults
 
 **Usage**:
 ```typescript
 import { useChords } from '@/hooks/useChords';
 
 function ChordsComponent() {
-  const { tonic, variant, chordName, notes, setTonic } = useChords();
+  const { tonic, variant, chordName, notes, handleTonicChange } = useChords();
   // Component logic
 }
 ```
 
-**Persistence**: Nerd mode is persisted to localStorage with Zod schema validation. Tonic and variant are managed via `useChordState` hook and are not persisted.
+**Persistence**: 
+- `showNerdMode` is persisted to localStorage with Zod schema validation
+- `tonic` and `variant` are persisted to sessionStorage via `chordsStore` (Zustand) - persists during navigation but clears on page refresh
 
 **Schema Validation**:
-- `showNerdMode` is validated using `z.boolean()`
-- Tonic and variant are managed in component state (not persisted)
+- `showNerdMode` is validated using `z.boolean()` (localStorage)
+- `tonic` and `variant` are validated using `NoteIndexSchema` and `ChordVariantSchema` in the store (sessionStorage)
 
 ### PlayContext
 
@@ -165,6 +174,82 @@ function InstrumentComponent() {
   // Component logic
 }
 ```
+
+## Zustand Stores
+
+The application uses Zustand stores for managing tonic and variant state, with sessionStorage persistence that clears on page refresh.
+
+### chordsStore
+
+Manages tonic and variant state for chords.
+
+**Location**: `@/stores/chordsStore`
+
+**Hook**: `useChordsStore()`
+
+**State**:
+- `tonic` - Selected tonic note (Chord_Tonic)
+- `variant` - Selected chord variant (Chord_Variant)
+
+**Methods**:
+- `setTonic(tonic: Chord_Tonic)` - Set the tonic note
+- `setVariant(variant: Chord_Variant)` - Set the chord variant
+- `reset()` - Reset to initial values
+
+**Persistence**: Uses sessionStorage (persists during navigation, clears on page refresh)
+
+**Validation**: Validates data with `NoteIndexSchema` and `ChordVariantSchema` on load and save
+
+**Usage**:
+```typescript
+import { useChordsStore } from '@/stores/chordsStore';
+
+function MyComponent() {
+  const { tonic, variant, setTonic, setVariant } = useChordsStore();
+  // Component logic
+}
+```
+
+### scalesStore
+
+Manages tonic and variant state for scales.
+
+**Location**: `@/stores/scalesStore`
+
+**Hook**: `useScalesStore()`
+
+**State**:
+- `tonic` - Selected tonic note (NoteIndex)
+- `variant` - Selected scale variant (ScaleType)
+
+**Methods**:
+- `setTonic(tonic: NoteIndex)` - Set the tonic note
+- `setVariant(variant: ScaleType)` - Set the scale variant
+- `reset()` - Reset to initial values
+
+**Persistence**: Uses sessionStorage (persists during navigation, clears on page refresh)
+
+**Validation**: Validates data with `NoteIndexSchema` and `ScaleTypeSchema` on load and save
+
+**Usage**:
+```typescript
+import { useScalesStore } from '@/stores/scalesStore';
+
+function MyComponent() {
+  const { tonic, variant, setTonic, setVariant } = useScalesStore();
+  // Component logic
+}
+```
+
+### playStore
+
+Placeholder store for play functionality.
+
+**Location**: `@/stores/playStore`
+
+**Hook**: `usePlayStore()`
+
+**Persistence**: Uses sessionStorage
 
 ## Shared Context Utilities
 
@@ -219,21 +304,6 @@ function MyComponent() {
 }
 ```
 
-### useScaleState
-
-Scales state persistence hook.
-
-**Location**: `@/context/shared/useScaleState`
-
-**Usage**: Internal use by ScalesContext.
-
-### useChordState
-
-Chords state persistence hook.
-
-**Location**: `@/context/shared/useChordState`
-
-**Usage**: Internal use by ChordsContext.
 
 ### useEscapeReset
 
@@ -274,32 +344,50 @@ GlobalsContextProvider (root)
 
 ## State Persistence
 
-### localStorage Keys
+The application uses two persistence strategies:
 
-- `music-be-simple-globals` - Global preferences
-- `music-be-simple-scales` - Scales state
-- `music-be-simple-chords` - Chords state
+### sessionStorage (Zustand Stores)
+
+**Storage Keys**:
+- `chords-store` - Chords tonic and variant
+- `scales-store` - Scales tonic and variant
+- `play-store` - Play functionality state
+
+**Persistence Behavior**:
+- Persists during navigation (client-side routing)
+- Clears on page refresh/reload (F5, Ctrl+R, etc.)
+- Automatically detects page refresh and clears storage
+
+**Validation**: All data is validated using Zod schemas (`NoteIndexSchema`, `ChordVariantSchema`, `ScaleTypeSchema`) before loading and saving
+
+### localStorage (useLocalStorage Hook)
+
+**Storage Keys**:
+- `usingFlats` - Global flats/sharps preference
+- `selectedDisplays` - Selected instrument displays
+- `showNoteLabels` - Scales note label visibility
+- `showNerdMode` - Chords nerd mode toggle
+
+**Persistence Behavior**:
+- Persists across page refreshes
+- Survives browser restarts (until cleared)
+
+**Validation**: All data is validated using Zod schemas before loading and saving:
+- `usingFlats` - validated with `z.boolean()`
+- `selectedDisplays` - validated with `z.array(IconTypeSchema)`
+- `showNoteLabels` - validated with `z.boolean()`
+- `showNerdMode` - validated with `z.boolean()`
 
 ### Persistence Strategy
 
-1. State is saved to localStorage on changes
-2. State is loaded from localStorage on mount
+1. **Zustand stores**: Tonic and variant are saved to sessionStorage on changes, loaded on mount
+2. **localStorage hook**: UI preferences are saved to localStorage on changes, loaded on mount
 3. **Zod schema validation**: All data is validated using Zod schemas before use
-4. Errors are handled gracefully (falls back to defaults)
-5. Validation errors are logged to console for debugging
-6. State migration can be handled in context providers
+4. **Error handling**: Errors are handled gracefully (falls back to defaults)
+5. **Validation errors**: Validation errors are logged to console for debugging
+6. **State migration**: Can be handled in context providers or stores if needed
 
-### Schema Validation
-
-All localStorage data is validated using Zod schemas defined in `src/schemas.ts`. Each field is validated individually:
-
-- **GlobalsContext**: `usingFlats` (validated with `z.boolean()`), `selectedDisplays` (validated with `z.array(IconTypeSchema)`)
-- **ScalesContext**: `showNoteLabels` (validated with `z.boolean()`)
-- **ChordsContext**: `showNerdMode` (validated with `z.boolean()`)
-
-**Note**: The storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) are defined in `src/schemas.ts` but are not currently used. Each field is validated individually rather than as a complete storage object. Tonic and variant are managed via `useScaleState` and `useChordState` hooks and are not persisted to localStorage.
-
-The `useLocalStorage` hook automatically validates data on load and before save, ensuring data integrity and type safety at runtime.
+The `useLocalStorage` hook and Zustand stores automatically validate data on load and before save, ensuring data integrity and type safety at runtime.
 
 ## Custom Hooks
 

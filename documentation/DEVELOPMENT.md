@@ -114,16 +114,64 @@ import type { ChordData } from '@/types/chords';
 
 ## State Management
 
+The application uses a hybrid approach combining Zustand stores and React Context API.
+
+### Zustand Stores
+
+- Create stores in `src/stores/` directory
+- Use Zustand for managing tonic and variant state
+- Persist to sessionStorage (clears on page refresh)
+- Validate data with Zod schemas on load and save
+- Export hooks from `src/stores/index.ts`
+
+**Store Pattern**:
+```typescript
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import { NoteIndexSchema, ScaleTypeSchema } from '@/schemas';
+
+type ScalesStore = {
+  tonic: NoteIndex;
+  variant: ScaleType;
+  setTonic: (tonic: NoteIndex) => void;
+  setVariant: (variant: ScaleType) => void;
+  reset: () => void;
+};
+
+export const useScalesStore = create<ScalesStore>()(
+  persist(
+    (set) => ({
+      tonic: 0,
+      variant: 'major',
+      setTonic: (tonic) => set({ tonic }),
+      setVariant: (variant) => set({ variant }),
+      reset: () => set({ tonic: 0, variant: 'major' }),
+    }),
+    {
+      name: 'scales-store',
+      storage: createJSONStorage(() => customSessionStorage),
+    }
+  )
+);
+```
+
 ### Context API Usage
 
 - Create context in `src/context/[Feature]/`
 - Export provider and custom hook
 - Use custom hooks (e.g., `useGlobals()`) instead of `useContext()` directly
+- Context providers can use Zustand stores for state management
+- Context provides computed values and additional functionality
 
 ### State Persistence
 
-- Use `useLocalStorage` hook for persistent state with Zod schema validation
-- Implement persistence in context providers
+**sessionStorage (Zustand stores)**:
+- Use for tonic and variant state (persists during navigation, clears on refresh)
+- Validate with Zod schemas in custom storage implementation
+- Automatically detect page refresh and clear storage
+
+**localStorage (useLocalStorage hook)**:
+- Use `useLocalStorage` hook for UI preferences that should persist across refreshes
 - Always provide a Zod schema when using `useLocalStorage`
 - Handle localStorage errors gracefully (validation errors fall back to defaults)
 - Log validation errors to console for debugging
@@ -261,7 +309,9 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ✅ Use Zod schemas for runtime validation  
 ✅ Follow the established component structure  
 ✅ Use custom hooks for reusable logic  
-✅ Persist important state to localStorage with Zod validation  
+✅ Use Zustand stores for tonic/variant state (sessionStorage)  
+✅ Use localStorage for UI preferences that should persist across refreshes  
+✅ Persist important state with Zod validation  
 ✅ Use semantic HTML  
 ✅ Write descriptive commit messages  
 ✅ Format code before committing  
@@ -269,7 +319,7 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ### Don'ts
 
 ❌ Use `any` type  
-❌ Skip Zod schema validation for localStorage  
+❌ Skip Zod schema validation for localStorage or sessionStorage  
 ❌ Create deeply nested component structures  
 ❌ Mutate state directly  
 ❌ Use inline styles (use Tailwind)  

@@ -16,7 +16,6 @@ src/
 │   │   ├── instruments/ # Instrument-specific display components
 │   │   └── modes/      # Mode display components
 │   ├── nav/            # Navigation components
-│   └── notes/          # Note-related components
 ├── context/            # React Context providers
 │   ├── Chords/         # Chords context and provider
 │   ├── Globals/        # Global application context
@@ -40,29 +39,55 @@ src/
 
 ## State Management
 
-The application uses React Context API for state management, organized by feature domain:
+The application uses a hybrid state management approach combining **Zustand stores** and **React Context API**:
+
+### Zustand Stores
+
+Zustand stores manage tonic and variant state for scales and chords, with sessionStorage persistence:
+
+1. **chordsStore** (`src/stores/chordsStore.ts`)
+   - Manages `tonic` and `variant` for chords
+   - Persists to sessionStorage (clears on page refresh)
+   - Validates data with Zod schemas on load and save
+   - Provides `setTonic`, `setVariant`, and `reset` methods
+
+2. **scalesStore** (`src/stores/scalesStore.ts`)
+   - Manages `tonic` and `variant` for scales
+   - Persists to sessionStorage (clears on page refresh)
+   - Validates data with Zod schemas on load and save
+   - Provides `setTonic`, `setVariant`, and `reset` methods
+
+3. **playStore** (`src/stores/playStore.ts`)
+   - Placeholder store for play functionality
+   - Uses sessionStorage for persistence
+
+**Store Features**:
+- **sessionStorage persistence**: State persists during navigation but clears on page refresh/reload
+- **Zod validation**: All data is validated using Zod schemas before loading and saving
+- **Automatic cleanup**: Stores detect page refresh and clear sessionStorage automatically
+- **Type safety**: Full TypeScript support with typed stores
 
 ### Context Providers
 
+React Context API provides additional state and computed values:
+
 1. **GlobalsContext** - Global application state
-   - Note display preferences (flats/sharps)
-   - Selected instrument displays
+   - Note display preferences (flats/sharps) - persisted to localStorage
+   - Selected instrument displays - persisted to localStorage
    - Audio context for note playback
-   - Global UI state
+   - Global UI preferences
 
 2. **ScalesContext** - Scales-specific state
-   - Selected tonic note
-   - Scale variant/type
-   - Scale notes
-   - Note label visibility
+   - Uses `scalesStore` for tonic and variant
+   - Calculated scale notes
+   - Note label visibility - persisted to localStorage
+   - Mode-related calculations
 
 3. **ChordsContext** - Chords-specific state
-   - Selected tonic note
-   - Chord variant/type
-   - Chord notes
-   - Chord name
-   - Note count
-   - Nerd mode toggle
+   - Uses `chordsStore` for tonic and variant
+   - Calculated chord notes
+   - Chord name and note count
+   - Nerd mode toggle - persisted to localStorage
 
 4. **PlayContext** - Play functionality state
    - Play-related state and functionality
@@ -72,10 +97,17 @@ The application uses React Context API for state management, organized by featur
 
 ### State Persistence
 
-State is persisted to localStorage using custom hooks:
-- `useLocalStorage` - Generic localStorage hook
-- `useScaleState` - Scales state persistence
-- `useChordState` - Chords state persistence
+State persistence uses two strategies:
+
+**sessionStorage (via Zustand stores)**:
+- Tonic and variant for scales and chords
+- Persists during navigation, clears on page refresh
+- Validated with Zod schemas
+
+**localStorage (via useLocalStorage hook)**:
+- `useLocalStorage` - Generic localStorage hook with Zod validation
+- Persists: `usingFlats`, `selectedDisplays`, `showNoteLabels`, `showNerdMode`
+- Survives page refresh
 
 ## Routing
 
@@ -209,15 +241,20 @@ export const ScalesStorageSchema = z.object({
 });
 ```
 
-### Integration with Context
+### Integration with Context and Stores
 
-Context providers use Zod schemas for localStorage persistence. Each field is validated individually:
+Context providers and Zustand stores use Zod schemas for persistence:
 
+**localStorage (via useLocalStorage hook)**:
 - `GlobalsContext` validates `usingFlats` (with `z.boolean()`) and `selectedDisplays` (with `z.array(IconTypeSchema)`)
 - `ScalesContext` validates `showNoteLabels` (with `z.boolean()`)
 - `ChordsContext` validates `showNerdMode` (with `z.boolean()`)
 
-**Note**: Tonic and variant are managed via `useScaleState` and `useChordState` hooks and are not persisted to localStorage. The storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) are defined but not currently used - each field is validated individually rather than as a complete storage object.
+**sessionStorage (via Zustand stores)**:
+- `scalesStore` validates `tonic` (with `NoteIndexSchema`) and `variant` (with `ScaleTypeSchema`)
+- `chordsStore` validates `tonic` (with `NoteIndexSchema`) and `variant` (with `ChordVariantSchema`)
+
+**Note**: The storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) are defined in `src/schemas.ts` but are not currently used - each field is validated individually rather than as a complete storage object.
 
 ## Styling
 
@@ -231,6 +268,7 @@ The application uses Tailwind CSS for styling:
 - **Vite** - Build tool and dev server
 - **TypeScript** - Type checking and compilation
 - **Zod** - Runtime type validation and schema definition
+- **Zustand** - State management for tonic/variant state
 - **Biome** - Linting and formatting
 - **TanStack Router Plugin** - Route generation
 

@@ -9,8 +9,7 @@ Components are organized by functionality:
 - `components/buttons/` - Button components
 - `components/displays/` - Display components
 - `components/nav/` - Navigation components
-- `components/notes/` - Note-related components
-- Root-level components (Footer, Icon, Main, Title, Tonic, Variant)
+- Root-level components (AllowedNote, Footer, Icon, Main, Title, Tonic, Variant)
 
 ## Button Components
 
@@ -248,6 +247,24 @@ Individual navigation tab component.
 
 ## Root-Level Components
 
+### AllowedNote
+
+Component for displaying allowed/selected notes on instruments.
+
+**Location**: `@/components/AllowedNote`
+
+**Props**:
+- `note` - Note name to display (string)
+- `isTonic` - Boolean indicating if note is the tonic
+- `borderStyle` - Border style type (border)
+- `isPiano` - Optional boolean for piano-specific positioning (default: false)
+
+**Features**:
+- Displays note labels when `showNoteLabels` is enabled (from InstrumentNotesContext)
+- Different styling for tonic vs non-tonic notes
+- Supports flats (♭) and sharps (♯) with special styling
+- Responsive sizing (smaller on mobile, larger on desktop)
+
 ### Footer
 
 Application footer component.
@@ -306,19 +323,6 @@ Variant/type selector component (for scales or chords).
 - `variant` - Current variant
 - `variants` - Available variants
 - `onChange` - Variant change handler
-
-## Note Components
-
-### AllowedNote
-
-Component for displaying allowed/selected notes.
-
-**Location**: `@/components/notes/AllowedNote`
-
-**Props**:
-- `note` - Note to display
-- `isSelected` - Boolean indicating if note is selected
-- `onClick` - Click handler
 
 ## Page Components
 
