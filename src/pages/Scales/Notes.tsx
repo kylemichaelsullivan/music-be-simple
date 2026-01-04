@@ -1,6 +1,7 @@
 import { useGlobals, useScales } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { INTERVALS, getNote, rangeOfLength } from '@/utils';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 export default function Notes() {
@@ -47,7 +48,7 @@ export default function Notes() {
 					return (
 						<div
 							key={`note-${note}`}
-							className={`${hasFlat ? 'hasFlat' : ''}${hasSharp ? 'hasSharp' : ''}`}
+							className={clsx(hasFlat && 'hasFlat', hasSharp && 'hasSharp')}
 						>
 							{noteText}
 						</div>

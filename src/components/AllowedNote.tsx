@@ -1,6 +1,7 @@
 import { useInstrumentNotes } from '@/hooks';
 import type { border } from '@/types';
 import { getBorderClass } from '@/utils';
+import clsx from 'clsx';
 
 type AllowedNoteProps = {
 	note: string;
@@ -24,7 +25,15 @@ export default function AllowedNote({
 
 	return (
 		<span
-			className={`AllowedNote absolute flex items-center justify-center ${bgColor} rounded-full ring-1 ring-slate-300 text-white ${fontSize} w-4 h-4 text-center font-bold leading-none ${verticalPosition} left-1/2 translate-x-[-50%] ${getBorderClass(borderStyle, 'all')}${hasFlat ? ' hasFlat' : ''}${hasSharp ? ' hasSharp' : ''} sm:w-6 sm:h-6`}
+			className={clsx(
+				'AllowedNote absolute flex items-center justify-center rounded-full ring-1 ring-slate-300 text-white w-4 h-4 text-center font-bold leading-none left-1/2 translate-x-[-50%] sm:w-6 sm:h-6',
+				bgColor,
+				fontSize,
+				verticalPosition,
+				getBorderClass(borderStyle, 'all'),
+				hasFlat && 'hasFlat',
+				hasSharp && 'hasSharp'
+			)}
 			title={note}
 		>
 			{showNoteLabels ? note : ''}

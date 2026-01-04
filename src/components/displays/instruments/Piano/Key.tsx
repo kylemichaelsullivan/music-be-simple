@@ -2,6 +2,7 @@ import AllowedNote from '@/components/AllowedNote';
 import { useGlobals, useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getNote } from '@/utils';
+import clsx from 'clsx';
 import type { KeyboardEvent } from 'react';
 
 type KeyProps = {
@@ -27,7 +28,7 @@ export default function Key({ note, isBlack, isAllowed }: KeyProps) {
 	return (
 		<button
 			type='button'
-			className={`Key border border-black ${isBlack ? 'black' : 'white'}`}
+			className={clsx('Key border border-black', isBlack ? 'black' : 'white')}
 			title={noteName}
 			onClick={() => playNote(note)}
 			onKeyDown={(e) => handleKeyDown(e)}

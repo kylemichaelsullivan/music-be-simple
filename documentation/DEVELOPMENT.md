@@ -228,6 +228,7 @@ export const useScalesStore = create<ScalesStore>()(
 - Create custom utilities in `tailwind.config.js` if needed
 - Use responsive prefixes (`sm:`, `md:`, `lg:`, etc.)
 - Follow mobile-first approach
+- Use `clsx` for conditional className construction
 
 ### CSS Organization
 

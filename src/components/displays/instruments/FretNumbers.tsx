@@ -1,5 +1,6 @@
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
+import clsx from 'clsx';
 
 export default function FretNumbers() {
 	const dottedFretIndexes: NoteIndex[] = [0, 2, 4, 6, 8];
@@ -10,7 +11,10 @@ export default function FretNumbers() {
 				.filter(isValidNoteIndex)
 				.map((index: NoteIndex) => (
 					<div
-						className={`${dottedFretIndexes.includes(index) ? 'text-black' : 'text-gray-400'} w-full text-center text-xs sm:text-base`}
+						className={clsx(
+							'w-full text-center text-xs sm:text-base',
+							dottedFretIndexes.includes(index) ? 'text-black' : 'text-gray-400'
+						)}
 						key={`fret-${index}`}
 					>
 						{index + 1}

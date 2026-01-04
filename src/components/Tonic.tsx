@@ -2,6 +2,7 @@ import { useGlobals } from '@/hooks';
 import { NoteIndexSchema } from '@/schemas';
 import type { NoteIndex } from '@/types';
 import { getNote, isValidNoteIndex, rangeOfLength } from '@/utils';
+import clsx from 'clsx';
 import type { ChangeEvent } from 'react';
 
 type TonicProps = {
@@ -26,7 +27,11 @@ export default function Tonic({ tonic, handleTonicChange }: TonicProps) {
 
 	return (
 		<select
-			className={`Tonic rounded-none border border-slate-500 min-w-14 min-h-12 px-1 hover:ring-1${hasFlat ? ' hasFlat' : ''}${hasSharp ? ' hasSharp' : ''}`}
+			className={clsx(
+				'Tonic rounded-none border border-slate-500 min-w-14 min-h-12 px-1 hover:ring-1',
+				hasFlat && 'hasFlat',
+				hasSharp && 'hasSharp'
+			)}
 			value={tonic}
 			name='Tonic Select'
 			onChange={handleChange}

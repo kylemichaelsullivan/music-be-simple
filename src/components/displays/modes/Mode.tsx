@@ -1,4 +1,5 @@
 import type { ScaleMode, ScaleType } from '@/types';
+import clsx from 'clsx';
 import { useMemo } from 'react';
 
 type ModeProps = {
@@ -11,8 +12,6 @@ type ModeProps = {
 };
 
 const Mode = ({ mode, background, isCurrent, notes, relativeMajor, relativeMinor }: ModeProps) => {
-	const className = useMemo(() => (isCurrent ? 'font-bold' : 'font-normal'), [isCurrent]);
-
 	const noteElements = useMemo(
 		() =>
 			notes.map((note: string) => (
@@ -24,8 +23,13 @@ const Mode = ({ mode, background, isCurrent, notes, relativeMajor, relativeMinor
 	);
 
 	return (
-		<div className={`Mode grid-cols-17 grid items-center ${background} capitalize`}>
-			<div className={`${className} flex flex-col text-xxs col-span-3 sm:text-base`}>
+		<div className={clsx('Mode grid-cols-17 grid items-center', background, 'capitalize')}>
+			<div
+				className={clsx(
+					'flex flex-col text-xxs col-span-3 sm:text-base',
+					isCurrent ? 'font-bold' : 'font-normal'
+				)}
+			>
 				{mode}
 				<span className='hidden text-gray-500 text-xxs leading-snug sm:block'>
 					[{relativeMajor}, {relativeMinor}

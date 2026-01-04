@@ -1,6 +1,7 @@
 import { useChords, useGlobals } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getBorderClass, getNote } from '@/utils';
+import clsx from 'clsx';
 import { memo } from 'react';
 
 type ChordNoteProps = {
@@ -17,7 +18,12 @@ const ChordNote = memo(function ChordNote({ note }: ChordNoteProps) {
 
 	return (
 		<div
-			className={`ChordNote text-lg font-medium text-center ${hasFlat ? 'hasFlat' : ''}${hasSharp ? 'hasSharp' : ''} ${getBorderClass(borderStyle, 'bottom')}`}
+			className={clsx(
+				'ChordNote text-lg font-medium text-center',
+				hasFlat && 'hasFlat',
+				hasSharp && 'hasSharp',
+				getBorderClass(borderStyle, 'bottom')
+			)}
 		>
 			{noteText}
 		</div>
