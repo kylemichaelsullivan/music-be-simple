@@ -242,7 +242,7 @@ select {
 
 /* camelCase to match React Prop */
 .hasFlat {
-	letter-spacing: -0.15ch;
+	letter-spacing: 0em;
 }
 
 .hasSharp {
