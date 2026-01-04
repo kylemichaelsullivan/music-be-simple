@@ -1,6 +1,6 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
-import { IconTypeSchema } from '@/schemas';
+import { GlobalsStorageSchema, IconTypeSchema } from '@/schemas';
 import type { GlobalsContextProviderProps } from '@/types';
 import { FREQUENCIES } from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -31,6 +31,17 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 			context.close();
 		};
 	}, []);
+
+	useEffect(() => {
+		const combinedData = {
+			usingFlats,
+			selectedDisplays: displays,
+		};
+		const result = GlobalsStorageSchema.safeParse(combinedData);
+		if (!result.success) {
+			console.warn('Globals storage data validation failed:', result.error.format());
+		}
+	}, [usingFlats, displays]);
 
 	const getFrequency = useCallback((note: number) => {
 		return FREQUENCIES[note];

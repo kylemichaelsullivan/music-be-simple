@@ -1,6 +1,7 @@
 import { useEscapeReset } from '@/context/shared/useEscapeReset';
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
 import { useGlobals } from '@/hooks';
+import { ChordsStorageSchema } from '@/schemas';
 import { useChordsStore } from '@/stores/chordsStore';
 import type {
 	Chord_Tonic,
@@ -87,6 +88,18 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 		z.boolean(),
 		initialShowNerdMode
 	);
+
+	useEffect(() => {
+		const combinedData = {
+			tonic,
+			variant,
+			showNerdMode,
+		};
+		const result = ChordsStorageSchema.safeParse(combinedData);
+		if (!result.success) {
+			console.warn('Chords storage data validation failed:', result.error.format());
+		}
+	}, [tonic, variant, showNerdMode]);
 
 	const getBorderStyle = useMemo(
 		() =>

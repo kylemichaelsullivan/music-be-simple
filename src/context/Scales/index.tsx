@@ -1,6 +1,7 @@
 import { useEscapeReset } from '@/context/shared/useEscapeReset';
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
 import { useGlobals } from '@/hooks';
+import { ScalesStorageSchema } from '@/schemas';
 import { useScalesStore } from '@/stores/scalesStore';
 import type {
 	NoteIndex,
@@ -60,6 +61,18 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 		z.boolean(),
 		initialShowNoteLabels
 	);
+
+	useEffect(() => {
+		const combinedData = {
+			tonic,
+			variant,
+			showNoteLabels,
+		};
+		const result = ScalesStorageSchema.safeParse(combinedData);
+		if (!result.success) {
+			console.warn('Scales storage data validation failed:', result.error.format());
+		}
+	}, [tonic, variant, showNoteLabels]);
 
 	const getRelativeMajor = useCallback(
 		(mode: ScaleMode) => {
