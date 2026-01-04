@@ -26,3 +26,9 @@ dist-ssr
 # TanStack Router
 src/routeTree.gen.ts
 
+# Testing
+coverage
+.nyc_output
+test-results
+playwright-report
+playwright/.cache
