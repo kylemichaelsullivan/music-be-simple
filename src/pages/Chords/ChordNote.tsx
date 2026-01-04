@@ -17,9 +17,7 @@ const ChordNote = memo(function ChordNote({ note }: ChordNoteProps) {
 
 	return (
 		<div
-			className={`ChordNote text-lg font-medium text-center ${
-				hasFlat ? 'useFlat' : hasSharp ? 'useSharp' : ''
-			} ${getBorderClass(borderStyle, 'bottom')}`}
+			className={`ChordNote text-lg font-medium text-center ${hasFlat ? 'hasFlat' : ''}${hasSharp ? 'hasSharp' : ''} ${getBorderClass(borderStyle, 'bottom')}`}
 		>
 			{noteText}
 		</div>

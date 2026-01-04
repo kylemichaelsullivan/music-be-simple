@@ -40,9 +40,19 @@ export default function Notes() {
 			</div>
 
 			<div className={`grid ${gridClass}`}>
-				{notes.map((note: NoteIndex) => (
-					<div key={`note-${note}`}>{getNote(note, usingFlats)}</div>
-				))}
+				{notes.map((note: NoteIndex) => {
+					const noteText = getNote(note, usingFlats);
+					const hasFlat = noteText.includes('♭');
+					const hasSharp = noteText.includes('♯');
+					return (
+						<div
+							key={`note-${note}`}
+							className={`${hasFlat ? 'hasFlat' : ''}${hasSharp ? 'hasSharp' : ''}`}
+						>
+							{noteText}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

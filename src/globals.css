@@ -25,7 +25,13 @@
 body {
 	background-color: var(--background);
 	color: var(--black);
-	font-family: "Inter", sans-serif;
+	font-family: "Geist Mono", monospace;
+}
+
+.Navbar,
+.Title,
+.Icon + span {
+	font-family: "Geist", sans-serif;
 }
 
 button,
@@ -242,7 +248,7 @@ select {
 
 /* camelCase to match React Prop */
 .hasFlat {
-	letter-spacing: 0em;
+	letter-spacing: -0.25ch;
 }
 
 .hasSharp {

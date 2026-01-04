@@ -13,14 +13,14 @@ const ChordName = memo(function ChordName({ chordName }: ChordNameProps) {
 				const key = `chord-name-part-${part}-${index}`;
 				if (part === '♭') {
 					return (
-						<span key={key} className='useFlat'>
+						<span key={key} className='hasFlat'>
 							{part}
 						</span>
 					);
 				}
 				if (part === '♯') {
 					return (
-						<span key={key} className='useSharp'>
+						<span key={key} className='hasSharp'>
 							{part}
 						</span>
 					);
