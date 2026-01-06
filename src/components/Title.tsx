@@ -1,7 +1,15 @@
+import { NavIcon } from '@/components/nav';
+import type { TabType } from '@/types';
+
 type TitleProps = {
-	title: string;
+	title: TabType;
 };
 
 export default function Title({ title }: TitleProps) {
-	return <h1 className='Title text-2xl font-bold text-center'>{title}</h1>;
+	return (
+		<h1 className='Title flex justify-center items-center gap-2 text-2xl font-bold text-center'>
+			<NavIcon name={title} />
+			{title}
+		</h1>
+	);
 }
