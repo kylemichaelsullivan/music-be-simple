@@ -1,4 +1,4 @@
-import NavTab from '@/components/nav/NavTab';
+import { NavTab } from '@/components/nav';
 import { TABS } from '@/navigation';
 import type { TabType } from '@/types';
 
