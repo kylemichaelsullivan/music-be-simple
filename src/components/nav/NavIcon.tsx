@@ -14,5 +14,5 @@ export default function NavIcon({ name }: NavIconProps) {
 		Scales: scalesIcon,
 	};
 
-	return <img src={iconMap[name]} className='Icon w-4 h-4 sm:w-6 sm:h-6' alt={name} />;
+	return <img src={iconMap[name]} className={`${name}Icon w-4 h-4 sm:w-6 sm:h-6`} alt={name} />;
 }
