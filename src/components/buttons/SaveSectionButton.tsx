@@ -14,7 +14,7 @@ export default function SaveSectionButton({ label, action, onFxn }: SaveSectionB
 	return (
 		<button
 			type='button'
-			className='SaveSectionButton border p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'
+			className='SaveSectionButton border p-2 hover:ring-1 transition-colors'
 			title={title}
 			onClick={handleClick}
 			onKeyDown={handleKeyDown}
