@@ -14,10 +14,12 @@ _https://www.svgrepo.com/collection/music-instrument/_
 
 _https://thenounproject.com/icon/_
 
+- add.svg (add-8232455/)
 - chords.svg (chord-1688937/)
 - down.svg (up-7929044/) [inverted]
-- lock.svg (lock-locked-4020631/)
 - mandolin.svg (mandolin-147442/)
 - play.svg (play-icon-3092220/)
+- save.svg (save-5153407/)
 - scales.svg (musical-beam-note-921153/)
+- trash.svg (trash-8128904/)
 - up.svg (up-7929044/)
