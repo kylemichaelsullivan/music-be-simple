@@ -15,15 +15,8 @@ export { useRequireGlobals } from './shared/useRequireGlobals';
 export { useScaleState } from './shared/useScaleState';
 
 // Contexts
-export { ChordsContext } from './Chords';
-export { GlobalsContext } from './Globals';
-export { InstrumentNotesContext } from './InstrumentNotes';
-export { PlayContext } from './Play';
-export { ScalesContext } from './Scales';
-
-// Providers
-export { ChordsContextProvider } from './Chords';
-export { GlobalsContextProvider } from './Globals';
-export { InstrumentNotesProvider } from './InstrumentNotes';
-export { PlayContextProvider } from './Play';
-export { ScalesContextProvider } from './Scales';
+export { ChordsContext, ChordsContextProvider } from './Chords';
+export { GlobalsContext, GlobalsContextProvider } from './Globals';
+export { InstrumentNotesContext, InstrumentNotesProvider } from './InstrumentNotes';
+export { PlayContext, PlayContextProvider } from './Play';
+export { ScalesContext, ScalesContextProvider } from './Scales';

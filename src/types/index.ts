@@ -22,6 +22,8 @@ export type PositionType = XPositionType | YPositionType;
 // Instrument & Icon types
 export type InstrumentType = (typeof INSTRUMENTS)[number];
 export type IconName = InstrumentType | 'Modes';
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg';
+export type ActionIconName = 'add' | 'down' | 'save' | 'trash' | 'up';
 export type NerdModeButtonIcon = '🤓' | '💃🏾';
 export type NoteLabelsButtonIcon = '📖' | '📕';
 
@@ -49,5 +51,5 @@ export type { Notes_Flats, Notes_Sharps } from '@/utils/notes';
 // Re-export types from type files
 export type { ChordsContextType, ChordsContextProviderProps } from './chords';
 export type { GlobalsContextType, GlobalsContextProviderProps } from './globals';
-export type { PlayContextType, PlayContextProviderProps } from './play';
+export type { PlayContextType, PlayContextProviderProps, SaveActionType } from './play';
 export type { ScalesContextType, ScalesContextProviderProps } from './scales';
