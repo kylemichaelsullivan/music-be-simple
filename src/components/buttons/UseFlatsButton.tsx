@@ -11,9 +11,9 @@ export default function UseFlatsButton({ position = 'right' }: UseFlatsButtonPro
 
 	return (
 		<TopButton
-			title={usingFlats ? 'Use Sharps?' : 'Use Flats?'}
 			icon={usingFlats ? '♭' : '♯'}
 			position={position}
+			title={usingFlats ? 'Use Sharps?' : 'Use Flats?'}
 			onFxn={toggleUsingFlats}
 		/>
 	);

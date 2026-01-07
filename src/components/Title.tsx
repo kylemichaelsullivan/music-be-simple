@@ -1,4 +1,4 @@
-import { NavIcon } from '@/components/nav';
+import { NavIcon } from '@/components/icons';
 import type { TabType } from '@/types';
 
 type TitleProps = {

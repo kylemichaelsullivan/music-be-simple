@@ -2,7 +2,7 @@ import { NavTab } from '@/components/nav';
 import { TABS } from '@/navigation';
 import type { TabType } from '@/types';
 
-export default function Navbar() {
+export function Navbar() {
 	const tabToRoute = (tab: TabType) => {
 		return `/${tab.toLowerCase().replace(' ', '-')}`;
 	};

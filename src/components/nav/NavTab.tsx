@@ -1,4 +1,4 @@
-import { NavIcon } from '@/components/nav';
+import { NavIcon } from '@/components/icons';
 import type { TabType } from '@/types';
 import { Link } from '@tanstack/react-router';
 
@@ -7,7 +7,7 @@ type NavTabProps = {
 	to: string;
 };
 
-export default function NavTab({ title, to }: NavTabProps) {
+export function NavTab({ title, to }: NavTabProps) {
 	return (
 		<Link
 			to={to}

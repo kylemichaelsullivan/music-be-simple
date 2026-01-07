@@ -1,7 +1,6 @@
-import { useScales } from '@/hooks';
+import { ActionIcon } from '@/components/icons';
+import { useButtonHandler, useScales } from '@/hooks';
 import { isValidNoteIndex } from '@/utils';
-import downIcon from '/icons/down.svg';
-import upIcon from '/icons/up.svg';
 
 type TransposeButtonProps = {
 	direction: 'up' | 'down';
@@ -25,19 +24,20 @@ export default function TransposeButton({ direction }: TransposeButtonProps) {
 	}
 
 	const isUp = direction === 'up';
-	const icon = isUp ? upIcon : downIcon;
 	const title = isUp ? 'Up a Fifth' : 'Down a Fifth';
 	const componentName = isUp ? 'TransposeUp' : 'TransposeDown';
-	const onClick = isUp ? transposeUp : transposeDown;
+	const transposeDirectionFunction = isUp ? transposeUp : transposeDown;
+	const { handleClick, handleKeyDown } = useButtonHandler(transposeDirectionFunction);
 
 	return (
 		<button
 			type='button'
 			className={`${componentName} bg-slate-200 border border-slate-500 p-2 hover:ring-1`}
 			title={title}
-			onClick={onClick}
+			onClick={handleClick}
+			onKeyDown={handleKeyDown}
 		>
-			<img src={icon} className='w-4 h-4 sm:w-6 sm:h-6' alt={isUp ? 'Up' : 'Down'} />
+			<ActionIcon name={direction} size='sm' />
 		</button>
 	);
 }

@@ -1,4 +1,4 @@
-import Icon from '@/components/Icon';
+import { InstrumentIcon } from '@/components/icons';
 import type { IconName } from '@/types';
 
 type LabelProps = {
@@ -9,7 +9,7 @@ type LabelProps = {
 export default function Label({ icon, title }: LabelProps) {
 	return (
 		<div className='Label flex flex-col items-center justify-center gap-2' title={title}>
-			<Icon name={icon} />
+			<InstrumentIcon name={icon} />
 			<span className='hidden text-xs font-bold sm:block'>{title}</span>
 		</div>
 	);
