@@ -234,6 +234,15 @@ select {
 	border-color: hsl(from var(--border) h s l / 1.0);
 }
 
+/* Chord Bin */
+.ChordBinItems {
+	grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
+}
+
+.ChordBinItem {
+	min-width: 0;
+}
+
 /* Utility Classes */
 .text-xxxs {
 	font-size: 0.5rem;
