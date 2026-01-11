@@ -1,4 +1,4 @@
-import type { NoteIndex } from '@/types';
+import type { NoteIndex, ScaleType } from '@/types';
 
 export const FLATS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'] as const;
 
@@ -60,6 +60,10 @@ export function getNote(note: NoteIndex, usingFlats: boolean): string {
 
 export function isValidNoteIndex(value: number): value is NoteIndex {
 	return value >= 0 && value <= 11;
+}
+
+export function isValidScaleType(value: string): value is ScaleType {
+	return value in INTERVALS;
 }
 
 /*

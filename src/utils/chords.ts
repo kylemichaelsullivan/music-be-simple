@@ -823,3 +823,14 @@ export const generateChordNotes = (tonic: number, variant: Chord_Variant): numbe
 export type Chord_Variant = {
 	[K in keyof typeof CHORDS]: keyof (typeof CHORDS)[K];
 }[keyof typeof CHORDS];
+
+const chordVariantKeys = new Set<string>();
+for (const group of Object.values(CHORDS)) {
+	for (const key of Object.keys(group)) {
+		chordVariantKeys.add(key);
+	}
+}
+
+export function isValidChordVariant(value: string): value is Chord_Variant {
+	return chordVariantKeys.has(value);
+}

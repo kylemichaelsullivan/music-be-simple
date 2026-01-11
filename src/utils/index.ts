@@ -6,6 +6,7 @@ export {
 	getChordInfo,
 	getChordSymbol,
 	getChordVariants,
+	isValidChordVariant,
 } from './chords';
 export {
 	FLATS,
@@ -17,6 +18,7 @@ export {
 	getIntervalsForVariant,
 	getNote,
 	isValidNoteIndex,
+	isValidScaleType,
 	rangeOfLength,
 } from './notes';
 export { generateNotesFromIntervals } from './scales';
