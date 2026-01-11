@@ -56,8 +56,8 @@ test.describe('Play Page', () => {
 		const chordBinItem = page.locator('[id^="chord-bin-item-"]').first();
 		await expect(chordBinItem).toBeVisible({ timeout: 2000 });
 
-		// Find and click remove button
-		const removeButton = chordBinItem.getByTitle(/Remove Chord Bin Item/);
+		// Find and click remove button (title format is "Remove {chordName}")
+		const removeButton = chordBinItem.getByTitle(/^Remove /);
 		await removeButton.click();
 
 		// Item should be removed

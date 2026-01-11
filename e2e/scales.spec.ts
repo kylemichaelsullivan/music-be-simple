@@ -10,12 +10,12 @@ test.describe('Scales Page', () => {
 	});
 
 	test('should have tonic selector', async ({ page }) => {
-		const tonicSelector = page.getByRole('combobox');
+		const tonicSelector = page.getByLabel('Tonic Select');
 		await expect(tonicSelector).toBeVisible();
 	});
 
 	test('should change tonic when selected', async ({ page }) => {
-		const tonicSelector = page.getByRole('combobox');
+		const tonicSelector = page.getByLabel('Tonic Select');
 		await tonicSelector.selectOption('5'); // F
 		await expect(tonicSelector).toHaveValue('5');
 	});

@@ -10,12 +10,12 @@ test.describe('Chords Page', () => {
 	});
 
 	test('should have tonic selector', async ({ page }) => {
-		const tonicSelector = page.getByRole('combobox');
+		const tonicSelector = page.getByLabel('Tonic Select');
 		await expect(tonicSelector).toBeVisible();
 	});
 
 	test('should change tonic when selected', async ({ page }) => {
-		const tonicSelector = page.getByRole('combobox');
+		const tonicSelector = page.getByLabel('Tonic Select');
 		await tonicSelector.selectOption('7'); // G
 		await expect(tonicSelector).toHaveValue('7');
 	});
