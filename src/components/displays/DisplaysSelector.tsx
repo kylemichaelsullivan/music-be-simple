@@ -1,6 +1,6 @@
-import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
-import DisplaySelector from './DisplaySelector';
+import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
+import { DisplaySelector } from './';
 
 type DisplaysSelectorProps = {
 	hasModes?: boolean;
@@ -8,7 +8,7 @@ type DisplaysSelectorProps = {
 	onFxn: (icon: IconType) => void;
 };
 
-export default function DisplaysSelector({
+export function DisplaysSelector({
 	onFxn,
 	hasModes = false,
 	displays = [],

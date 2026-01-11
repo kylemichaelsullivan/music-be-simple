@@ -10,7 +10,7 @@ type DisplaySelectorProps = {
 	onFxn: (icon: IconName) => void;
 };
 
-export default function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelectorProps) {
+export function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelectorProps) {
 	const { handleClick, handleKeyDown } = useButtonHandler(
 		useCallback(() => {
 			onFxn(icon);
