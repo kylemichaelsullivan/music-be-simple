@@ -1,30 +1,11 @@
+import { ChordsContextProvider } from '@/context/Chords';
 import { GlobalsContextProvider } from '@/context/Globals';
 import { PlayContextProvider } from '@/context/Play';
+import { ScalesContextProvider } from '@/context/Scales';
+import type { NoteIndex } from '@/types';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { usePlay } from '../usePlay';
-
-// Mock localStorage
-const localStorageMock = (() => {
-	let store: Record<string, string> = {};
-
-	return {
-		getItem: (key: string) => store[key] || null,
-		setItem: (key: string, value: string) => {
-			store[key] = value.toString();
-		},
-		removeItem: (key: string) => {
-			delete store[key];
-		},
-		clear: () => {
-			store = {};
-		},
-	};
-})();
-
-Object.defineProperty(window, 'localStorage', {
-	value: localStorageMock,
-});
 
 // Mock URL.createObjectURL and URL.revokeObjectURL
 const createObjectURLMock = vi.fn(() => 'blob:mock-url');
@@ -35,21 +16,26 @@ global.URL.revokeObjectURL = revokeObjectURLMock;
 // Mock document.createElement and appendChild/removeChild
 let mockAnchor: HTMLAnchorElement;
 let anchorClickMock: ReturnType<typeof vi.fn>;
-const createElementSpy = vi.spyOn(document, 'createElement');
-const appendChildSpy = vi.spyOn(document.body, 'appendChild');
-const removeChildSpy = vi.spyOn(document.body, 'removeChild');
+let createElementSpy: ReturnType<typeof vi.spyOn>;
+let appendChildSpy: ReturnType<typeof vi.spyOn>;
+let removeChildSpy: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
-	localStorageMock.clear();
+	// Clear localStorage before each test to prevent state persistence
+	if (typeof window !== 'undefined' && window.localStorage) {
+		window.localStorage.clear();
+	}
 
 	// Create a proper mock anchor element
 	mockAnchor = document.createElement('a');
 	anchorClickMock = vi.fn();
 	// Ensure TS knows this is a mock (HTMLAnchorElement.click is typed as () => void)
 	(mockAnchor as unknown as { click: typeof anchorClickMock }).click = anchorClickMock;
-	createElementSpy.mockReturnValue(mockAnchor);
-	appendChildSpy.mockClear();
-	removeChildSpy.mockClear();
+
+	// Set up spies inside beforeEach to ensure document is available
+	createElementSpy = vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
+	appendChildSpy = vi.spyOn(document.body, 'appendChild');
+	removeChildSpy = vi.spyOn(document.body, 'removeChild');
 });
 
 afterEach(() => {
@@ -57,11 +43,18 @@ afterEach(() => {
 });
 
 describe('usePlay', () => {
-	const wrapper = ({ children }: { children: React.ReactNode }) => (
-		<GlobalsContextProvider>
-			<PlayContextProvider>{children}</PlayContextProvider>
-		</GlobalsContextProvider>
-	);
+	// Create a fresh wrapper function for each test to ensure isolation
+	const createWrapper =
+		() =>
+		({ children }: { children: React.ReactNode }) => (
+			<GlobalsContextProvider>
+				<ChordsContextProvider>
+					<ScalesContextProvider>
+						<PlayContextProvider>{children}</PlayContextProvider>
+					</ScalesContextProvider>
+				</ChordsContextProvider>
+			</GlobalsContextProvider>
+		);
 
 	it('should throw error when used outside provider', () => {
 		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -79,7 +72,7 @@ describe('usePlay', () => {
 	});
 
 	it('should return context value when used within provider', () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		expect(result.current).toHaveProperty('chordBinItems');
 		expect(result.current).toHaveProperty('notepadLines');
@@ -104,14 +97,14 @@ describe('usePlay', () => {
 	});
 
 	it('should initialize with empty arrays', () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		expect(result.current.chordBinItems).toEqual([]);
 		expect(result.current.notepadLines).toEqual([]);
 	});
 
 	it('should add chord bin items', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		expect(result.current.chordBinItems).toHaveLength(0);
 
@@ -134,7 +127,12 @@ describe('usePlay', () => {
 	});
 
 	it('should remove chord bin items', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		// Clear localStorage before this test to ensure clean state
+		if (typeof window !== 'undefined' && window.localStorage) {
+			window.localStorage.clear();
+		}
+
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		// Add two items separately to ensure different timestamps
 		act(() => {
@@ -153,19 +151,20 @@ describe('usePlay', () => {
 			expect(result.current.chordBinItems.length).toBe(2);
 		});
 
-		const firstId = result.current.chordBinItems[0];
+		const firstItem = result.current.chordBinItems[0];
+		const firstId = firstItem.id;
 		act(() => {
 			result.current.removeChordBinItem(firstId);
 		});
 
 		await waitFor(() => {
-			expect(result.current.chordBinItems).not.toContain(firstId);
+			expect(result.current.chordBinItems.find((item) => item.id === firstId)).toBeUndefined();
 			expect(result.current.chordBinItems.length).toBe(1);
 		});
 	});
 
 	it('should add notepad lines', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		expect(result.current.notepadLines).toHaveLength(0);
 
@@ -188,7 +187,12 @@ describe('usePlay', () => {
 	});
 
 	it('should remove notepad lines', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		// Clear localStorage before this test to ensure clean state
+		if (typeof window !== 'undefined' && window.localStorage) {
+			window.localStorage.clear();
+		}
+
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		// Add two lines separately to ensure different timestamps
 		act(() => {
@@ -207,21 +211,26 @@ describe('usePlay', () => {
 			expect(result.current.notepadLines.length).toBe(2);
 		});
 
-		const firstId = result.current.notepadLines[0];
+		const firstLine = result.current.notepadLines[0];
+		const firstId = firstLine.id;
 		act(() => {
 			result.current.removeNotepadLine(firstId);
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines).not.toContain(firstId);
+			expect(result.current.notepadLines.find((line) => line.id === firstId)).toBeUndefined();
 			expect(result.current.notepadLines.length).toBe(1);
 		});
 	});
 
 	it('should import chord bin', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
-		const items = [100, 200, 300];
+		const items = [
+			{ id: 100, tonic: 0 as NoteIndex, variant: 'major' },
+			{ id: 200, tonic: 2 as NoteIndex, variant: 'minor' },
+			{ id: 300, tonic: 4 as NoteIndex, variant: 'major' },
+		];
 		act(() => {
 			result.current.importChordBin(items);
 		});
@@ -232,9 +241,13 @@ describe('usePlay', () => {
 	});
 
 	it('should import notepad', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
-		const lines = [400, 500, 600];
+		const lines = [
+			{ id: 400, content: 'Line 1' },
+			{ id: 500, content: 'Line 2' },
+			{ id: 600, content: 'Line 3' },
+		];
 		act(() => {
 			result.current.importNotepad(lines);
 		});
@@ -245,11 +258,17 @@ describe('usePlay', () => {
 	});
 
 	it('should import all', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		const data = {
-			chordBin: [100, 200],
-			notepad: [300, 400],
+			chordBin: [
+				{ id: 100, tonic: 0 as NoteIndex, variant: 'major' },
+				{ id: 200, tonic: 2 as NoteIndex, variant: 'minor' },
+			],
+			notepad: [
+				{ id: 300, content: 'Note 1' },
+				{ id: 400, content: 'Note 2' },
+			],
 		};
 
 		act(() => {
@@ -263,7 +282,7 @@ describe('usePlay', () => {
 	});
 
 	it('should export chord bin', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		// Add some items
 		act(() => {
@@ -295,7 +314,7 @@ describe('usePlay', () => {
 	});
 
 	it('should export notepad', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		// Add some lines
 		act(() => {
@@ -327,7 +346,7 @@ describe('usePlay', () => {
 	});
 
 	it('should export all', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		// Add some items and lines
 		act(() => {
@@ -360,7 +379,7 @@ describe('usePlay', () => {
 	});
 
 	it('should reset all state', async () => {
-		const { result } = renderHook(() => usePlay(), { wrapper });
+		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		// Add items and lines
 		act(() => {
