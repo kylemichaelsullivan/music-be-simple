@@ -1,8 +1,6 @@
-import Banjo from './Banjo/Banjo';
-import Guitar from './Guitar/Guitar';
-import Instrument from './Instrument';
-import Mandolin from './Mandolin/Mandolin';
-import Piano from './Piano/Piano';
-import Ukulele from './Ukulele/Ukulele';
-
-export { Banjo, Guitar, Instrument, Mandolin, Piano, Ukulele };
+export { Banjo } from './Banjo';
+export { Guitar } from './Guitar';
+export { Instrument } from './Instrument';
+export { Mandolin } from './Mandolin';
+export { Piano } from './Piano';
+export { Ukulele } from './Ukulele';

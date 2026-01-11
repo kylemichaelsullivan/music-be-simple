@@ -1,4 +1,4 @@
-import AllowedNote from '@/components/AllowedNote';
+import { AllowedNote } from '@/components/AllowedNote';
 import { useGlobals, useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getNote } from '@/utils';
@@ -7,7 +7,7 @@ type FretProps = {
 	note: NoteIndex;
 };
 
-export default function Fret({ note }: FretProps) {
+export function Fret({ note }: FretProps) {
 	const { usingFlats, playNote } = useGlobals();
 	const { notes, tonic, getBorderStyle } = useInstrumentNotes();
 	const noteName = getNote(note, usingFlats);

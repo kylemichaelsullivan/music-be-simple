@@ -1,4 +1,4 @@
-import AllowedNote from '@/components/AllowedNote';
+import { AllowedNote } from '@/components/AllowedNote';
 import { useGlobals, useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getNote } from '@/utils';
@@ -7,7 +7,7 @@ type NutProps = {
 	note: NoteIndex;
 };
 
-export default function Nut({ note }: NutProps) {
+export function Nut({ note }: NutProps) {
 	const { usingFlats, playNote } = useGlobals();
 	const { notes, tonic, getBorderStyle } = useInstrumentNotes();
 	const noteName = getNote(note, usingFlats);

@@ -1,14 +1,14 @@
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
-import Fret from '../Fret';
-import Nut from '../Nut';
-import SkippedFret from './SkippedFret';
+import { Fret } from '../Fret';
+import { Nut } from '../Nut';
+import { SkippedFret } from './SkippedFret';
 
 type DroneStringProps = {
 	openNote: NoteIndex;
 };
 
-export default function DroneString({ openNote }: DroneStringProps) {
+export function DroneString({ openNote }: DroneStringProps) {
 	const frets = 6;
 
 	return (

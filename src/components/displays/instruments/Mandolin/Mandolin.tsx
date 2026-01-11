@@ -1,10 +1,10 @@
 import type { NoteIndex } from '@/types';
 import { rangeOfLength } from '@/utils';
-import FretNumbers from '../FretNumbers';
-import FretString from '../FretString';
-import Label from '../Label';
+import { FretNumbers } from '../FretNumbers';
+import { FretString } from '../FretString';
+import { Label } from '../Label';
 
-export default function Mandolin() {
+export function Mandolin() {
 	// G D A E
 	const openNotes: NoteIndex[] = [4, 9, 2, 7];
 

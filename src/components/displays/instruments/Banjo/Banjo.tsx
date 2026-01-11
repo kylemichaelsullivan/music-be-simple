@@ -1,11 +1,11 @@
 import type { NoteIndex } from '@/types';
 import { rangeOfLength } from '@/utils';
-import FretNumbers from '../FretNumbers';
-import FretString from '../FretString';
-import Label from '../Label';
-import DroneString from './DroneString';
+import { FretNumbers } from '../FretNumbers';
+import { FretString } from '../FretString';
+import { Label } from '../Label';
+import { DroneString } from './DroneString';
 
-export default function Banjo() {
+export function Banjo() {
 	// [G] D B G D
 	const openNotes: NoteIndex[] = [2, 11, 7, 2];
 

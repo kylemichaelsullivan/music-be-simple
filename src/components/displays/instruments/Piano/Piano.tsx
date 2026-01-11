@@ -1,9 +1,9 @@
 import { useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
-import Key from './Key';
+import { Key } from './Key';
 
-export default function Piano() {
+export function Piano() {
 	const keys = 12;
 	const blackKeys: NoteIndex[] = [1, 3, 6, 8, 10];
 

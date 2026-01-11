@@ -1,10 +1,10 @@
 import type { NoteIndex } from '@/types';
 import { rangeOfLength } from '@/utils';
-import FretNumbers from '../FretNumbers';
-import FretString from '../FretString';
-import Label from '../Label';
+import { FretNumbers } from '../FretNumbers';
+import { FretString } from '../FretString';
+import { Label } from '../Label';
 
-export default function Guitar() {
+export function Guitar() {
 	// E A D G B E
 	const openNotes: NoteIndex[] = [4, 11, 7, 2, 9, 4];
 

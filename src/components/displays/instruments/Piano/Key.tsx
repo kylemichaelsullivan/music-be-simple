@@ -1,4 +1,4 @@
-import AllowedNote from '@/components/AllowedNote';
+import { AllowedNote } from '@/components/AllowedNote';
 import { useGlobals, useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getNote } from '@/utils';
@@ -11,7 +11,7 @@ type KeyProps = {
 	isAllowed: boolean;
 };
 
-export default function Key({ note, isBlack, isAllowed }: KeyProps) {
+export function Key({ note, isBlack, isAllowed }: KeyProps) {
 	const { usingFlats, playNote } = useGlobals();
 	const { tonic, getBorderStyle } = useInstrumentNotes();
 	const noteName = getNote(note, usingFlats);

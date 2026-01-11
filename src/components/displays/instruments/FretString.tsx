@@ -1,7 +1,7 @@
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
-import Fret from './Fret';
-import Nut from './Nut';
+import { Fret } from './Fret';
+import { Nut } from './Nut';
 
 type FretStringProps = {
 	openNote: NoteIndex;
@@ -26,4 +26,4 @@ function FretString({ openNote }: FretStringProps) {
 	);
 }
 
-export default FretString;
+export { FretString };
