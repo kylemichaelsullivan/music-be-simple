@@ -1,36 +1,14 @@
 import { GlobalsContextProvider } from '@/context/Globals';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Tonic from '../Tonic';
-
-// Mock localStorage
-const localStorageMock = (() => {
-	let store: Record<string, string> = {};
-
-	return {
-		getItem: (key: string) => store[key] || null,
-		setItem: (key: string, value: string) => {
-			store[key] = value.toString();
-		},
-		removeItem: (key: string) => {
-			delete store[key];
-		},
-		clear: () => {
-			store = {};
-		},
-	};
-})();
-
-Object.defineProperty(window, 'localStorage', {
-	value: localStorageMock,
-});
-
-beforeEach(() => {
-	localStorageMock.clear();
-});
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Tonic } from '../Tonic';
 
 describe('Tonic', () => {
+	afterEach(() => {
+		cleanup();
+	});
+
 	const mockHandleTonicChange = vi.fn();
 
 	it('should render with correct initial value', () => {
