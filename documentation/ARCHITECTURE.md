@@ -204,6 +204,41 @@ TypeScript types are organized in `src/types/`:
 - `play.ts` - Play-related types
 - `scales.ts` - Scale-related types
 
+### Type Guards
+
+Type guard functions provide runtime type narrowing and are located in `src/utils/`:
+
+- **`isValidNoteIndex(value: number): value is NoteIndex`** (in `utils/notes.ts`)
+  - Validates that a number is between 0 and 11 (inclusive)
+  - Used for note index validation
+
+- **`isValidScaleType(value: string): value is ScaleType`** (in `utils/notes.ts`)
+  - Validates that a string is a valid scale type key in the INTERVALS object
+  - Used for scale variant validation
+
+- **`isValidChordVariant(value: string): value is Chord_Variant`** (in `utils/chords.ts`)
+  - Validates that a string is a valid chord variant key in the CHORDS structure
+  - Used for chord variant validation
+
+**Type Guard Pattern**: Always combine Zod schema validation with type guard functions:
+
+```typescript
+// ✅ Correct pattern: Zod safeParse() + type guard
+const result = ScaleTypeSchema.safeParse(e.target.value);
+if (result.success && isValidScaleType(result.data)) {
+  // result.data is properly typed as ScaleType (no type assertion needed)
+  handleVariantChange(result.data);
+}
+
+// ❌ Avoid: Type assertions
+const result = ScaleTypeSchema.safeParse(e.target.value);
+if (result.success) {
+  handleVariantChange(result.data as ScaleType); // ❌ Type assertion
+}
+```
+
+All type guard functions are exported from `src/utils/index.ts` for convenient importing.
+
 ## Schema Validation System
 
 The application uses **Zod** for runtime type validation and schema definition:
@@ -222,8 +257,9 @@ All Zod schemas are defined in `src/schemas.ts`:
 
 1. **localStorage Validation**: All data loaded from localStorage is validated using Zod schemas via the `useLocalStorage` hook (individual field validation)
 2. **Combined Data Validation**: Context providers validate combined storage data using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in `useEffect` hooks for monitoring and debugging
-3. **Input Validation**: User inputs (form selections, user interactions) are validated using `safeParse()` before state updates
+3. **Input Validation**: User inputs (form selections, user interactions) are validated using `safeParse()` followed by type guard functions before state updates
 4. **Runtime Safety**: Zod provides runtime type checking beyond TypeScript's compile-time checks
+5. **Type Narrowing**: Type guard functions (`isValidNoteIndex`, `isValidScaleType`, `isValidChordVariant`) are used with Zod validation to properly narrow types without type assertions
 
 ### Schema Examples
 
@@ -234,12 +270,42 @@ export const NoteIndexSchema = z.number().int().min(0).max(11);
 // Enum schema
 export const ScaleTypeSchema = z.enum(SCALE_TYPES as [string, ...string[]]);
 
+// Refined schema (for complex validation)
+export const ChordVariantSchema = z.string().refine(
+  (val) => chordVariantArray.includes(val),
+  (val) => ({ message: `Invalid chord variant: ${val}` })
+);
+
 // Storage schema
 export const ScalesStorageSchema = z.object({
   tonic: NoteIndexSchema,
   variant: ScaleTypeSchema,
   showNoteLabels: z.boolean(),
 });
+```
+
+### Input Validation Pattern
+
+When validating user inputs, combine Zod's `safeParse()` with type guard functions:
+
+```typescript
+// ✅ Correct: Zod validation + type guard (no type assertions)
+import { ScaleTypeSchema } from '@/schemas';
+import { isValidScaleType } from '@/utils';
+
+const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const result = ScaleTypeSchema.safeParse(e.target.value);
+  if (result.success && isValidScaleType(result.data)) {
+    // result.data is properly typed as ScaleType
+    handleVariantChange(result.data);
+  }
+};
+
+// ❌ Avoid: Type assertions
+const result = ScaleTypeSchema.safeParse(e.target.value);
+if (result.success) {
+  handleVariantChange(result.data as ScaleType); // ❌ Type assertion
+}
 ```
 
 ### Integration with Context and Stores

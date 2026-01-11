@@ -26,7 +26,7 @@ Global application state and preferences.
 
 **Usage**:
 ```typescript
-import { useGlobals } from '@/hooks/useGlobals';
+import { useGlobals } from '@/hooks';
 
 function MyComponent() {
   const { selectedDisplays, usingFlats, setUsingFlats } = useGlobals();
@@ -68,7 +68,7 @@ Scales-specific state and functionality.
 
 **Usage**:
 ```typescript
-import { useScales } from '@/hooks/useScales';
+import { useScales } from '@/hooks';
 
 function ScalesComponent() {
   const { tonic, variant, notes, handleTonicChange, handleVariantChange } = useScales();
@@ -113,7 +113,7 @@ Chords-specific state and functionality.
 
 **Usage**:
 ```typescript
-import { useChords } from '@/hooks/useChords';
+import { useChords } from '@/hooks';
 
 function ChordsComponent() {
   const { tonic, variant, chordName, notes, handleTonicChange } = useChords();
@@ -146,7 +146,7 @@ Play functionality state.
 
 **Usage**:
 ```typescript
-import { usePlay } from '@/hooks/usePlay';
+import { usePlay } from '@/hooks';
 
 function PlayComponent() {
   const { playNote, stopNote } = usePlay();
@@ -170,7 +170,7 @@ Instrument notes display context.
 
 **Usage**:
 ```typescript
-import { useInstrumentNotes } from '@/hooks/useInstrumentNotes';
+import { useInstrumentNotes } from '@/hooks';
 
 function InstrumentComponent() {
   const { getNotesForInstrument } = useInstrumentNotes();

@@ -25,6 +25,8 @@ This guide covers development practices, coding standards, and workflow for the 
 - Define types in `src/types/` directory
 - Use type inference where appropriate, but be explicit for public APIs
 - Avoid `any` type - use `unknown` if type is truly unknown
+- **Avoid type assertions**: Use type guards with Zod schema validation instead of `as Type` assertions
+- **Type guards**: Create type guard functions in `utils/` files for runtime type narrowing
 
 ### Zod Schema Validation
 
@@ -69,14 +71,30 @@ useEffect(() => {
   }
 }, [usingFlats, displays]);
 
-// ✅ Validate user inputs
-import { NoteIndexSchema } from '@/schemas';
+// ✅ Validate user inputs with Zod + type guards (no type assertions)
+import { NoteIndexSchema, ScaleTypeSchema, ChordVariantSchema } from '@/schemas';
+import { isValidNoteIndex, isValidScaleType, isValidChordVariant } from '@/utils';
 
-const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+// Pattern: Zod safeParse() + type guard function for proper type narrowing
+const handleTonicChange = (e: ChangeEvent<HTMLSelectElement>) => {
   const value = Number.parseInt(e.target.value, 10);
   const result = NoteIndexSchema.safeParse(value);
   if (result.success && isValidNoteIndex(result.data)) {
-    handleTonicChange(result.data);
+    handleTonicChange(result.data); // Properly typed as NoteIndex (no 'as' needed)
+  }
+};
+
+const handleScaleVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const result = ScaleTypeSchema.safeParse(e.target.value);
+  if (result.success && isValidScaleType(result.data)) {
+    handleVariantChange(result.data); // Properly typed as ScaleType
+  }
+};
+
+const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const result = ChordVariantSchema.safeParse(e.target.value);
+  if (result.success && isValidChordVariant(result.data)) {
+    handleVariantChange(result.data); // Properly typed as Chord_Variant
   }
 };
 ```
@@ -115,18 +133,117 @@ export default function Component({ prop1, prop2 }: ComponentProps) {
 
 ### Import Organization
 
-1. External dependencies
-2. Internal imports from `@/` alias
-3. Relative imports
-4. Type imports (use `import type`)
+Imports should be ordered as follows (alphabetically within each group):
+
+1. **Internal project imports with `@/` alias** (alphabetically by path: components, context, hooks, instruments, navigation, schemas, stores, utils)
+2. **Type imports from `@/types` and other `@/` paths** (alphabetically)
+3. **React value imports** (from 'react')
+4. **Third-party libraries** (alphabetically by source: clsx, zod, @tanstack/react-router, etc.)
+5. **Relative imports** (siblings, direct children, direct parents)
+6. **Type imports from React** (import type from 'react') - comes last
+
+**Separate code and type imports**: If importing both code and types from the same file, use separate import statements.
 
 Example:
 ```typescript
+import { Main } from '@/components/Main';
+import { useGlobals } from '@/hooks';
+import type { ChordData } from '@/types';
 import { useState } from 'react';
-import { useGlobals } from '@/hooks/useGlobals';
-import { NoteIndex } from '@/types';
-import type { ChordData } from '@/types/chords';
+import clsx from 'clsx';
+import { IconButton } from './IconButton';
+import type { ReactNode } from 'react';
 ```
+
+### Index Files (index.ts)
+
+All `index.ts` files MUST use direct export statements (NOT import-then-export pattern).
+
+#### Pattern
+
+**Standard Format**:
+```typescript
+// ✅ Correct - Direct export pattern
+export { ComponentA } from './ComponentA';
+export { ComponentB } from './ComponentB';
+export { NamedExport } from './NamedExport';
+```
+
+**Key Rules**:
+- ✅ **Always use direct exports** - `export { X } from './X'` pattern
+- ❌ **Never use import-then-export pattern** - Do not import then export separately
+- ❌ **Never use `export { default as ... }` syntax** - This pattern is not allowed
+- ✅ **Group related exports** - Organize exports logically with comments (defaults, shared, contexts, etc.) - optional
+- ✅ **Alphabetize exports** - Keep exports in alphabetical order within each group
+- ✅ **One export per line** - Format exports on separate lines for clarity
+
+#### Examples
+
+**Simple Component Directory**:
+```typescript
+// src/components/buttons/index.ts
+export { AddButton } from './AddButton';
+export { EditButton } from './EditButton';
+export { IconButton } from './IconButton';
+export { RemoveButton } from './RemoveButton';
+```
+
+**Multiple Groups with Comments**:
+```typescript
+// src/context/index.ts
+// Defaults
+export { initialTonic, initialVariant, initialUsingFlats } from './defaults';
+
+// Shared
+export { useChordState } from './shared/useChordState';
+export { useScaleState } from './shared/useScaleState';
+
+// Contexts
+export { ChordsContext, ChordsContextProvider } from './Chords';
+export { GlobalsContext, GlobalsContextProvider } from './Globals';
+```
+
+**Multiple Exports from Same File**:
+```typescript
+// ✅ Correct - Multiple exports from same file
+export { Button, Icon, Label } from './Button';
+```
+
+**Exports with Aliases**:
+```typescript
+// ✅ Correct - Export with alias
+export { ScalesIndex as Scales } from './Scales';
+```
+
+**Type Exports**:
+```typescript
+// src/types/index.ts
+export type { ChordData, ChordGroup, ChordInfo } from './chords';
+export type { Notes_Flats, Notes_Sharps } from './notes';
+```
+
+#### When to Create Index Files
+
+- ✅ **Create `index.ts`** in directories with multiple related files that should be consumed together
+- ✅ **Create `index.ts`** for directories that export functionality used by other parts of the application
+- ❌ **Do NOT create `index.ts`** if a directory already has `index.tsx` (e.g., page components)
+- ❌ **Do NOT create `index.ts`** in test directories (`__tests__`, `__test__`)
+
+#### Benefits
+
+1. **Consistency**: All index files follow the same pattern, making them easy to understand and maintain
+2. **Clarity**: Import-then-export pattern makes it clear what's being exported
+3. **Flexibility**: Easy to add re-exports, aliases, or transformations if needed
+4. **Maintainability**: Changes to source files don't require changes to index file syntax
+
+#### Important Notes
+
+- **Use direct exports only**: Always use `export { X } from './X'` pattern (NOT import-then-export)
+- Keep index files simple - they are re-export files, not implementation files
+- If a component's export name changes, update it in the index file
+- Use consistent formatting across all index files
+- Group related exports with comments only when it adds clarity
+- One export per line for better readability
 
 ## State Management
 
@@ -243,30 +360,32 @@ The project uses a comprehensive testing setup with Vitest and Playwright. See [
 ### Test Commands
 
 ```bash
-# Run unit and component tests in watch mode
-bun test
+# Run unit and component tests once (CI mode) (Vitest)
+bun run test
+
+# Run tests in watch mode (development)
+bun run test:watch
 
 # Run tests with Vitest UI
-bun test:ui
-
-# Run tests once (CI mode)
-bun test:run
+bun run test:ui
 
 # Run tests with coverage report
-bun test:coverage
+bun run test:coverage
 
 # Run E2E tests with Playwright
-bun test:e2e
+bun run test:e2e
 
 # Run E2E tests with Playwright UI
-bun test:e2e:ui
+bun run test:e2e:ui
 
 # Run E2E tests in headed mode (visible browser)
-bun test:e2e:headed
+bun run test:e2e:headed
 
 # Run both unit and E2E tests
-bun test:all
+bun run test:all
 ```
+
+**Note**: Use `bun run test` (not `bun test`) to run Vitest. Bun's built-in test runner (`bun test`) is not recommended for this project due to compatibility issues with Testing Library.
 
 ### Test Structure
 
@@ -401,7 +520,9 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 
 - TypeScript compiler checks types
 - Fix all type errors before committing
-- Use type assertions sparingly
+- **Avoid type assertions**: Use type guards with Zod validation instead of `as Type`
+- **Type guard functions**: Create in `utils/` files (e.g., `isValidNoteIndex`, `isValidScaleType`, `isValidChordVariant`)
+- **Pattern**: Always combine Zod's `safeParse()` with type guard functions for runtime validation and type narrowing
 
 ## Performance Considerations
 

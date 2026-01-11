@@ -14,37 +14,39 @@ This project uses a comprehensive testing setup with multiple testing strategies
 ### Unit & Component Tests (Vitest)
 
 ```bash
+# Run tests once (CI mode)
+bun run test
+
 # Run tests in watch mode (development)
-bun test
+bun run test:watch
 
 # Run tests with UI
-bun test:ui
-
-# Run tests once (CI mode)
-bun test:run
+bun run test:ui
 
 # Run tests with coverage
-bun test:coverage
+bun run test:coverage
 ```
+
+**Note**: Use `bun run test` (not `bun test`) to run Vitest. Bun's built-in test runner (`bun test`) is not recommended for this project due to compatibility issues with Testing Library.
 
 ### E2E Tests (Playwright)
 
 ```bash
 # Run all E2E tests
-bun test:e2e
+bun run test:e2e
 
 # Run E2E tests with UI
-bun test:e2e:ui
+bun run test:e2e:ui
 
 # Run E2E tests in headed mode (see browser)
-bun test:e2e:headed
+bun run test:e2e:headed
 ```
 
 ### Run All Tests
 
 ```bash
 # Run both unit and E2E tests
-bun test:all
+bun run test:all
 ```
 
 ## Test Structure
@@ -138,7 +140,7 @@ The `setup.ts` file configures:
 Coverage reports are generated in the `coverage/` directory. To view:
 
 ```bash
-bun test:coverage
+bun run test:coverage
 # Then open coverage/index.html in your browser
 ```
 
@@ -158,8 +160,8 @@ Tests can be run in CI/CD pipelines:
 
 ```bash
 # In CI, run tests without watch mode
-bun test:run
-bun test:e2e
+bun run test
+bun run test:e2e
 ```
 
 ## Troubleshooting
