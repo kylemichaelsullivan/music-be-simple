@@ -149,10 +149,10 @@ Always use the project's utility components instead of creating custom HTML elem
 
 ```tsx
 // ✅ Use Main component wrapper
-import Main from '@/components/Main';
-import Title from '@/components/Title';
+import { Main } from '@/components/Main';
+import { Title } from '@/components/Title';
 
-export default function Chords() {
+export function Chords() {
   return (
     <Main componentName='Chords'>
       <Title title='Chords' />
@@ -161,7 +161,7 @@ export default function Chords() {
 }
 
 // ✅ Use TopButton component
-import TopButton from '@/components/buttons/TopButton';
+import { TopButton } from '@/components/buttons';
 
 <TopButton
   title='Chords'
@@ -188,10 +188,9 @@ import TopButton from '@/components/buttons/TopButton';
 ### Component Structure
 
 ```tsx
-// Pattern 1: Default export function component (most common)
+// Pattern 1: Named export function component (most common)
+import { Main } from '@/components/Main';
 import type { ReactNode } from 'react';
-
-import Main from '@/components/Main';
 
 type ComponentProps = {
 	title: string;
@@ -199,7 +198,7 @@ type ComponentProps = {
 	children?: ReactNode;
 };
 
-export default function ComponentName({
+export function ComponentName({
 	title,
 	variant = 'primary',
 	children,
@@ -211,7 +210,7 @@ export default function ComponentName({
 	);
 }
 
-// Pattern 2: forwardRef component with default export (for DOM refs)
+// Pattern 2: forwardRef component with named export (for DOM refs)
 import { forwardRef } from 'react';
 
 const ComponentName = forwardRef<HTMLDivElement, ComponentProps>(
@@ -229,9 +228,11 @@ const ComponentName = forwardRef<HTMLDivElement, ComponentProps>(
 
 ComponentName.displayName = 'ComponentName';
 
-export default ComponentName;
+export { ComponentName };
 
 // Pattern 3: Memoized component (for performance optimization)
+import { Main } from '@/components/Main';
+import type { ReactNode } from 'react';
 import { memo } from 'react';
 
 function ComponentName({ title, variant = 'primary', children }: ComponentProps) {
@@ -242,18 +243,28 @@ function ComponentName({ title, variant = 'primary', children }: ComponentProps)
 	);
 }
 
-export default memo(ComponentName);
+export const ComponentName = memo(ComponentName);
 ```
 
 ### Component Guidelines
 
 - **TypeScript types**: Prefer `type` over `interface` for component props and data structures
-- **Default exports**: Export components as default exports using `export default function ComponentName`
-- **Import paths**: Use `@/` path alias for imports (configured in tsconfig.json)
-- **Import order**: Type imports come before value imports (e.g., `import type { ReactNode } from 'react'` before `import { useState } from 'react'`)
+- **Named exports only**: Export components as named exports using `export function ComponentName` (NO default exports)
+- **Import paths**: 
+  - Use relative imports (`./` or `../`) for siblings, direct children, or direct parents (NOT root level)
+  - Use `@/` alias for all other imports (cross-directory, root level, etc.)
+- **Import order**: All imports at top without blank lines:
+  1. Internal project imports with `@/` alias (alphabetically: components, context, hooks, instruments, navigation, schemas, stores, utils)
+  2. Type imports from `@/types` and other `@/` paths (alphabetically)
+  3. React value imports (from 'react')
+  4. Third-party libraries (alphabetically: clsx, zod, @tanstack/react-router, etc.)
+  5. Relative imports (alphabetically)
+  6. Type imports from React (import type from 'react') - comes last
+- **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
 - **Props interface**: Define clear, typed props with descriptive names
 - **forwardRef usage**: Use `forwardRef` for components that need to expose DOM refs
 - **Memoization**: Use `memo` for components with stable props to prevent unnecessary re-renders
+- **Memoized exports**: Memoized components should have their export at the bottom of the file as a named export
 
 ## Component Patterns
 
@@ -321,11 +332,11 @@ The project uses a hybrid approach combining Zustand stores and React Context AP
 
 ```tsx
 // ✅ Use context hooks (recommended - provides computed values)
-import Main from '@/components/Main';
-import { useGlobals } from '@/hooks/useGlobals';
-import { useScales } from '@/hooks/useScales';
+import { Main } from '@/components/Main';
+import { useGlobals } from '@/hooks';
+import { useScales } from '@/hooks';
 
-export default function Scales() {
+export function Scales() {
   const { tonic, variant, notes, handleTonicChange } = useScales();
   const { displays, usingFlats } = useGlobals();
   
@@ -339,7 +350,7 @@ export default function Scales() {
 // ✅ Use store hooks directly (if you only need tonic/variant)
 import { useScalesStore } from '@/stores/scalesStore';
 
-export default function MyComponent() {
+export function MyComponent() {
   const { tonic, variant, setTonic, setVariant } = useScalesStore();
   
   return (
@@ -356,12 +367,11 @@ Context providers wrap page components at the route level:
 
 ```tsx
 // Route file (src/routes/scales.tsx)
+import { ScalesContextProvider } from '@/context';
+import { Scales } from '@/pages/Scales';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { ScalesContextProvider } from '@/context';
-import Scales from '@/pages/Scales';
-
-function ScalesPage() {
+export function ScalesPage() {
   return (
     <ScalesContextProvider>
       <Scales />
@@ -483,6 +493,7 @@ import { Link } from '@tanstack/react-router';
 - Use `bun run build` for production build
 - Use `bun lint` for linting
 - Use `bun format` for formatting code
-- Use `bun test` for running unit and component tests
-- Use `bun test:e2e` for running end-to-end tests
-- Use `bun test:all` for running all tests
+- Use `bun run test` for running unit and component tests once (CI mode) (Vitest)
+- Use `bun run test:watch` for running tests in watch mode (development)
+- Use `bun run test:e2e` for running end-to-end tests
+- Use `bun run test:all` for running all tests

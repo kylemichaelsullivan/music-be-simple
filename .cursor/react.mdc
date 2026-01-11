@@ -18,12 +18,22 @@ alwaysApply: false
 ### Component Guidelines
 
 - **TypeScript types**: Prefer `type` over `interface` for component props and data structures
-- **Default exports**: Export components as default exports using `export default function ComponentName`
-- **Import paths**: Use `@/` path alias for imports (configured in tsconfig.json)
-- **Import order**: Type imports come before value imports (e.g., `import type { ReactNode } from 'react'` before `import { useState } from 'react'`)
+- **Named exports only**: Export components as named exports using `export function ComponentName` (NO default exports)
+- **Import paths**: 
+  - Use relative imports (`./` or `../`) for siblings, direct children, or direct parents (NOT root level)
+  - Use `@/` alias for all other imports (cross-directory, root level, etc.)
+- **Import order**: All imports at top without blank lines for auto-sorting:
+  1. Internal project imports with `@/` alias (alphabetically: components, context, hooks, instruments, navigation, schemas, stores, utils)
+  2. Type imports from `@/types` and other `@/` paths (alphabetically)
+  3. React value imports (from 'react')
+  4. Third-party libraries (alphabetically: clsx, zod, @tanstack/react-router, etc.)
+  5. Relative imports (alphabetically)
+  6. Type imports from React (import type from 'react') - comes last
+- **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
 - **Props interface**: Define clear, typed props with descriptive names
 - **forwardRef usage**: Use `forwardRef` for components that need to expose DOM refs when needed
 - **JSX attribute order**: The `key` attribute must be the last attribute in any JSX element
+- **Memoized components**: Export memoized components at the bottom of the file as a named export
 
 ### Performance Optimization
 
@@ -46,7 +56,7 @@ type TopButtonProps = {
   onFxn: () => void;
 };
 
-function TopButton({ title, icon, position, onFxn }: TopButtonProps) {
+function TopButtonComponent({ title, icon, position, onFxn }: TopButtonProps) {
   return (
     <button
       type='button'
@@ -58,7 +68,7 @@ function TopButton({ title, icon, position, onFxn }: TopButtonProps) {
   );
 }
 
-export default memo(TopButton);
+export const TopButton = memo(TopButtonComponent);
 ```
 
 **When to use React.memo:**
@@ -542,21 +552,23 @@ The project uses a comprehensive testing setup with Vitest and Playwright:
 #### Running Tests
 
 ```bash
-# Run unit and component tests in watch mode
-bun test
+# Run unit and component tests once (CI mode) (Vitest)
+bun run test
+
+# Run tests in watch mode (development)
+bun run test:watch
 
 # Run tests with UI
-bun test:ui
-
-# Run tests once (CI mode)
-bun test:run
+bun run test:ui
 
 # Run tests with coverage
-bun test:coverage
+bun run test:coverage
 
 # Run E2E tests
-bun test:e2e
+bun run test:e2e
 
 # Run all tests
-bun test:all
+bun run test:all
 ```
+
+**Note**: Use `bun run test` (not `bun test`) to run Vitest. Bun's built-in test runner is not supported due to compatibility issues with Testing Library.

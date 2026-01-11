@@ -32,14 +32,19 @@ Music Be Simple is a web application for learning and exploring music theory. It
 - **Production Build**: `bun run build` (TypeScript compilation + Vite build)
 - **Linting**: `bun lint` (Run Biome linter)
 - **Formatting**: `bun format` (Format code with Biome)
-- **Testing**: `bun test` (Run unit and component tests in watch mode)
-- **Test UI**: `bun test:ui` (Run tests with Vitest UI)
-- **Test Run**: `bun test:run` (Run tests once, CI mode)
-- **Test Coverage**: `bun test:coverage` (Run tests with coverage report)
-- **E2E Tests**: `bun test:e2e` (Run end-to-end tests with Playwright)
-- **E2E UI**: `bun test:e2e:ui` (Run E2E tests with Playwright UI)
-- **E2E Headed**: `bun test:e2e:headed` (Run E2E tests in headed mode)
-- **All Tests**: `bun test:all` (Run both unit and E2E tests)
+- **Testing**: 
+  - **Recommended**: `bun run test` (Run once, CI mode) or `bun run test:watch` (Watch mode) - Runs Vitest via npm script
+    - Automatically excludes E2E tests (configured in vitest.config.ts)
+    - Full Vitest API support
+    - Most reliable for all tests
+  - **Note**: Do NOT use `bun test` (Bun's built-in test runner) - It is not supported due to compatibility issues with Testing Library
+- **Test Watch**: `bun run test:watch` (Run tests in watch mode, development)
+- **Test UI**: `bun run test:ui` (Run tests with Vitest UI)
+- **Test Coverage**: `bun run test:coverage` (Run tests with coverage report)
+- **E2E Tests**: `bun run test:e2e` (Run end-to-end tests with Playwright)
+- **E2E UI**: `bun run test:e2e:ui` (Run E2E tests with Playwright UI)
+- **E2E Headed**: `bun run test:e2e:headed` (Run E2E tests in headed mode)
+- **All Tests**: `bun run test:all` (Run both unit and E2E tests)
 
 ### Vite Benefits
 
@@ -171,33 +176,134 @@ e2e/                     # End-to-end tests
 
 ### Import Organization
 
+- **All imports at top**: All imports must be at the top of the file without extra line breaks for automatic sorting
+- **Import path rules**:
+  1. Use relative imports (`./` or `../`) for:
+     - Sibling files in the same directory
+     - Direct child directories (one level down)
+     - Direct parent directories (one level up, but NOT root level)
+  2. Use `@/` alias for all other imports (cross-directory, root level, etc.)
 - **Defined order**: Follow specific import order, then alphabetize within each group
 - **Import order**:
-  1. Type imports (alphabetically by path, including React types)
-  2. React value imports (from 'react')
-  3. Third-party libraries (alphabetically by source)
-  4. Internal project imports (alphabetically by path)
+  1. Internal project imports with `@/` alias (alphabetically by path: components, context, hooks, instruments, navigation, schemas, stores, utils)
+  2. Type imports from `@/types` and other `@/` paths (alphabetically)
+  3. React value imports (from 'react')
+  4. Third-party libraries (alphabetically by source: clsx, zod, @tanstack/react-router, etc.)
+  5. Relative imports (siblings, direct children, direct parents)
+  6. Type imports from React (import type from 'react') - comes last
+- **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
 - **Avoid React namespace**: Import React types directly, avoid `React.` prefix
-- **Default imports**: Use default imports for components, named imports for hooks and utilities
+- **Named imports only**: Use named imports/exports exclusively (no default exports)
+
+#### Import Path Examples
+
+```tsx
+// ✅ Correct - Relative import for sibling
+import { IconButton } from './IconButton';
+
+// ✅ Correct - Relative import for direct child
+import { Key } from './Key';
+
+// ✅ Correct - Relative import for direct parent
+import { Fret } from '../Fret';
+
+// ✅ Correct - @/ alias for cross-directory
+import { Main } from '@/components/Main';
+import { useScales } from '@/hooks';
+
+// ❌ Incorrect - @/ alias for sibling (should be relative)
+import { IconButton } from '@/components/buttons/IconButton';
+
+// ❌ Incorrect - Relative import for root level (should use @/)
+import { TABS } from '../../navigation';
+```
 
 #### Import Order Example
 
 ```tsx
-// 1. Type imports (alphabetically by path)
-import type { ReactNode } from 'react';
+// All imports at top, no blank lines between groups
+import { Main } from '@/components/Main';
+import { useScales } from '@/hooks';
 import type { TabType } from '@/types';
-
-// 2. React value imports
 import { useState } from 'react';
-
-// 3. Third-party libraries (alphabetically by source)
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-
-// 4. Internal project imports (alphabetically by path)
-import Main from '@/components/Main';
-import { useScales } from '@/hooks/useScales';
+import { Link } from '@tanstack/react-router';
+import { IconButton } from './IconButton';
+import type { ReactNode } from 'react';
 ```
+
+#### Separate Code and Type Imports
+
+If importing both code and types from the same file, use separate import statements:
+
+```tsx
+// ✅ Correct - Separate imports
+import { render } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
+
+// ❌ Incorrect - Combined import
+import { type RenderOptions, render } from '@testing-library/react';
+```
+
+### Index Files (index.ts)
+
+**Standardized Pattern**: All `index.ts` files MUST use direct export statements (no import-then-export pattern).
+
+**Pattern**:
+```ts
+// ✅ Correct - Direct export pattern
+export { ComponentA } from './ComponentA';
+export { ComponentB } from './ComponentB';
+export { NamedExport } from './NamedExport';
+```
+
+**For multiple exports from same file**:
+```ts
+// ✅ Correct - Multiple exports from same file
+export { Button, Icon, Label } from './Button';
+```
+
+**For exports with aliases**:
+```ts
+// ✅ Correct - Export with alias
+export { ScalesIndex as Scales } from './Scales';
+```
+
+**Formatting**:
+- One export per line for clarity
+- Alphabetize exports
+- Add comments to organize related exports (optional, use sparingly)
+
+**Examples**:
+```ts
+// Single component directory
+export { Displays } from './Displays';
+export { DisplaySelector } from './DisplaySelector';
+export { DisplaysSelector } from './DisplaysSelector';
+```
+
+```ts
+// Multiple exports with comments
+// Defaults
+export { initialTonic, initialVariant, initialUsingFlats } from './defaults';
+
+// Shared
+export { useChordState } from './shared/useChordState';
+export { useScaleState } from './shared/useScaleState';
+```
+
+**When to create index.ts files**:
+- Create `index.ts` files in directories that contain multiple related files
+- Use `index.ts` for directories with exports that should be consumed from outside
+- Each folder should have an `index.ts` that does direct exports
+- Do NOT create `index.ts` if a directory already has `index.tsx` (page components)
+- Do NOT create `index.ts` in test directories (`__tests__`, `__test__`)
+
+**Important Notes**:
+- Use direct exports: `export { X } from './X'` (NOT import-then-export)
+- Keep index files simple - they are re-export files, not implementation files
+- Alphabetize exports for maintainability
+- Use consistent formatting across all index files
 
 ### File Structure
 
@@ -209,8 +315,8 @@ import { useState } from 'react';
 import Main from '@/components/Main';
 import { useScales } from '@/hooks/useScales';
 
-// Default export pattern (current working pattern)
-export default function ComponentName() {
+// Named export pattern (required)
+export function ComponentName() {
 	const [localState, setLocalState] = useState('');
 	const { tonic, variant, notes } = useScales();
 
@@ -345,14 +451,30 @@ const [displays, setDisplays] = useLocalStorage(
   initialDisplays
 );
 
-// ✅ Use safeParse for user input validation
-import { NoteIndexSchema } from '@/schemas';
+// ✅ Use safeParse + type guard for user input validation
+import { NoteIndexSchema, ScaleTypeSchema, ChordVariantSchema } from '@/schemas';
+import { isValidNoteIndex, isValidScaleType, isValidChordVariant } from '@/utils';
 
-const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+// Pattern: Validate with Zod, then narrow type with type guard
+const handleTonicChange = (e: ChangeEvent<HTMLSelectElement>) => {
   const value = Number.parseInt(e.target.value, 10);
   const result = NoteIndexSchema.safeParse(value);
   if (result.success && isValidNoteIndex(result.data)) {
-    handleTonicChange(result.data);
+    handleTonicChange(result.data); // Properly typed as NoteIndex
+  }
+};
+
+const handleScaleVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const result = ScaleTypeSchema.safeParse(e.target.value);
+  if (result.success && isValidScaleType(result.data)) {
+    handleVariantChange(result.data); // Properly typed as ScaleType
+  }
+};
+
+const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const result = ChordVariantSchema.safeParse(e.target.value);
+  if (result.success && isValidChordVariant(result.data)) {
+    handleVariantChange(result.data); // Properly typed as Chord_Variant
   }
 };
 ```
@@ -469,6 +591,16 @@ The project uses a comprehensive testing setup:
 - Use `render` from `@/test/test-utils` for components that need router context
 - Test setup includes mocks for `matchMedia`, `IntersectionObserver`, and `AudioContext`
 - Coverage reports are generated in the `coverage/` directory
+
+### Running Tests
+
+- **Use: `bun run test` (run once, CI mode) or `bun run test:watch` (watch mode)** - These commands run Vitest via npm scripts
+  - Automatically excludes E2E tests (configured in vitest.config.ts)
+  - Full Vitest API support
+  - Most reliable for all tests
+- **Note**: Do NOT use `bun test` (Bun's built-in test runner) - It is not supported due to compatibility issues with Testing Library's `screen` object and DOM environment setup
+- Test setup files:
+  - Vitest setup: `src/test/setup.ts` (loaded via vitest.config.ts)
 
 ## Comments and Documentation
 
