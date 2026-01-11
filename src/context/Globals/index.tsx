@@ -1,5 +1,5 @@
-import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { IconType } from '@/instruments';
+import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import { GlobalsStorageSchema, IconTypeSchema } from '@/schemas';
 import type { GlobalsContextProviderProps } from '@/types';
 import { FREQUENCIES } from '@/utils';

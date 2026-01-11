@@ -1,48 +1,102 @@
-import type { PlayContextProviderProps } from '@/types';
-import { useCallback, useMemo, useState } from 'react';
+import { useChords } from '@/hooks';
+import {
+	ChordBinStorageSchema,
+	InstrumentTypeSchema,
+	NotepadStorageSchema,
+	ReferenceModeSchema,
+} from '@/schemas';
+import type {
+	ChordBinItemData,
+	InstrumentType,
+	NotepadLineData,
+	PlayContextProviderProps,
+	ReferenceMode,
+} from '@/types';
+import { useCallback, useMemo } from 'react';
+import { useLocalStorage } from '../shared/useLocalStorage';
 import { useRequireGlobals } from '../shared/useRequireGlobals';
 import { PlayContext } from './PlayContext';
 
 export { PlayContext };
 
+const initialReferenceMode: ReferenceMode = 'Scales';
+
 export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	useRequireGlobals();
+	const { tonic, variant } = useChords();
+
+	// Reference Mode state
+	const [referenceMode, setReferenceMode] = useLocalStorage<ReferenceMode>(
+		'referenceMode',
+		ReferenceModeSchema,
+		initialReferenceMode
+	);
+
+	// Active Instrument state
+	const [activeInstrument, setActiveInstrument] = useLocalStorage<InstrumentType | null>(
+		'activeInstrument',
+		InstrumentTypeSchema.nullable(),
+		null
+	);
 
 	// Chord Bin state
-	const [chordBinItems, setChordBinItems] = useState<number[]>([]);
+	const [chordBinItems, setChordBinItems] = useLocalStorage<ChordBinItemData[]>(
+		'chordBinItems',
+		ChordBinStorageSchema,
+		[]
+	);
 
 	const addChordBinItem = useCallback(() => {
-		setChordBinItems((prev) => [...prev, Date.now()]);
-	}, []);
+		setChordBinItems((prev) => [...prev, { id: Date.now(), tonic, variant }]);
+	}, [tonic, variant, setChordBinItems]);
 
-	const removeChordBinItem = useCallback((id: number) => {
-		setChordBinItems((prev) => prev.filter((itemId) => itemId !== id));
-	}, []);
+	const removeChordBinItem = useCallback(
+		(id: number) => {
+			setChordBinItems((prev) => prev.filter((item) => item.id !== id));
+		},
+		[setChordBinItems]
+	);
 
 	// Notepad state
-	const [notepadLines, setNotepadLines] = useState<number[]>([]);
+	const [notepadLines, setNotepadLines] = useLocalStorage<NotepadLineData[]>(
+		'notepadLines',
+		NotepadStorageSchema,
+		[]
+	);
 
 	const addNotepadLine = useCallback(() => {
-		setNotepadLines((prev) => [...prev, Date.now()]);
-	}, []);
+		setNotepadLines((prev) => [...prev, { id: Date.now(), content: '' }]);
+	}, [setNotepadLines]);
 
-	const removeNotepadLine = useCallback((id: number) => {
-		setNotepadLines((prev) => prev.filter((lineId) => lineId !== id));
-	}, []);
+	const removeNotepadLine = useCallback(
+		(id: number) => {
+			setNotepadLines((prev) => prev.filter((line) => line.id !== id));
+		},
+		[setNotepadLines]
+	);
 
 	// Import handlers
-	const importChordBin = useCallback((items: number[]) => {
-		setChordBinItems(items);
-	}, []);
+	const importChordBin = useCallback(
+		(items: ChordBinItemData[]) => {
+			setChordBinItems(items);
+		},
+		[setChordBinItems]
+	);
 
-	const importNotepad = useCallback((lines: number[]) => {
-		setNotepadLines(lines);
-	}, []);
+	const importNotepad = useCallback(
+		(lines: NotepadLineData[]) => {
+			setNotepadLines(lines);
+		},
+		[setNotepadLines]
+	);
 
-	const importAll = useCallback((data: { chordBin: number[]; notepad: number[] }) => {
-		setChordBinItems(data.chordBin);
-		setNotepadLines(data.notepad);
-	}, []);
+	const importAll = useCallback(
+		(data: { chordBin: ChordBinItemData[]; notepad: NotepadLineData[] }) => {
+			setChordBinItems(data.chordBin);
+			setNotepadLines(data.notepad);
+		},
+		[setChordBinItems, setNotepadLines]
+	);
 
 	// Export handlers
 	const exportChordBin = useCallback(() => {
@@ -84,15 +138,22 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		URL.revokeObjectURL(url);
 	}, [chordBinItems, notepadLines]);
 
+	const toggleReferenceMode = useCallback(() => {
+		setReferenceMode((prev: ReferenceMode) => (prev === 'Scales' ? 'Chords' : 'Scales'));
+	}, [setReferenceMode]);
+
 	const reset = useCallback(() => {
 		setChordBinItems([]);
 		setNotepadLines([]);
-	}, []);
+	}, [setChordBinItems, setNotepadLines]);
 
 	const contextValue = useMemo(
 		() => ({
 			chordBinItems,
 			notepadLines,
+			referenceMode,
+			activeInstrument,
+			setActiveInstrument,
 			addChordBinItem,
 			removeChordBinItem,
 			addNotepadLine,
@@ -103,11 +164,15 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			exportChordBin,
 			exportNotepad,
 			exportAll,
+			toggleReferenceMode,
 			reset,
 		}),
 		[
 			chordBinItems,
 			notepadLines,
+			referenceMode,
+			activeInstrument,
+			setActiveInstrument,
 			addChordBinItem,
 			removeChordBinItem,
 			addNotepadLine,
@@ -118,6 +183,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			exportChordBin,
 			exportNotepad,
 			exportAll,
+			toggleReferenceMode,
 			reset,
 		]
 	);

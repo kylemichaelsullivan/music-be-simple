@@ -12,7 +12,21 @@ export const useLocalStorage = <T>(
 			if (!item) {
 				return initialValue;
 			}
-			const parsed = JSON.parse(item);
+			let parsed = JSON.parse(item);
+
+			// Migration: Convert old lowercase referenceMode values to capitalized
+			if (key === 'referenceMode' && typeof parsed === 'string') {
+				if (parsed === 'chords') {
+					parsed = 'Chords';
+				} else if (parsed === 'scales') {
+					parsed = 'Scales';
+				}
+				// Update localStorage with the migrated value
+				if (parsed !== JSON.parse(item)) {
+					localStorage.setItem(key, JSON.stringify(parsed));
+				}
+			}
+
 			const validated = schema.parse(parsed);
 			return validated;
 		} catch (error) {

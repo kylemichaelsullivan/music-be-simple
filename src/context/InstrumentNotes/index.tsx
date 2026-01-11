@@ -30,4 +30,5 @@ export function InstrumentNotesProvider({
 	);
 }
 
-export { InstrumentNotesContext, type InstrumentNotesContextType } from './InstrumentNotesContext';
+export { InstrumentNotesContext } from './InstrumentNotesContext';
+export type { InstrumentNotesContextType } from './InstrumentNotesContext';
