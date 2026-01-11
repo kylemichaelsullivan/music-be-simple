@@ -9,7 +9,7 @@ type IconButtonProps = {
 	className?: string;
 };
 
-export default function IconButton({ title, onFxn, className, children }: IconButtonProps) {
+export function IconButton({ title, onFxn, className, children }: IconButtonProps) {
 	const { handleClick, handleKeyDown } = useButtonHandler(onFxn);
 
 	return (

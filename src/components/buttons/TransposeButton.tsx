@@ -6,7 +6,7 @@ type TransposeButtonProps = {
 	direction: 'up' | 'down';
 };
 
-export default function TransposeButton({ direction }: TransposeButtonProps) {
+export function TransposeButton({ direction }: TransposeButtonProps) {
 	const { tonic, handleTonicChange } = useScales();
 
 	function transposeUp() {

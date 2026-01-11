@@ -1,4 +1,4 @@
-import { useButtonHandler } from '@/hooks/useButtonHandler';
+import { useButtonHandler } from '@/hooks';
 import type { SaveActionType } from '@/types';
 
 type SaveSectionButtonProps = {
@@ -7,7 +7,7 @@ type SaveSectionButtonProps = {
 	onFxn: () => void;
 };
 
-export default function SaveSectionButton({ label, action, onFxn }: SaveSectionButtonProps) {
+export function SaveSectionButton({ label, action, onFxn }: SaveSectionButtonProps) {
 	const { handleClick, handleKeyDown } = useButtonHandler(onFxn);
 	const title = `${action} ${label}`;
 

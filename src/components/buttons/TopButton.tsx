@@ -1,14 +1,15 @@
 import { useButtonHandler } from '@/hooks';
 import type { XPositionType } from '@/types';
+import type { ReactNode } from 'react';
 
 type TopButtonProps = {
 	title: string;
-	icon: string;
+	icon: string | ReactNode;
 	position: XPositionType;
 	onFxn: () => void;
 };
 
-export default function TopButton({ title, icon, position, onFxn }: TopButtonProps) {
+export function TopButton({ title, icon, position, onFxn }: TopButtonProps) {
 	const ComponentTitle = title.replace(/[\s?]/g, '');
 	const { handleClick, handleKeyDown } = useButtonHandler(onFxn);
 
@@ -18,7 +19,7 @@ export default function TopButton({ title, icon, position, onFxn }: TopButtonPro
 	return (
 		<button
 			type='button'
-			className={`${ComponentTitle} absolute bg-slate-200 border border-slate-500 text-xl w-12 h-12 top-0 ${positionX} hover:ring-1`}
+			className={`${ComponentTitle} absolute flex items-center justify-center bg-slate-200 border border-slate-500 text-xl w-12 h-12 top-0 ${positionX} hover:ring-1`}
 			title={title}
 			onClick={handleClick}
 			onKeyDown={handleKeyDown}

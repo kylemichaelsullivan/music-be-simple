@@ -1,15 +1,12 @@
 import { ActionIcon } from '@/components/icons';
-import IconButton from './IconButton';
+import { IconButton } from './IconButton';
 
 type ToggleSaveSectionButtonProps = {
 	isOpen?: boolean;
 	onFxn: () => void;
 };
 
-export default function ToggleSaveSectionButton({
-	isOpen = false,
-	onFxn,
-}: ToggleSaveSectionButtonProps) {
+export function ToggleSaveSectionButton({ isOpen = false, onFxn }: ToggleSaveSectionButtonProps) {
 	const title = isOpen ? 'Close Save Section' : 'Open Save Section';
 
 	return (
