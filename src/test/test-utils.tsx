@@ -1,5 +1,6 @@
 import { RouterProvider, createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
-import { type RenderOptions, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
 import type { ReactElement } from 'react';
 
 // Helper function to render components with router context
@@ -10,9 +11,24 @@ function AllTheProviders({ children }: { children: React.ReactNode }) {
 		path: '/',
 		component: () => children as ReactElement,
 	});
+	const chordsRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: '/chords',
+		component: () => children as ReactElement,
+	});
+	const scalesRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: '/scales',
+		component: () => children as ReactElement,
+	});
+	const playRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: '/play',
+		component: () => children as ReactElement,
+	});
 
 	const router = createRouter({
-		routeTree: rootRoute.addChildren([indexRoute]),
+		routeTree: rootRoute.addChildren([indexRoute, chordsRoute, scalesRoute, playRoute]),
 		defaultPreload: 'intent',
 	});
 

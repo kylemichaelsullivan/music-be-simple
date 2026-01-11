@@ -1,26 +1,122 @@
+// This setup file is preloaded by bunfig.toml for all bun tests
+// It should only run setup for Vitest tests, not Playwright E2E tests
+// We check for vitest availability before running setup
+
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 
+// Only run setup if we're in a jsdom environment (Vitest tests, not Playwright)
+if (typeof window !== 'undefined') {
+	// Mock localStorage
+	const localStorageMock = (() => {
+		let store: Record<string, string> = {};
+
+		return {
+			getItem: (key: string) => store[key] || null,
+			setItem: (key: string, value: string) => {
+				store[key] = value.toString();
+			},
+			removeItem: (key: string) => {
+				delete store[key];
+			},
+			clear: () => {
+				store = {};
+			},
+			key: (index: number) => {
+				const keys = Object.keys(store);
+				return keys[index] || null;
+			},
+			get length() {
+				return Object.keys(store).length;
+			},
+		};
+	})();
+
+	Object.defineProperty(window, 'localStorage', {
+		value: localStorageMock,
+		writable: true,
+	});
+
+	// Mock sessionStorage
+	const sessionStorageMock = (() => {
+		let store: Record<string, string> = {};
+
+		return {
+			getItem: (key: string) => store[key] || null,
+			setItem: (key: string, value: string) => {
+				store[key] = value.toString();
+			},
+			removeItem: (key: string) => {
+				delete store[key];
+			},
+			clear: () => {
+				store = {};
+			},
+			key: (index: number) => {
+				const keys = Object.keys(store);
+				return keys[index] || null;
+			},
+			get length() {
+				return Object.keys(store).length;
+			},
+		};
+	})();
+
+	Object.defineProperty(window, 'sessionStorage', {
+		value: sessionStorageMock,
+		writable: true,
+	});
+
+	// Mock window.matchMedia
+	Object.defineProperty(window, 'matchMedia', {
+		writable: true,
+		value: vi.fn().mockImplementation((query) => ({
+			matches: false,
+			media: query,
+			onchange: null,
+			addListener: vi.fn(),
+			removeListener: vi.fn(),
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			dispatchEvent: vi.fn(),
+		})),
+	});
+}
+
 // Cleanup after each test
 afterEach(() => {
 	cleanup();
+	if (typeof window !== 'undefined') {
+		if (window.localStorage) {
+			window.localStorage.clear();
+		}
+		if (window.sessionStorage) {
+			window.sessionStorage.clear();
+		}
+	}
 });
 
-// Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
-	writable: true,
-	value: vi.fn().mockImplementation((query) => ({
-		matches: false,
-		media: query,
-		onchange: null,
-		addListener: vi.fn(),
-		removeListener: vi.fn(),
-		addEventListener: vi.fn(),
-		removeEventListener: vi.fn(),
-		dispatchEvent: vi.fn(),
-	})),
-});
+// Mock performance API
+const mockPerformanceEntries: PerformanceEntry[] = [];
+global.performance = {
+	...global.performance,
+	getEntriesByType: vi.fn((type: string) => {
+		if (type === 'navigation') {
+			return [
+				{
+					type: 'navigate',
+					entryType: 'navigation',
+					name: '',
+					startTime: 0,
+					duration: 0,
+					toJSON: vi.fn(),
+				} as unknown as PerformanceNavigationTiming,
+			];
+		}
+		return mockPerformanceEntries;
+	}),
+} as unknown as Performance;
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
