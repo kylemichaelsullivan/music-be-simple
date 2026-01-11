@@ -1,0 +1,7 @@
+[test]
+# NOTE: Bun's built-in test runner is NOT recommended for this project.
+# Use `bun run test` instead, which runs Vitest (better compatibility with Testing Library).
+#
+# The preload script throws an error with helpful instructions when `bun test` is used.
+preload = ["./src/test/bun-test-error.ts"]
+root = "./src"
