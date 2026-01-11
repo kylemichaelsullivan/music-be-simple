@@ -17,4 +17,4 @@ function ModesHeading({ tonicNote }: ModesHeadingProps) {
 	);
 }
 
-export default ModesHeading;
+export { ModesHeading };

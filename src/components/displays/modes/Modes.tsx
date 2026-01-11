@@ -1,12 +1,11 @@
+import type { NoteIndex, ScaleMode } from '@/types';
+import { memo, useMemo } from 'react';
+import { Mode, ModesHeading } from './';
 import { useGlobals, useScales } from '@/hooks';
 import { ScaleModeSchema } from '@/schemas';
-import type { NoteIndex, ScaleMode } from '@/types';
 import { INTERVALS, SCALE_TYPES, getNote, isValidNoteIndex } from '@/utils';
-import { memo, useMemo } from 'react';
-import Mode from './Mode';
-import ModesHeading from './ModesHeading';
 
-function Modes() {
+function ModesComponent() {
 	const { usingFlats } = useGlobals();
 	const { tonic, variant, getRelativeMajor, getRelativeMinor } = useScales();
 
@@ -70,4 +69,4 @@ function Modes() {
 	);
 }
 
-export default memo(Modes);
+export const Modes = memo(ModesComponent);

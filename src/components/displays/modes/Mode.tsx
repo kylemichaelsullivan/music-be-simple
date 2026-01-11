@@ -41,4 +41,4 @@ const Mode = ({ mode, background, isCurrent, notes, relativeMajor, relativeMinor
 	);
 };
 
-export default Mode;
+export { Mode };
