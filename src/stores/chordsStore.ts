@@ -18,13 +18,16 @@ const STORE_NAME = 'chords-store';
 
 const clearStorageOnPageRefresh = (): void => {
 	try {
+		if (typeof performance === 'undefined' || typeof sessionStorage === 'undefined') {
+			return;
+		}
 		const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
 		const navType = navEntries[0]?.type;
 		if (navType === 'reload') {
 			sessionStorage.removeItem(STORE_NAME);
 		}
 	} catch {
-		// Performance API unavailable, continue normally
+		// Performance API or sessionStorage unavailable, continue normally
 	}
 };
 
@@ -33,6 +36,9 @@ clearStorageOnPageRefresh();
 const chordsStorage = {
 	getItem: (name: string): string | null => {
 		try {
+			if (typeof sessionStorage === 'undefined') {
+				return null;
+			}
 			const item = sessionStorage.getItem(name);
 			if (!item) return null;
 			const parsed = JSON.parse(item);
@@ -52,6 +58,9 @@ const chordsStorage = {
 	},
 	setItem: (name: string, value: string): void => {
 		try {
+			if (typeof sessionStorage === 'undefined') {
+				return;
+			}
 			const parsed = JSON.parse(value);
 			if (!parsed.state) return;
 
@@ -67,7 +76,13 @@ const chordsStorage = {
 		}
 	},
 	removeItem: (name: string): void => {
-		sessionStorage.removeItem(name);
+		try {
+			if (typeof sessionStorage !== 'undefined') {
+				sessionStorage.removeItem(name);
+			}
+		} catch {
+			// sessionStorage unavailable, continue normally
+		}
 	},
 };
 

@@ -10,39 +10,39 @@ type ReplaceSpaceWithDash<T extends string> = T extends `${infer Head} ${infer T
 // Basic types
 export type AccidentalType = '♭' | '♯';
 
+// Chord types
+export type Chord_NoteCount = number;
+export type Chord_Tonic = NoteIndex;
+export type Chord_UsingFlats = boolean;
+
+// Instrument & Icon types
+export type ActionIconName = 'add' | 'down' | 'pen' | 'save' | 'trash' | 'up';
+export type IconName = InstrumentType | 'Modes';
+export type IconSize = 'lg' | 'md' | 'sm' | 'xs';
+export type InstrumentType = (typeof INSTRUMENTS)[number];
+export type NerdModeButtonIcon = '🤓' | '💃🏾';
+export type NoteLabelsButtonIcon = '📖' | '📕';
+
 // Navigation types
 export type TabType = (typeof TABS)[number];
 export type tabType = Lowercase<ReplaceSpaceWithDash<(typeof TABS)[number]>>;
 
 // Position types
-export type XPositionType = 'left' | 'right';
-export type YPositionType = 'top' | 'bottom';
 export type PositionType = XPositionType | YPositionType;
-
-// Instrument & Icon types
-export type InstrumentType = (typeof INSTRUMENTS)[number];
-export type IconName = InstrumentType | 'Modes';
-export type IconSize = 'xs' | 'sm' | 'md' | 'lg';
-export type ActionIconName = 'add' | 'down' | 'save' | 'trash' | 'up';
-export type NerdModeButtonIcon = '🤓' | '💃🏾';
-export type NoteLabelsButtonIcon = '📖' | '📕';
-
-// Chord types
-export type Chord_UsingFlats = boolean;
-export type Chord_NoteCount = number;
-export type Chord_Tonic = NoteIndex;
+export type XPositionType = 'left' | 'right';
+export type YPositionType = 'bottom' | 'top';
 
 // Scale types
 export type NoteIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11; // representing semitones
-export type ScaleType = keyof typeof INTERVALS;
 export type ScaleMode =
-	| 'ionian'
+	| 'aeolian'
 	| 'dorian'
-	| 'phrygian'
+	| 'ionian'
+	| 'locrian'
 	| 'lydian'
 	| 'mixolydian'
-	| 'aeolian'
-	| 'locrian';
+	| 'phrygian';
+export type ScaleType = keyof typeof INTERVALS;
 
 // Re-export types from utils
 export type { Chord_Variant, ChordData, ChordGroup, ChordInfo, border } from '@/utils/chords';
@@ -51,5 +51,12 @@ export type { Notes_Flats, Notes_Sharps } from '@/utils/notes';
 // Re-export types from type files
 export type { ChordsContextType, ChordsContextProviderProps } from './chords';
 export type { GlobalsContextType, GlobalsContextProviderProps } from './globals';
-export type { PlayContextType, PlayContextProviderProps, SaveActionType } from './play';
+export type {
+	PlayContextType,
+	ChordBinItemData,
+	NotepadLineData,
+	PlayContextProviderProps,
+	ReferenceMode,
+	SaveActionType,
+} from './play';
 export type { ScalesContextType, ScalesContextProviderProps } from './scales';

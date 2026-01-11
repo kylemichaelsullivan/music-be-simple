@@ -1,23 +1,41 @@
+import type { Chord_Tonic, Chord_Variant, InstrumentType } from '@/types';
 import type { ReactNode } from 'react';
 
-export type PlayContextType = {
-	chordBinItems: number[];
-	notepadLines: number[];
-	addChordBinItem: () => void;
-	removeChordBinItem: (id: number) => void;
-	addNotepadLine: () => void;
-	removeNotepadLine: (id: number) => void;
-	importChordBin: (items: number[]) => void;
-	importNotepad: (lines: number[]) => void;
-	importAll: (data: { chordBin: number[]; notepad: number[] }) => void;
-	exportChordBin: () => void;
-	exportNotepad: () => void;
-	exportAll: () => void;
-	reset: () => void;
+export type ChordBinItemData = {
+	id: number;
+	tonic: Chord_Tonic;
+	variant: Chord_Variant;
+};
+
+export type NotepadLineData = {
+	content: string;
+	id: number;
 };
 
 export type PlayContextProviderProps = {
 	children: ReactNode;
 };
 
-export type SaveActionType = 'Import' | 'Export';
+export type PlayContextType = {
+	activeInstrument: InstrumentType | null;
+	addChordBinItem: () => void;
+	addNotepadLine: () => void;
+	chordBinItems: ChordBinItemData[];
+	exportAll: () => void;
+	exportChordBin: () => void;
+	exportNotepad: () => void;
+	importAll: (data: { chordBin: ChordBinItemData[]; notepad: NotepadLineData[] }) => void;
+	importChordBin: (items: ChordBinItemData[]) => void;
+	importNotepad: (lines: NotepadLineData[]) => void;
+	notepadLines: NotepadLineData[];
+	referenceMode: ReferenceMode;
+	removeChordBinItem: (id: number) => void;
+	removeNotepadLine: (id: number) => void;
+	reset: () => void;
+	setActiveInstrument: (instrument: InstrumentType | null) => void;
+	toggleReferenceMode: () => void;
+};
+
+export type ReferenceMode = 'Chords' | 'Scales';
+
+export type SaveActionType = 'Export' | 'Import';

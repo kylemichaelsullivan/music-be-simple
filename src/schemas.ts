@@ -1,5 +1,6 @@
 import { ICONS, INSTRUMENTS } from '@/instruments';
 import { TABS } from '@/navigation';
+import type { NoteIndex } from '@/types';
 import { CHORDS } from '@/utils/chords';
 import { SCALE_TYPES } from '@/utils/notes';
 import { z } from 'zod';
@@ -52,6 +53,8 @@ export const NerdModeButtonIconSchema = z.enum(['🤓', '💃🏾']);
 
 export const NoteLabelsButtonIconSchema = z.enum(['📖', '📕']);
 
+export const ReferenceModeSchema = z.enum(['Chords', 'Scales']);
+
 // Chord schemas
 export const ChordInfoSchema = z.object({
 	symbol: z.string(),
@@ -83,3 +86,20 @@ export const ChordsStorageSchema = z.object({
 	variant: ChordVariantSchema,
 	showNerdMode: z.boolean(),
 });
+
+export const ChordBinItemDataSchema = z.object({
+	id: z.number(),
+	tonic: z.custom<NoteIndex>((val) => {
+		return typeof val === 'number' && Number.isInteger(val) && val >= 0 && val <= 11;
+	}),
+	variant: ChordVariantSchema,
+});
+
+export const NotepadLineDataSchema = z.object({
+	id: z.number(),
+	content: z.string(),
+});
+
+export const ChordBinStorageSchema = z.array(ChordBinItemDataSchema);
+
+export const NotepadStorageSchema = z.array(NotepadLineDataSchema);
