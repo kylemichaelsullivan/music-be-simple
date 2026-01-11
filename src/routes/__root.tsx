@@ -1,11 +1,15 @@
+import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/nav';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 
-export default function RootComponent() {
+export function RootComponent() {
 	return (
-		<div className='flex flex-col min-h-screen'>
+		<div className='RootComponent flex flex-col min-h-screen'>
 			<Navbar />
-			<Outlet />
+			<div className='ScrollSnap flex flex-col scroll-snap-align-start'>
+				<Outlet />
+				<Footer />
+			</div>
 		</div>
 	);
 }
