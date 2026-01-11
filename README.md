@@ -57,14 +57,14 @@ bun dev
 - `bun run build` - Build for production
 - `bun lint` - Run Biome linter
 - `bun format` - Format code with Biome
-- `bun test` - Run unit and component tests in watch mode
-- `bun test:ui` - Run tests with Vitest UI
-- `bun test:run` - Run tests once (CI mode)
-- `bun test:coverage` - Run tests with coverage report
-- `bun test:e2e` - Run end-to-end tests with Playwright
-- `bun test:e2e:ui` - Run E2E tests with Playwright UI
-- `bun test:e2e:headed` - Run E2E tests in headed mode (visible browser)
-- `bun test:all` - Run both unit and E2E tests
+- `bun run test` - Run unit and component tests once (CI mode) (Vitest)
+- `bun run test:watch` - Run tests in watch mode (Vitest)
+- `bun run test:ui` - Run tests with Vitest UI
+- `bun run test:coverage` - Run tests with coverage report
+- `bun run test:e2e` - Run end-to-end tests with Playwright
+- `bun run test:e2e:ui` - Run E2E tests with Playwright UI
+- `bun run test:e2e:headed` - Run E2E tests in headed mode (visible browser)
+- `bun run test:all` - Run both unit and E2E tests
 
 ## Project Structure
 
@@ -114,14 +114,17 @@ See [TESTING.md](./TESTING.md) for detailed testing documentation.
 ### Quick Test Commands
 
 ```bash
-# Run unit and component tests
-bun test
+# Run unit and component tests once (CI mode)
+bun run test
+
+# Run tests in watch mode (development)
+bun run test:watch
 
 # Run E2E tests
-bun test:e2e
+bun run test:e2e
 
 # Run all tests
-bun test:all
+bun run test:all
 ```
 
 ## Development
