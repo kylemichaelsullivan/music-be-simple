@@ -1,11 +1,11 @@
 import { ChordsContextProvider } from '@/context';
-import ChordsIndex from '@/pages/Chords';
+import { Chords } from '@/pages/Chords';
 import { createFileRoute } from '@tanstack/react-router';
 
-export default function ChordsPage() {
+export function ChordsPage() {
 	return (
 		<ChordsContextProvider>
-			<ChordsIndex />
+			<Chords />
 		</ChordsContextProvider>
 	);
 }
