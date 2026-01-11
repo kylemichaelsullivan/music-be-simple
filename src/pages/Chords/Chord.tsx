@@ -1,8 +1,8 @@
-import Tonic from '@/components/Tonic';
-import Variant from '@/components/Variant';
+import { Tonic } from '@/components/Tonic';
+import { Variant } from '@/components/Variant';
 import { useChords } from '@/hooks';
 
-export default function Chord() {
+export function Chord() {
 	const { tonic, handleTonicChange } = useChords();
 
 	return (

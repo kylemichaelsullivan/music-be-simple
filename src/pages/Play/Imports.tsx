@@ -1,9 +1,9 @@
 import { usePlay } from '@/hooks';
 import type { SaveActionType } from '@/types';
 import { useRef } from 'react';
-import SaveSectionButtons from './SaveSectionButtons';
+import { SaveSectionButtons } from './';
 
-export default function Imports() {
+export function Imports() {
 	const { importChordBin, importNotepad, importAll } = usePlay();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const importTypeRef = useRef<'chordBin' | 'notepad' | 'all'>('all');

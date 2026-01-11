@@ -1,9 +1,8 @@
-import Exports from './Exports';
-import Imports from './Imports';
+import { Exports, Imports } from './';
 
-export default function SaveSectionContent() {
+export function SaveSectionContent() {
 	return (
-		<div className='SaveSectionContent flex flex-col gap-4 border w-full p-4 sm:flex-row sm:gap-6'>
+		<div className='SaveSectionContent flex flex-col gap-4 border shadow-xl w-full p-4 sm:flex-row sm:gap-6'>
 			<Imports />
 			<Exports />
 		</div>

@@ -1,7 +1,6 @@
 import { useChords } from '@/hooks';
 import { memo } from 'react';
-import ChordName from './ChordName';
-import ChordNotes from './ChordNotes';
+import { ChordName, ChordNotes } from './';
 
 const Notes = memo(function Notes() {
 	const { chordName, notes } = useChords();
@@ -14,4 +13,4 @@ const Notes = memo(function Notes() {
 	);
 });
 
-export default Notes;
+export { Notes };

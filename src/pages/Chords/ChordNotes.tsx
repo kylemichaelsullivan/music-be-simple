@@ -1,6 +1,6 @@
 import type { NoteIndex } from '@/types';
 import { memo } from 'react';
-import ChordNote from './ChordNote';
+import { ChordNote } from './';
 
 type ChordNotesProps = {
 	notes: NoteIndex[];
@@ -16,4 +16,4 @@ const ChordNotes = memo(function ChordNotes({ notes }: ChordNotesProps) {
 	);
 });
 
-export default ChordNotes;
+export { ChordNotes };

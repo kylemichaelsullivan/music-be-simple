@@ -1,12 +1,13 @@
-import RemoveButton from '@/components/buttons/RemoveButton';
+import { RemoveButton } from '@/components/buttons';
+import type { NotepadLineData } from '@/types';
 
 type NotepadLineProps = {
-	id: number;
+	line: NotepadLineData;
 	onRemove: () => void;
 };
 
-export default function NotepadLine({ onRemove, id }: NotepadLineProps) {
-	const ID = id.toString();
+export function NotepadLine({ onRemove, line }: NotepadLineProps) {
+	const ID = line.id.toString();
 
 	return (
 		<div
@@ -14,7 +15,7 @@ export default function NotepadLine({ onRemove, id }: NotepadLineProps) {
 			id={`notepad-line-${ID}`}
 		>
 			<RemoveButton title={`Remove Notepad Line ${ID}`} onFxn={onRemove} />
-			<span className='text-sm'>Notepad Line {ID}</span>
+			<span className='text-sm'>{line.content || `Notepad Line ${ID}`}</span>
 		</div>
 	);
 }

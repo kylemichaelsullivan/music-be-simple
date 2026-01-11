@@ -1,7 +1,7 @@
-import TransposeButton from '@/components/buttons/TransposeButton';
-import Scale from './Scale';
+import { TransposeButton } from '@/components/buttons';
+import { Scale } from './Scale';
 
-export default function Scales() {
+export function ScaleContainer() {
 	return (
 		<div className='ScaleContainer flex justify-between gap-2'>
 			<TransposeButton direction='down' />

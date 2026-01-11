@@ -1,8 +1,8 @@
-import ToggleSaveSectionButton from '@/components/buttons/ToggleSaveSectionButton';
+import { ToggleSaveSectionButton } from '@/components/buttons';
 import { useState } from 'react';
-import SaveSectionContent from './SaveSectionContent';
+import { SaveSectionContent } from './';
 
-export default function SaveSection() {
+export function SaveSection() {
 	const [isSaveSectionOpen, setIsSaveSectionOpen] = useState(false);
 
 	const toggleSaveSection = () => {
@@ -10,7 +10,7 @@ export default function SaveSection() {
 	};
 
 	return (
-		<div className='SaveSection flex flex-col gap-4 items-center w-full p-4'>
+		<div className='SaveSection flex flex-col gap-4 items-center w-full'>
 			<ToggleSaveSectionButton isOpen={isSaveSectionOpen} onFxn={toggleSaveSection} />
 
 			{isSaveSectionOpen && <SaveSectionContent />}

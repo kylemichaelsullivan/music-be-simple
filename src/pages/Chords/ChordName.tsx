@@ -13,21 +13,21 @@ const ChordName = memo(function ChordName({ chordName }: ChordNameProps) {
 				const key = `chord-name-part-${part}-${index}`;
 				if (part === '♭') {
 					return (
-						<span key={key} className='hasFlat'>
+						<span className='hasFlat' key={key}>
 							{part}
 						</span>
 					);
 				}
 				if (part === '♯') {
 					return (
-						<span key={key} className='hasSharp'>
+						<span className='hasSharp' key={key}>
 							{part}
 						</span>
 					);
 				}
 				if (/^\d+$/.test(part)) {
 					return (
-						<span key={key} className='number'>
+						<span className='number' key={key}>
 							{part}
 						</span>
 					);
@@ -38,4 +38,4 @@ const ChordName = memo(function ChordName({ chordName }: ChordNameProps) {
 	);
 });
 
-export default ChordName;
+export { ChordName };

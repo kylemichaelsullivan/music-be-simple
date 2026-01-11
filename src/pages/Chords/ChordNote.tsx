@@ -30,4 +30,4 @@ const ChordNote = memo(function ChordNote({ note }: ChordNoteProps) {
 	);
 });
 
-export default ChordNote;
+export { ChordNote };

@@ -4,7 +4,7 @@ import { INTERVALS, getNote, rangeOfLength } from '@/utils';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-export default function Notes() {
+export function Notes() {
 	const { usingFlats } = useGlobals();
 	const { variant, notes } = useScales();
 
@@ -47,8 +47,8 @@ export default function Notes() {
 					const hasSharp = noteText.includes('♯');
 					return (
 						<div
-							key={`note-${note}`}
 							className={clsx(hasFlat && 'hasFlat', hasSharp && 'hasSharp')}
+							key={`note-${note}`}
 						>
 							{noteText}
 						</div>

@@ -1,8 +1,8 @@
 import { usePlay } from '@/hooks';
 import type { SaveActionType } from '@/types';
-import SaveSectionButtons from './SaveSectionButtons';
+import { SaveSectionButtons } from './';
 
-export default function Exports() {
+export function Exports() {
 	const { exportChordBin, exportNotepad, exportAll } = usePlay();
 
 	const saves = {

@@ -1,8 +1,8 @@
-import Tonic from '@/components/Tonic';
-import Variant from '@/components/Variant';
+import { Tonic } from '@/components/Tonic';
+import { Variant } from '@/components/Variant';
 import { useScales } from '@/hooks';
 
-export default function Scale() {
+export function Scale() {
 	const { tonic, handleTonicChange } = useScales();
 
 	return (

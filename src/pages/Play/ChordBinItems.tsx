@@ -1,25 +1,14 @@
-import AddChordBinItem from '@/pages/Play/AddChordBinItem';
-import ChordBinItem from '@/pages/Play/ChordBinItem';
-import { useState } from 'react';
+import { usePlay } from '@/hooks';
+import { ChordBinItem } from './';
 
-export default function ChordBinItems() {
-	const [items, setItems] = useState<number[]>([]);
-
-	const handleAddItem = () => {
-		setItems((prev) => [...prev, Date.now()]);
-	};
-
-	const handleRemoveItem = (id: number) => {
-		setItems((prev) => prev.filter((itemId) => itemId !== id));
-	};
+export function ChordBinItems() {
+	const { chordBinItems, removeChordBinItem } = usePlay();
 
 	return (
-		<div className='ChordBinItems grid grid-cols-3 gap-4 justify-items-center'>
-			{items.map((id) => (
-				<ChordBinItem onRemove={() => handleRemoveItem(id)} id={id} key={id} />
+		<div className='ChordBinItems grid gap-4'>
+			{chordBinItems.map((item) => (
+				<ChordBinItem item={item} onRemove={() => removeChordBinItem(item.id)} key={item.id} />
 			))}
-
-			<AddChordBinItem onAdd={handleAddItem} />
 		</div>
 	);
 }

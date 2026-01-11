@@ -1,10 +1,10 @@
-import AddButton from '@/components/buttons/AddButton';
+import { AddButton } from '@/components/buttons';
 
 type AddNotepadLineProps = {
 	onAdd: () => void;
 };
 
-export default function AddNotepadLine({ onAdd }: AddNotepadLineProps) {
+export function AddNotepadLine({ onAdd }: AddNotepadLineProps) {
 	return (
 		<div className='AddNotepadLine col-span-full flex justify-center'>
 			<AddButton title='Add Line to Notepad' onFxn={onAdd} />
