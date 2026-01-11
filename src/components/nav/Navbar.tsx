@@ -1,6 +1,6 @@
-import { NavTab } from '@/components/nav';
 import { TABS } from '@/navigation';
 import type { TabType } from '@/types';
+import { NavTab } from './';
 
 export function Navbar() {
 	const tabToRoute = (tab: TabType) => {

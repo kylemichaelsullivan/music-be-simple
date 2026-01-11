@@ -10,12 +10,7 @@ type AllowedNoteProps = {
 	isPiano?: boolean;
 };
 
-export default function AllowedNote({
-	note,
-	isTonic,
-	borderStyle,
-	isPiano = false,
-}: AllowedNoteProps) {
+export function AllowedNote({ note, isTonic, borderStyle, isPiano = false }: AllowedNoteProps) {
 	const { showNoteLabels = true } = useInstrumentNotes();
 	const bgColor = isTonic ? 'bg-green-800' : 'bg-green-600';
 	const fontSize = isTonic ? 'text-xxs' : 'text-xxxs';

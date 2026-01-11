@@ -10,7 +10,7 @@ type TonicProps = {
 	handleTonicChange: (value: NoteIndex) => void;
 };
 
-export default function Tonic({ tonic, handleTonicChange }: TonicProps) {
+export function Tonic({ tonic, handleTonicChange }: TonicProps) {
 	const { usingFlats } = useGlobals();
 
 	const note = getNote(tonic, usingFlats);
@@ -34,6 +34,7 @@ export default function Tonic({ tonic, handleTonicChange }: TonicProps) {
 			)}
 			value={tonic}
 			name='Tonic Select'
+			aria-label='Tonic Select'
 			onChange={handleChange}
 		>
 			{rangeOfLength(12).map((index) => {

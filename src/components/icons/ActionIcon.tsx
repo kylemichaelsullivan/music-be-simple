@@ -1,6 +1,7 @@
 import type { ActionIconName, IconSize } from '@/types';
 import addIcon from '/icons/add.svg';
 import downIcon from '/icons/down.svg';
+import penIcon from '/icons/pen.svg';
 import saveIcon from '/icons/save.svg';
 import trashIcon from '/icons/trash.svg';
 import upIcon from '/icons/up.svg';
@@ -9,6 +10,7 @@ import { Icon } from './Icon';
 const actionIconMap: Record<ActionIconName, string> = {
 	add: addIcon,
 	down: downIcon,
+	pen: penIcon,
 	save: saveIcon,
 	trash: trashIcon,
 	up: upIcon,
@@ -17,6 +19,7 @@ const actionIconMap: Record<ActionIconName, string> = {
 const altTextMap: Record<ActionIconName, string> = {
 	add: 'Add',
 	down: 'Down',
+	pen: 'Edit',
 	save: 'Save',
 	trash: 'Remove',
 	up: 'Up',
