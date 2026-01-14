@@ -24,3 +24,4 @@ _https://thenounproject.com/icon/_
 - scales.svg (musical-beam-note-921153/)
 - trash.svg (trash-8128904/)
 - up.svg (up-7929044/)
+- x.svg (x-327680/)
