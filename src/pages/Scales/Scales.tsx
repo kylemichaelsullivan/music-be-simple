@@ -1,4 +1,5 @@
 import { Main } from '@/components/Main';
+import { SkipLink } from '@/components/SkipLink';
 import { Title } from '@/components/Title';
 import { TopButton, UseFlatsButton } from '@/components/buttons';
 import { Displays, DisplaysSelector } from '@/components/displays';
@@ -13,31 +14,34 @@ export function Scales() {
 		notes,
 		tonic,
 		showNoteLabels,
-		toggleNoteLabels,
-		noteLabelsButtonTitle,
 		noteLabelsButtonIcon,
+		noteLabelsButtonTitle,
+		toggleNoteLabels,
 	} = useScales();
 
 	return (
 		<Main componentName={title}>
 			<Title title={title} />
 			<TopButton
-				title={noteLabelsButtonTitle}
 				icon={noteLabelsButtonIcon}
+				title={noteLabelsButtonTitle}
 				position='left'
 				onFxn={toggleNoteLabels}
 			/>
 			<UseFlatsButton />
 
+			<SkipLink text='Skip tonic/variant' targetSelector='.DisplaysSelector' />
 			<ScaleContainer />
 			<Notes />
 
+			<SkipLink text='Skip displays selector' targetSelector='.Displays' />
 			<DisplaysSelector
-				onFxn={(icon: IconType) => handleDisplaysClick(icon)}
 				displays={displays}
 				hasModes
+				onFxn={(icon: IconType) => handleDisplaysClick(icon)}
 			/>
-			<Displays hasModes notes={notes} tonic={tonic} showNoteLabels={showNoteLabels} />
+
+			<Displays hasModes notes={notes} showNoteLabels={showNoteLabels} tonic={tonic} />
 		</Main>
 	);
 }

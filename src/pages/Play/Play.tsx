@@ -1,5 +1,8 @@
 import { Main } from '@/components/Main';
+import { SkipLink } from '@/components/SkipLink';
 import { Title } from '@/components/Title';
+import { Tonic } from '@/components/Tonic';
+import { Variant } from '@/components/Variant';
 import { TopButton, UseFlatsButton } from '@/components/buttons';
 import { Displays, DisplaysSelector } from '@/components/displays';
 import { NavIcon } from '@/components/icons';
@@ -24,20 +27,30 @@ export function Play() {
 			<Title title={title} />
 			<TopButton
 				icon={<NavIcon name={referenceMode} size='sm' />}
-				position='left'
 				title={referenceModeButtonTitle}
+				position='left'
 				onFxn={toggleReferenceMode}
 			/>
 			<UseFlatsButton />
 
+			<SkipLink text='Skip tonic/variant' targetSelector='.DisplaysSelector' />
+			<div
+				className={`${isScalesMode ? 'Scale' : 'Chord'} flex justify-center ${isScalesMode ? '' : 'align-center'} gap-1 w-full ${isScalesMode ? '' : 'mx-auto'}`}
+			>
+				<Tonic tonic={data.tonic} handleTonicChange={data.handleTonicChange} />
+				<Variant type={isScalesMode ? 'scale' : 'chord'} />
+			</div>
+
+			<SkipLink text='Skip displays selector' targetSelector='.Displays' />
 			<DisplaysSelector onFxn={handleDisplaysClick} displays={displays} hasModes={isScalesMode} />
+
 			<Displays
-				hasModes={isScalesMode}
 				notes={data.notes}
 				tonic={data.tonic}
-				showNoteLabels={isScalesMode ? scalesData.showNoteLabels : undefined}
 				getBorderStyle={isScalesMode ? undefined : chordsData.getBorderStyle}
 				showNerdMode={isScalesMode ? undefined : chordsData.showNerdMode}
+				showNoteLabels={isScalesMode ? scalesData.showNoteLabels : undefined}
+				hasModes={isScalesMode}
 			/>
 
 			<hr className='border-b border-black py-px' />

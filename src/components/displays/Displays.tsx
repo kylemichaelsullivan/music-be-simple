@@ -1,17 +1,19 @@
+import { SkipLink } from '@/components/SkipLink';
 import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { InstrumentType, NoteIndex, border } from '@/types';
+import { useLocation } from '@tanstack/react-router';
 import type { ReactElement } from 'react';
 import { Banjo, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from './';
 
 type DisplaysProps = {
-	hasModes?: boolean;
 	notes: NoteIndex[];
 	tonic: NoteIndex;
-	showNoteLabels?: boolean;
 	getBorderStyle?: (note: NoteIndex) => border;
+	hasModes?: boolean;
 	showNerdMode?: boolean;
+	showNoteLabels?: boolean;
 };
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
@@ -23,14 +25,16 @@ const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
 };
 
 export function Displays({
-	hasModes = false,
 	notes,
 	tonic,
-	showNoteLabels = true,
 	getBorderStyle,
+	hasModes = false,
 	showNerdMode,
+	showNoteLabels = true,
 }: DisplaysProps) {
 	const { displays } = useGlobals();
+	const location = useLocation();
+	const isPlayPage = location.pathname === '/play';
 
 	const orderedDisplays = INSTRUMENT_ORDER.filter((instrument) => {
 		const iconType = ICON_MAP[instrument];
@@ -41,18 +45,31 @@ export function Displays({
 
 	return (
 		<InstrumentNotesProvider
-			notes={notes}
-			tonic={tonic}
-			showNoteLabels={showNoteLabels}
 			getBorderStyle={getBorderStyle}
+			notes={notes}
 			showNerdMode={showNerdMode}
+			showNoteLabels={showNoteLabels}
+			tonic={tonic}
 		>
 			<div className='Displays flex flex-col gap-8 w-full max-w-screen-2xl mx-auto'>
-				{orderedDisplays.map((display) => (
-					<Instrument instrument={display} key={display}>
-						{INSTRUMENTS[display]()}
-					</Instrument>
-				))}
+				{orderedDisplays.map((display, index) => {
+					const nextDisplay = orderedDisplays[index + 1];
+					const isLastInstrument = !nextDisplay;
+
+					let skipTarget: string | null = null;
+					if (nextDisplay) {
+						skipTarget = `.${nextDisplay}`;
+					} else if (isLastInstrument && isPlayPage) {
+						skipTarget = '.ChordBin .InstrumentSelector';
+					}
+
+					return (
+						<Instrument instrument={display} key={display}>
+							{skipTarget && <SkipLink text={`Skip ${display}`} targetSelector={skipTarget} />}
+							{INSTRUMENTS[display]()}
+						</Instrument>
+					);
+				})}
 
 				{showModes && <Modes />}
 			</div>

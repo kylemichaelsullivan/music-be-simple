@@ -1,4 +1,5 @@
 import { Main } from '@/components/Main';
+import { SkipLink } from '@/components/SkipLink';
 import { Title } from '@/components/Title';
 import { TopButton, UseFlatsButton } from '@/components/buttons';
 import { Displays, DisplaysSelector } from '@/components/displays';
@@ -12,30 +13,33 @@ export function Chords() {
 		notes,
 		tonic,
 		getBorderStyle,
+		nerdModeButtonIcon,
+		nerdModeButtonTitle,
 		showNerdMode,
 		toggleNerdMode,
-		nerdModeButtonTitle,
-		nerdModeButtonIcon,
 	} = useChords();
 
 	return (
 		<Main componentName={title}>
 			<Title title={title} />
 			<TopButton
-				title={nerdModeButtonTitle}
 				icon={nerdModeButtonIcon}
+				title={nerdModeButtonTitle}
 				position='left'
 				onFxn={toggleNerdMode}
 			/>
 			<UseFlatsButton />
 
+			<SkipLink text='Skip tonic/variant' targetSelector='.DisplaysSelector' />
 			<Chord />
 			<Notes />
 
-			<DisplaysSelector onFxn={handleDisplaysClick} displays={displays} />
+			<SkipLink text='Skip displays selector' targetSelector='.Displays' />
+			<DisplaysSelector displays={displays} onFxn={handleDisplaysClick} />
+
 			<Displays
-				notes={notes}
 				tonic={tonic}
+				notes={notes}
 				getBorderStyle={getBorderStyle}
 				showNerdMode={showNerdMode}
 			/>
