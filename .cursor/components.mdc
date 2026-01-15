@@ -298,9 +298,9 @@ export const ComponentName = memo(ComponentName);
 
 All page components follow a similar pattern:
 
-- **Chords** (`@/pages/Chords`) - Chords page for chord-related functionality (default export)
-- **Play** (`@/pages/Play`) - Play page for music playback functionality (default export)
-- **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (default export)
+- **Chords** (`@/pages/Chords`) - Chords page for chord-related functionality (named export)
+- **Play** (`@/pages/Play`) - Play page for music playback functionality (named export)
+- **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (named export)
 
 ## State Management
 

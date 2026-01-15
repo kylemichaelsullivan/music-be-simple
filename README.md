@@ -109,7 +109,7 @@ The project uses a comprehensive testing setup with multiple testing strategies:
 - **E2E Tests**: Playwright for end-to-end user flow testing
 - **Coverage**: Vitest Coverage (v8) for code coverage reports
 
-See [TESTING.md](./TESTING.md) for detailed testing documentation.
+See [TESTING.md](./documentation/TESTING.md) for detailed testing documentation.
 
 ### Quick Test Commands
 
@@ -142,7 +142,7 @@ When contributing to this project, please follow the commit message format outli
 - [COMPONENTS.md](./documentation/COMPONENTS.md) - Component documentation
 - [CONTEXT.md](./documentation/CONTEXT.md) - Context API and state management
 - [GIT_COMMITS.md](./documentation/GIT_COMMITS.md) - Commit message guidelines
-- [TESTING.md](./TESTING.md) - Testing guide and best practices
+- [TESTING.md](./documentation/TESTING.md) - Testing guide and best practices
 
 ## License
 

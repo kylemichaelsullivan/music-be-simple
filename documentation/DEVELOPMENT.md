@@ -103,8 +103,9 @@ const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
 
 - Use **React 19** features and patterns
 - Prefer function components with hooks
-- Use TypeScript for component props
+- Use TypeScript for component props (prefer `type` over `interface`)
 - Follow component naming conventions (PascalCase)
+- Use named exports only (NO default exports)
 
 ### Component Structure
 
@@ -112,11 +113,11 @@ const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
 // Component file structure
 import { ... } from '@/...';
 
-interface ComponentProps {
+type ComponentProps = {
   // Props definition
-}
+};
 
-export default function Component({ prop1, prop2 }: ComponentProps) {
+export function Component({ prop1, prop2 }: ComponentProps) {
   // Component logic
   return (
     // JSX

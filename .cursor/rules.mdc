@@ -308,11 +308,11 @@ export { useScaleState } from './shared/useScaleState';
 ### File Structure
 
 ```tsx
-// Standard component file structure (default export pattern)
+// Standard component file structure (named export pattern)
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 
-import Main from '@/components/Main';
+import { Main } from '@/components/Main';
 import { useScales } from '@/hooks/useScales';
 
 // Named export pattern (required)
@@ -339,7 +339,7 @@ type ComponentProps = {
 	children?: ReactNode;
 };
 
-export default function ComponentName({
+export function ComponentName({
 	title,
 	variant = 'primary',
 	children,
@@ -381,7 +381,7 @@ export default function ComponentName({
 
 - **TypeScript**: Avoid using `any` type, prefer proper typing
 - **Type assertions**: Avoid type assertions (`as Type`) except for `as const`. Use type guards and proper type narrowing instead
-- **Default exports**: Use default exports for components (e.g., `export default function ComponentName`)
+- **Named exports only**: Use named exports for components (e.g., `export function ComponentName`) - NO default exports
 - **Path aliases**: Use `@/` alias for imports (configured in tsconfig.json)
 - **State management**: Use React Context API with custom hooks for global state, `useState` for local component state
 - **Router integration**: Components should work seamlessly with TanStack Router
@@ -523,7 +523,7 @@ function Component() {
 ```tsx
 // Route file wraps page with context provider
 import { ScalesContextProvider } from '@/context';
-import Scales from '@/pages/Scales';
+import { Scales } from '@/pages/Scales';
 
 function ScalesPage() {
 	return (

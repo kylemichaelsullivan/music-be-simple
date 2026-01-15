@@ -31,7 +31,7 @@ Button for transposing scales up or down by a fifth.
 **Location**: `@/components/buttons/TransposeButton`
 
 **Props**:
-- `direction` - 'up' | 'down'
+- `direction` - `YDirectionType` ('up' | 'down')
 - `onClick` - Transpose handler
 
 ### UseFlatsButton

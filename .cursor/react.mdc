@@ -90,9 +90,9 @@ export const TopButton = memo(TopButtonComponent);
 // ✅ useCallback for event handlers
 import { useCallback, useState } from 'react';
 
-import Main from '@/components/Main';
+import { Main } from '@/components/Main';
 
-export default function Chords() {
+export function Chords() {
   const [localState, setLocalState] = useState('');
 
   const handleAction = useCallback(() => {
@@ -299,11 +299,11 @@ const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 
 ```typescript
 // ✅ Use context hooks (recommended - provides computed values)
-import Main from '@/components/Main';
+import { Main } from '@/components/Main';
 import { useScales } from '@/hooks/useScales';
 import { useGlobals } from '@/hooks/useGlobals';
 
-export default function Scales() {
+export function Scales() {
   const { tonic, variant, notes, handleTonicChange } = useScales();
   const { displays, usingFlats } = useGlobals();
   
@@ -317,7 +317,7 @@ export default function Scales() {
 // ✅ Use store hooks directly (if you only need tonic/variant)
 import { useScalesStore } from '@/stores/scalesStore';
 
-export default function MyComponent() {
+export function MyComponent() {
   const { tonic, variant, setTonic, setVariant } = useScalesStore();
   
   return (
@@ -333,7 +333,7 @@ export default function MyComponent() {
 ```typescript
 // ✅ Route file wraps page with context provider
 import { ScalesContextProvider } from '@/context';
-import Scales from '@/pages/Scales';
+import { Scales } from '@/pages/Scales';
 import { createFileRoute } from '@tanstack/react-router';
 
 function ScalesPage() {
