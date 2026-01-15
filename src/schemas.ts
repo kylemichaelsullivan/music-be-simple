@@ -68,6 +68,22 @@ export const ChordDataSchema = z.object({
 
 export const ChordGroupSchema = z.record(z.string(), ChordDataSchema);
 
+// NoteIndex schema that properly infers NoteIndex union type (for use with useLocalStorage and storage schemas)
+export const NoteIndexZodSchema = z.union([
+	z.literal(0),
+	z.literal(1),
+	z.literal(2),
+	z.literal(3),
+	z.literal(4),
+	z.literal(5),
+	z.literal(6),
+	z.literal(7),
+	z.literal(8),
+	z.literal(9),
+	z.literal(10),
+	z.literal(11),
+]);
+
 // localStorage schemas
 export const GlobalsStorageSchema = z.object({
 	usingFlats: z.boolean(),
@@ -75,20 +91,20 @@ export const GlobalsStorageSchema = z.object({
 });
 
 export const ScalesStorageSchema = z.object({
-	tonic: NoteIndexSchema,
+	tonic: NoteIndexZodSchema,
 	variant: ScaleTypeSchema,
 	showNoteLabels: z.boolean(),
 });
 
 export const ChordsStorageSchema = z.object({
-	tonic: NoteIndexSchema,
+	tonic: NoteIndexZodSchema,
 	variant: ChordVariantSchema,
 	showNerdMode: z.boolean(),
 });
 
 export const ChordBinItemDataSchema = z.object({
 	id: z.number(),
-	tonic: NoteIndexSchema,
+	tonic: NoteIndexZodSchema,
 	variant: ChordVariantSchema,
 });
 
