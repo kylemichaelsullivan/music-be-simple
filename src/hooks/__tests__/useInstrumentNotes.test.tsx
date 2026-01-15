@@ -56,4 +56,28 @@ describe('useInstrumentNotes', () => {
 
 		expect(result.current.getBorderStyle).toBe(mockGetBorderStyle);
 	});
+
+	it('should return showNerdMode when provided', () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<InstrumentNotesProvider notes={[0, 2, 4]} tonic={0} showNerdMode={true}>
+				{children}
+			</InstrumentNotesProvider>
+		);
+
+		const { result } = renderHook(() => useInstrumentNotes(), { wrapper });
+
+		expect(result.current.showNerdMode).toBe(true);
+	});
+
+	it('should return showNerdMode as undefined when not provided', () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<InstrumentNotesProvider notes={[0, 2, 4]} tonic={0}>
+				{children}
+			</InstrumentNotesProvider>
+		);
+
+		const { result } = renderHook(() => useInstrumentNotes(), { wrapper });
+
+		expect(result.current.showNerdMode).toBeUndefined();
+	});
 });

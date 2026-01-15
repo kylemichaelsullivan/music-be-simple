@@ -59,8 +59,8 @@ describe('IconButton', () => {
 
 		const button = screen.getByTitle('Test Button');
 		expect(button).toHaveClass('grayscale');
-		expect(button).toHaveClass('opacity-100');
-		expect(button).toHaveClass('hover:opacity-65');
+		expect(button).toHaveClass('opacity-65');
+		expect(button).toHaveClass('hover:opacity-100');
 	});
 
 	it('should call onFxn when clicked', async () => {

@@ -35,7 +35,8 @@ describe('DisplaySelector', () => {
 		render(<DisplaySelector icon='Guitar' text='Guitar' isActive={true} onFxn={mockOnFxn} />);
 
 		const button = screen.getByTitle('Guitar');
-		expect(button).toHaveClass('opacity-100');
+		expect(button).toHaveClass('opacity-65');
+		expect(button).toHaveClass('hover:opacity-100');
 		expect(button).not.toHaveClass('opacity-30');
 	});
 

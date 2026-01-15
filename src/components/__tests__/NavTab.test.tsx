@@ -47,8 +47,9 @@ describe('NavTab', () => {
 	it('should scroll to main element on click', async () => {
 		const user = userEvent.setup();
 
-		// Create a main element in the document
+		// Create a main element with the correct class name matching the title
 		const mainElement = document.createElement('main');
+		mainElement.className = 'Chords';
 		document.body.appendChild(mainElement);
 
 		render(<NavTab title='Chords' to='/chords' />);

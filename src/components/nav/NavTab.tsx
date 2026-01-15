@@ -10,8 +10,10 @@ type NavTabProps = {
 export function NavTab({ title, to }: NavTabProps) {
 	const handleClick = () => {
 		const main = document.querySelector(`main.${title}`) as HTMLElement;
-		main.scrollIntoView({ behavior: 'smooth', block: 'start' });
-		main.focus();
+		if (main) {
+			main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			main.focus();
+		}
 	};
 
 	return (
