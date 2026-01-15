@@ -15,7 +15,7 @@ export function IconButton({ title, onFxn, className, children }: IconButtonProp
 	return (
 		<button
 			type='button'
-			className={clsx(className, 'grayscale transition-all opacity-100 hover:opacity-65')}
+			className={clsx(className, 'grayscale transition-all opacity-65 hover:opacity-100')}
 			title={title}
 			aria-label={title}
 			onClick={handleClick}

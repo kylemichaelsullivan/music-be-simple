@@ -14,7 +14,7 @@ export function SaveSectionButton({ label, action, onFxn }: SaveSectionButtonPro
 	return (
 		<button
 			type='button'
-			className='SaveSectionButton border p-2 hover:ring-1 transition-colors'
+			className='SaveSectionButton bg-slate-500 border text-white p-2 transition-colors hover:bg-slate-400 hover:ring-1'
 			title={title}
 			onClick={handleClick}
 			onKeyDown={handleKeyDown}

@@ -1,9 +1,10 @@
 import { ActionIcon } from '@/components/icons';
 import { useButtonHandler, useScales } from '@/hooks';
+import type { YDirectionType } from '@/types';
 import { isValidNoteIndex } from '@/utils';
 
 type TransposeButtonProps = {
-	direction: 'up' | 'down';
+	direction: YDirectionType;
 };
 
 export function TransposeButton({ direction }: TransposeButtonProps) {
