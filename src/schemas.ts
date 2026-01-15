@@ -1,6 +1,5 @@
 import { ICONS, INSTRUMENTS } from '@/instruments';
 import { TABS } from '@/navigation';
-import type { NoteIndex } from '@/types';
 import { CHORDS } from '@/utils/chords';
 import { SCALE_TYPES } from '@/utils/notes';
 import { z } from 'zod';
@@ -89,9 +88,7 @@ export const ChordsStorageSchema = z.object({
 
 export const ChordBinItemDataSchema = z.object({
 	id: z.number(),
-	tonic: z.custom<NoteIndex>((val) => {
-		return typeof val === 'number' && Number.isInteger(val) && val >= 0 && val <= 11;
-	}),
+	tonic: NoteIndexSchema,
 	variant: ChordVariantSchema,
 });
 
