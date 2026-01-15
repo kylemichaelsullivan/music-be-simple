@@ -77,11 +77,11 @@ export function Imports() {
 		<div className='Imports flex flex-col flex-1 gap-4'>
 			<h3 className='text-xl font-semibold text-center'>Import</h3>
 			<input
-				ref={fileInputRef}
 				type='file'
+				className='hidden'
 				accept='application/json,.json'
 				onChange={handleFileChange}
-				className='hidden'
+				ref={fileInputRef}
 			/>
 			<SaveSectionButtons actions={actions} action={action} />
 		</div>

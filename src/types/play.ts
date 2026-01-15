@@ -32,6 +32,8 @@ export type PlayContextType = {
 	referenceMode: ReferenceMode;
 	removeChordBinItem: (id: number) => void;
 	removeNotepadLine: (id: number) => void;
+	reorderChordBinItems: (fromIndex: number, toIndex: number) => void;
+	reorderNotepadLines: (fromIndex: number, toIndex: number) => void;
 	reset: () => void;
 	setActiveInstrument: (instrument: InstrumentType | null) => void;
 	setEditingItemId: (id: number | null) => void;

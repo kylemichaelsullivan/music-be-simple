@@ -73,6 +73,18 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		[setChordBinItems]
 	);
 
+	const reorderChordBinItems = useCallback(
+		(fromIndex: number, toIndex: number) => {
+			setChordBinItems((prev) => {
+				const newItems = [...prev];
+				const [movedItem] = newItems.splice(fromIndex, 1);
+				newItems.splice(toIndex, 0, movedItem);
+				return newItems;
+			});
+		},
+		[setChordBinItems]
+	);
+
 	// Notepad operations
 	const addNotepadLine = useCallback(() => {
 		setNotepadLines((prev) => [...prev, { id: Date.now(), content: '' }]);
@@ -88,6 +100,18 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	const updateNotepadLine = useCallback(
 		(id: number, content: string) => {
 			setNotepadLines((prev) => prev.map((line) => (line.id === id ? { ...line, content } : line)));
+		},
+		[setNotepadLines]
+	);
+
+	const reorderNotepadLines = useCallback(
+		(fromIndex: number, toIndex: number) => {
+			setNotepadLines((prev) => {
+				const newLines = [...prev];
+				const [movedLine] = newLines.splice(fromIndex, 1);
+				newLines.splice(toIndex, 0, movedLine);
+				return newLines;
+			});
 		},
 		[setNotepadLines]
 	);
@@ -183,6 +207,8 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			referenceMode,
 			removeChordBinItem,
 			removeNotepadLine,
+			reorderChordBinItems,
+			reorderNotepadLines,
 			reset,
 			setActiveInstrument,
 			setEditingItemId,
@@ -206,6 +232,8 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			referenceMode,
 			removeChordBinItem,
 			removeNotepadLine,
+			reorderChordBinItems,
+			reorderNotepadLines,
 			reset,
 			setActiveInstrument,
 			toggleReferenceMode,
