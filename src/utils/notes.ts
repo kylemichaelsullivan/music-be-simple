@@ -42,7 +42,6 @@ export function getIntervalsForVariant(variant: IntervalKey) {
 	if (isIntervalKey(variant)) {
 		return INTERVALS[variant];
 	}
-	// Default to major if variant is not found
 	return INTERVALS.major;
 }
 

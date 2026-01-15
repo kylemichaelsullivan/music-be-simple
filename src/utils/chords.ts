@@ -1,3 +1,5 @@
+import { FLATS, SHARPS } from './notes';
+
 export type ChordInfo = {
 	symbol: string;
 	display: string;
@@ -631,36 +633,6 @@ export const CHORDS: Record<string, ChordGroup> = {
 			],
 			symbols: ['m7♭9', '–7♭9'],
 		},
-		'dominant-7-sharp-9': {
-			display: 'Dominant 7 Sharp 9',
-			intervals: [
-				[2, '3', 'solid'],
-				[1.5, '5', 'dotted'],
-				[1.5, '♭7', 'solid'],
-				[2.5, '♯9', 'double'],
-			],
-			symbols: ['7♯9', '7♯9'],
-		},
-		'dominant-7-flat-9': {
-			display: 'Dominant 7 Flat 9',
-			intervals: [
-				[2, '3', 'solid'],
-				[1.5, '5', 'dotted'],
-				[1.5, '♭7', 'solid'],
-				[1.5, '♭9', 'double'],
-			],
-			symbols: ['7♭9', '7♭9'],
-		},
-		'dominant-7-sharp-11': {
-			display: 'Dominant 7 Sharp 11',
-			intervals: [
-				[2, '3', 'solid'],
-				[1.5, '5', 'dotted'],
-				[1.5, '♭7', 'solid'],
-				[4, '♯11', 'double'],
-			],
-			symbols: ['7♯11', '7♯11'],
-		},
 		'dominant-7-flat-11': {
 			display: 'Dominant 7 Flat 11',
 			intervals: [
@@ -720,16 +692,6 @@ export const CHORDS: Record<string, ChordGroup> = {
 				[3.5, '♯13', 'double'],
 			],
 			symbols: ['7♯13', '7♯13'],
-		},
-		'dominant-7-flat-13': {
-			display: 'Dominant 7 Flat 13',
-			intervals: [
-				[2, '3', 'solid'],
-				[1.5, '5', 'dotted'],
-				[1.5, '♭7', 'solid'],
-				[5, '♭13', 'double'],
-			],
-			symbols: ['7♭13', '7♭13'],
 		},
 		'major-7-sharp-13': {
 			display: 'Major 7 Sharp 13',
@@ -833,4 +795,80 @@ for (const group of Object.values(CHORDS)) {
 
 export function isValidChordVariant(value: string): value is Chord_Variant {
 	return chordVariantKeys.has(value);
+}
+
+type ParsedChord = {
+	tonic: number | null;
+	variant: Chord_Variant | null;
+};
+
+export function parseChordName(input: string, usingFlats: boolean): ParsedChord {
+	const trimmed = input.trim();
+	if (!trimmed) {
+		return { tonic: null, variant: null };
+	}
+
+	const noteNames = usingFlats ? FLATS : SHARPS;
+
+	let tonic: number | null = null;
+	let remaining = trimmed;
+
+	for (let i = 0; i < noteNames.length; i++) {
+		const noteName = noteNames[i];
+		if (trimmed.startsWith(noteName)) {
+			tonic = i;
+			remaining = trimmed.slice(noteName.length);
+			break;
+		}
+	}
+
+	if (tonic === null) {
+		const altNoteNames = usingFlats ? SHARPS : FLATS;
+		for (let i = 0; i < altNoteNames.length; i++) {
+			const noteName = altNoteNames[i];
+			if (trimmed.startsWith(noteName)) {
+				tonic = i;
+				remaining = trimmed.slice(noteName.length);
+				break;
+			}
+		}
+	}
+
+	if (tonic === null) {
+		return { tonic: null, variant: null };
+	}
+
+	if (!remaining) {
+		return { tonic, variant: 'major' };
+	}
+
+	let variant: Chord_Variant | null = null;
+	const remainingLower = remaining.toLowerCase().trim();
+
+	for (const group of Object.values(CHORDS)) {
+		for (const [variantKey, chordData] of Object.entries(group)) {
+			const symbols = chordData.symbols;
+			const nerdSymbol = symbols[0].toLowerCase();
+			const jazzSymbol = symbols[1].toLowerCase();
+
+			if (
+				remainingLower === nerdSymbol ||
+				remainingLower === jazzSymbol ||
+				remainingLower.startsWith(nerdSymbol) ||
+				remainingLower.startsWith(jazzSymbol)
+			) {
+				if (isValidChordVariant(variantKey)) {
+					variant = variantKey;
+					break;
+				}
+			}
+		}
+		if (variant) break;
+	}
+
+	if (variant === null) {
+		variant = 'major';
+	}
+
+	return { tonic, variant };
 }

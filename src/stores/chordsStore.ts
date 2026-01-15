@@ -27,7 +27,6 @@ const clearStorageOnPageRefresh = (): void => {
 			sessionStorage.removeItem(STORE_NAME);
 		}
 	} catch {
-		// Performance API or sessionStorage unavailable, continue normally
 	}
 };
 
@@ -81,7 +80,6 @@ const chordsStorage = {
 				sessionStorage.removeItem(name);
 			}
 		} catch {
-			// sessionStorage unavailable, continue normally
 		}
 	},
 };

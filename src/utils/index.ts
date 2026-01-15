@@ -7,6 +7,7 @@ export {
 	getChordSymbol,
 	getChordVariants,
 	isValidChordVariant,
+	parseChordName,
 } from './chords';
 export {
 	FLATS,
