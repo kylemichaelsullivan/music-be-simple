@@ -21,6 +21,7 @@ export type PlayContextType = {
 	addChordBinItem: () => void;
 	addNotepadLine: () => void;
 	chordBinItems: ChordBinItemData[];
+	editingItemId: number | null;
 	exportAll: () => void;
 	exportChordBin: () => void;
 	exportNotepad: () => void;
@@ -33,7 +34,13 @@ export type PlayContextType = {
 	removeNotepadLine: (id: number) => void;
 	reset: () => void;
 	setActiveInstrument: (instrument: InstrumentType | null) => void;
+	setEditingItemId: (id: number | null) => void;
 	toggleReferenceMode: () => void;
+	updateChordBinItem: (
+		id: number,
+		updates: Partial<Pick<ChordBinItemData, 'tonic' | 'variant'>>
+	) => void;
+	updateNotepadLine: (id: number, content: string) => void;
 };
 
 export type ReferenceMode = 'Chords' | 'Scales';

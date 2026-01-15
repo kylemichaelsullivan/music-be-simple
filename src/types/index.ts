@@ -9,6 +9,8 @@ type ReplaceSpaceWithDash<T extends string> = T extends `${infer Head} ${infer T
 
 // Basic types
 export type AccidentalType = '♭' | '♯';
+export type XDirectionType = 'left' | 'right';
+export type YDirectionType = 'up' | 'down';
 
 // Chord types
 export type Chord_NoteCount = number;
@@ -16,7 +18,7 @@ export type Chord_Tonic = NoteIndex;
 export type Chord_UsingFlats = boolean;
 
 // Instrument & Icon types
-export type ActionIconName = 'add' | 'down' | 'pen' | 'save' | 'trash' | 'up';
+export type ActionIconName = 'add' | 'pen' | 'save' | 'trash' | YDirectionType;
 export type IconName = InstrumentType | 'Modes';
 export type IconSize = 'lg' | 'md' | 'sm' | 'xs';
 export type InstrumentType = (typeof INSTRUMENTS)[number];
@@ -29,7 +31,7 @@ export type tabType = Lowercase<ReplaceSpaceWithDash<(typeof TABS)[number]>>;
 
 // Position types
 export type PositionType = XPositionType | YPositionType;
-export type XPositionType = 'left' | 'right';
+export type XPositionType = XDirectionType;
 export type YPositionType = 'bottom' | 'top';
 
 // Scale types
