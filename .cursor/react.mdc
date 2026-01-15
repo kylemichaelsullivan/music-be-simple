@@ -32,7 +32,7 @@ alwaysApply: false
 - **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
 - **Props interface**: Define clear, typed props with descriptive names
 - **forwardRef usage**: Use `forwardRef` for components that need to expose DOM refs when needed
-- **JSX attribute order**: The `key` attribute must be the last attribute in any JSX element
+- **JSX attribute order**: The attributes `ref`, `key`, and `id` must be the last three attributes (in that order) when present. If only some of them are present, they should still be in that order and be last.
 - **Memoized components**: Export memoized components at the bottom of the file as a named export
 
 ### Performance Optimization

@@ -51,8 +51,11 @@ Follow this specific order for JSX attributes:
 4. **Event handlers** - (alphabetically, starting with 'on')
 5. **ARIA attributes** - (alphabetically)
 6. **Custom data attributes** - (alphabetically)
-7. **ref** - React ref (penultimate)
-8. **id** - Element identifier (always last)
+7. **ref** - React ref (third to last)
+8. **key** - React key (second to last)
+9. **id** - Element identifier (always last)
+
+**Important**: The attributes `ref`, `key`, and `id` must be the last three attributes (in that order) when present. If only some of them are present, they should still be in that order and be last.
 
 #### JSX Attribute Order Example
 
@@ -72,6 +75,16 @@ Follow this specific order for JSX attributes:
 >
 	Submit
 </button>
+
+<div
+	className='ComponentName base-classes'
+	onClick={handleClick}
+	ref={nodeRef}
+	key={item.id}
+	id={`item-${item.id}`}
+>
+	{/* Content */}
+</div>
 ```
 
 ### Layout Principles

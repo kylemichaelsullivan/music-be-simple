@@ -217,8 +217,8 @@ const ComponentName = forwardRef<HTMLDivElement, ComponentProps>(
 	({ title, variant = 'primary', children }, ref) => {
 		return (
 			<div
-				ref={ref}
 				className='ComponentName base-classes'
+				ref={ref}
 			>
 				{children}
 			</div>

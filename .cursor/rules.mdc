@@ -352,6 +352,66 @@ export function ComponentName({
 }
 ```
 
+## JSX Attribute Ordering
+
+### Attribute Order Rules
+
+- **ref, key, id ordering**: The attributes `ref`, `key`, and `id` must be the last three attributes (in that order) when present
+- **Partial presence**: If only some of these attributes are present, they should still be in that order and be last
+- **Other attributes**: All other attributes (type, className, event handlers, ARIA attributes, data attributes, etc.) come before `ref`, `key`, and `id`
+
+#### Examples
+
+```tsx
+// ✅ Correct - ref, key, id in correct order at the end
+<div
+	className='ComponentName base-classes'
+	onClick={handleClick}
+	ref={nodeRef}
+	key={item.id}
+	id={`item-${item.id}`}
+>
+	{/* Content */}
+</div>
+
+// ✅ Correct - only ref and id present, in correct order
+<input
+	type='file'
+	accept='application/json,.json'
+	onChange={handleChange}
+	className='hidden'
+	ref={fileInputRef}
+	id='file-input'
+/>
+
+// ✅ Correct - only key present, at the end
+<NotepadLine
+	line={line}
+	index={index}
+	onRemove={() => removeNotepadLine(line.id)}
+	onReorder={reorderNotepadLines}
+	key={line.id}
+/>
+
+// ❌ Incorrect - ref should come before className
+<div
+	ref={nodeRef}
+	className='ComponentName'
+	id='item-1'
+>
+	{/* Content */}
+</div>
+
+// ❌ Incorrect - key should come after ref
+<div
+	className='ComponentName'
+	key={item.id}
+	ref={nodeRef}
+>
+	{/* Content */}
+</div>
+```
+
 ## Styling Guidelines
 
 ### CSS and Styling
@@ -481,11 +541,13 @@ const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
 
 #### Available Schemas
 
-- **Basic schemas**: `NoteIndexSchema`, `AccidentalTypeSchema`, `ScaleTypeSchema`, `ScaleModeSchema`, `ChordVariantSchema`
+- **Basic schemas**: `NoteIndexSchema` (infers `number`), `NoteIndexZodSchema` (infers `NoteIndex` union type), `AccidentalTypeSchema`, `ScaleTypeSchema`, `ScaleModeSchema`, `ChordVariantSchema`
 - **UI schemas**: `BorderSchema`, `InstrumentTypeSchema`, `IconTypeSchema`, `TabTypeSchema`, `PositionTypeSchema`
 - **Button schemas**: `NerdModeButtonIconSchema`, `NoteLabelsButtonIconSchema`
 - **Storage schemas**: `GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema` (used for combined data validation in context providers via `useEffect` hooks)
 - **Data schemas**: `ChordInfoSchema`, `ChordDataSchema`, `ChordGroupSchema`
+
+**Important**: When creating schemas for use with `useLocalStorage` that contain `NoteIndex` fields, use `NoteIndexZodSchema` (union of literals) instead of `NoteIndexSchema` (number). This ensures TypeScript infers the exact `NoteIndex` union type (`0 | 1 | 2 | ... | 11`) rather than just `number`, which is required for proper type matching.
 
 **Note**: Storage schemas are used for combined data validation in context providers (for monitoring and debugging), while individual localStorage fields are validated individually via `useLocalStorage` hook (e.g., `z.boolean()` for `usingFlats`, `z.array(IconTypeSchema)` for `selectedDisplays`).
 
