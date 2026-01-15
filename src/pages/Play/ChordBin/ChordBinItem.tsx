@@ -1,5 +1,5 @@
 import { EditButton, RemoveButton } from '@/components/buttons';
-import { useChords, useGlobals } from '@/hooks';
+import { useChords, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData } from '@/types';
 import { getChordSymbol, getNote } from '@/utils';
 
@@ -11,6 +11,7 @@ type ChordBinItemProps = {
 export function ChordBinItem({ item, onRemove }: ChordBinItemProps) {
 	const { usingFlats } = useGlobals();
 	const { showNerdMode } = useChords();
+	const { setEditingItemId, activeInstrument } = usePlay();
 	const ID = item.id.toString();
 
 	const note = getNote(item.tonic, usingFlats);
@@ -18,7 +19,7 @@ export function ChordBinItem({ item, onRemove }: ChordBinItemProps) {
 	const chordName = item.variant === 'major' ? note : `${note}${symbol}`;
 
 	const onEdit = () => {
-		console.log('edit', chordName);
+		setEditingItemId(item.id);
 	};
 
 	return (
@@ -26,8 +27,10 @@ export function ChordBinItem({ item, onRemove }: ChordBinItemProps) {
 			className='ChordBinItem relative flex justify-center items-start border border-lg p-2'
 			id={`chord-bin-item-${ID}`}
 		>
-			<EditButton title={`Edit ${chordName}`} onFxn={onEdit} />
+			{activeInstrument !== null && <EditButton title={`Edit ${chordName}`} onFxn={onEdit} />}
+
 			<span className='text-sm'>{chordName}</span>
+
 			<RemoveButton title={`Remove ${chordName}`} onFxn={onRemove} />
 		</div>
 	);

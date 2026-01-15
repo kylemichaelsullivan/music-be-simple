@@ -1,6 +1,7 @@
 export { AddButton } from './AddButton';
 export { EditButton } from './EditButton';
 export { IconButton } from './IconButton';
+export { InstrumentButton } from './InstrumentButton';
 export { RemoveButton } from './RemoveButton';
 export { SaveSectionButton } from './SaveSectionButton';
 export { ToggleSaveSectionButton } from './ToggleSaveSectionButton';

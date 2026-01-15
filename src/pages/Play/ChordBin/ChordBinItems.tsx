@@ -1,5 +1,5 @@
 import { usePlay } from '@/hooks';
-import { ChordBinItem } from './';
+import { ChordBinItem } from '..';
 
 export function ChordBinItems() {
 	const { chordBinItems, removeChordBinItem } = usePlay();

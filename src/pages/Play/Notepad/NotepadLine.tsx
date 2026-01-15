@@ -11,7 +11,7 @@ export function NotepadLine({ onRemove, line }: NotepadLineProps) {
 
 	return (
 		<div
-			className='NotepadLine relative flex justify-start items-center gap-2 border border-lg p-2'
+			className='NotepadLine relative flex justify-start items-center gap-2 border border-lg p-2 pr-10'
 			id={`notepad-line-${ID}`}
 		>
 			<RemoveButton title={`Remove Notepad Line ${ID}`} onFxn={onRemove} />

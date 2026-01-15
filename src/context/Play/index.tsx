@@ -12,7 +12,7 @@ import type {
 	PlayContextProviderProps,
 	ReferenceMode,
 } from '@/types';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useLocalStorage } from '../shared/useLocalStorage';
 import { useRequireGlobals } from '../shared/useRequireGlobals';
 import { PlayContext } from './PlayContext';
@@ -25,27 +25,34 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	useRequireGlobals();
 	const { tonic, variant } = useChords();
 
-	// Reference Mode state
+	// State
 	const [referenceMode, setReferenceMode] = useLocalStorage<ReferenceMode>(
 		'referenceMode',
 		ReferenceModeSchema,
 		initialReferenceMode
 	);
 
-	// Active Instrument state
 	const [activeInstrument, setActiveInstrument] = useLocalStorage<InstrumentType | null>(
 		'activeInstrument',
 		InstrumentTypeSchema.nullable(),
 		null
 	);
 
-	// Chord Bin state
+	const [editingItemId, setEditingItemId] = useState<number | null>(null);
+
 	const [chordBinItems, setChordBinItems] = useLocalStorage<ChordBinItemData[]>(
 		'chordBinItems',
 		ChordBinStorageSchema,
 		[]
 	);
 
+	const [notepadLines, setNotepadLines] = useLocalStorage<NotepadLineData[]>(
+		'notepadLines',
+		NotepadStorageSchema,
+		[]
+	);
+
+	// Chord Bin operations
 	const addChordBinItem = useCallback(() => {
 		setChordBinItems((prev) => [...prev, { id: Date.now(), tonic, variant }]);
 	}, [tonic, variant, setChordBinItems]);
@@ -57,13 +64,16 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		[setChordBinItems]
 	);
 
-	// Notepad state
-	const [notepadLines, setNotepadLines] = useLocalStorage<NotepadLineData[]>(
-		'notepadLines',
-		NotepadStorageSchema,
-		[]
+	const updateChordBinItem = useCallback(
+		(id: number, updates: Partial<Pick<ChordBinItemData, 'tonic' | 'variant'>>) => {
+			setChordBinItems((prev) =>
+				prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+			);
+		},
+		[setChordBinItems]
 	);
 
+	// Notepad operations
 	const addNotepadLine = useCallback(() => {
 		setNotepadLines((prev) => [...prev, { id: Date.now(), content: '' }]);
 	}, [setNotepadLines]);
@@ -75,7 +85,14 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		[setNotepadLines]
 	);
 
-	// Import handlers
+	const updateNotepadLine = useCallback(
+		(id: number, content: string) => {
+			setNotepadLines((prev) => prev.map((line) => (line.id === id ? { ...line, content } : line)));
+		},
+		[setNotepadLines]
+	);
+
+	// Import operations
 	const importChordBin = useCallback(
 		(items: ChordBinItemData[]) => {
 			setChordBinItems(items);
@@ -98,7 +115,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		[setChordBinItems, setNotepadLines]
 	);
 
-	// Export handlers
+	// Export operations
 	const exportChordBin = useCallback(() => {
 		const data = { chordBin: chordBinItems };
 		const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -138,6 +155,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		URL.revokeObjectURL(url);
 	}, [chordBinItems, notepadLines]);
 
+	// Other operations
 	const toggleReferenceMode = useCallback(() => {
 		setReferenceMode((prev: ReferenceMode) => (prev === 'Scales' ? 'Chords' : 'Scales'));
 	}, [setReferenceMode]);
@@ -147,44 +165,52 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		setNotepadLines([]);
 	}, [setChordBinItems, setNotepadLines]);
 
+	// Context value
 	const contextValue = useMemo(
 		() => ({
-			chordBinItems,
-			notepadLines,
-			referenceMode,
 			activeInstrument,
-			setActiveInstrument,
 			addChordBinItem,
-			removeChordBinItem,
 			addNotepadLine,
-			removeNotepadLine,
-			importChordBin,
-			importNotepad,
-			importAll,
+			chordBinItems,
+			editingItemId,
+			exportAll,
 			exportChordBin,
 			exportNotepad,
-			exportAll,
-			toggleReferenceMode,
+			importAll,
+			importChordBin,
+			importNotepad,
+			notepadLines,
+			referenceMode,
+			removeChordBinItem,
+			removeNotepadLine,
 			reset,
+			setActiveInstrument,
+			setEditingItemId,
+			toggleReferenceMode,
+			updateChordBinItem,
+			updateNotepadLine,
 		}),
 		[
-			chordBinItems,
-			notepadLines,
-			referenceMode,
 			activeInstrument,
-			setActiveInstrument,
 			addChordBinItem,
-			removeChordBinItem,
 			addNotepadLine,
-			removeNotepadLine,
-			importChordBin,
-			importNotepad,
-			importAll,
+			chordBinItems,
+			editingItemId,
+			exportAll,
 			exportChordBin,
 			exportNotepad,
-			exportAll,
-			toggleReferenceMode,
+			importAll,
+			importChordBin,
+			importNotepad,
+			notepadLines,
+			referenceMode,
+			removeChordBinItem,
+			removeNotepadLine,
 			reset,
+			setActiveInstrument,
+			toggleReferenceMode,
+			updateChordBinItem,
+			updateNotepadLine,
 		]
 	);
 

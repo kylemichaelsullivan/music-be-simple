@@ -1,5 +1,5 @@
 import { usePlay } from '@/hooks';
-import { AddNotepadLine, InstrumentSelector, NotepadLine } from './';
+import { AddNotepadLine, InstrumentSelector, NotepadLine } from '..';
 
 export function Notepad() {
 	const { notepadLines, addNotepadLine, removeNotepadLine } = usePlay();

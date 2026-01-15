@@ -1,14 +1,15 @@
 import { usePlay } from '@/hooks';
 import type { SaveActionType } from '@/types';
 import { useRef } from 'react';
-import { SaveSectionButtons } from './';
+import type { ChangeEvent } from 'react';
+import { SaveSectionButtons } from '..';
 
 export function Imports() {
 	const { importChordBin, importNotepad, importAll } = usePlay();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const importTypeRef = useRef<'chordBin' | 'notepad' | 'all'>('all');
 
-	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (!file) return;
 
@@ -44,7 +45,6 @@ export function Imports() {
 		};
 		reader.readAsText(file);
 
-		// Reset the input so the same file can be selected again
 		if (fileInputRef.current) {
 			fileInputRef.current.value = '';
 		}
@@ -65,7 +65,7 @@ export function Imports() {
 		fileInputRef.current?.click();
 	};
 
-	const saves = {
+	const actions = {
 		'Chord Bin': handleImportChordBin,
 		Notepad: handleImportNotepad,
 		All: handleImportAll,
@@ -83,7 +83,7 @@ export function Imports() {
 				onChange={handleFileChange}
 				className='hidden'
 			/>
-			<SaveSectionButtons saves={saves} action={action} />
+			<SaveSectionButtons actions={actions} action={action} />
 		</div>
 	);
 }
