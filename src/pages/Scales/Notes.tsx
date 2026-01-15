@@ -26,7 +26,7 @@ export function Notes() {
 			case 8:
 				return 'grid-cols-8';
 			default:
-				return 'grid-cols-7'; // fallback
+				return 'grid-cols-7';
 		}
 	};
 

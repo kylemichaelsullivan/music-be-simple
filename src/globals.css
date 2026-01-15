@@ -56,7 +56,13 @@ select {
 }
 
 .ChordContainer {
-	max-width: calc(100vw - 2rem);
+	max-width: calc(100% - 2rem);
+}
+
+@supports (width: 100dvw) {
+	.ChordContainer {
+		max-width: calc(100dvw - 2rem);
+	}
 }
 
 /* Instruments */
@@ -110,8 +116,14 @@ select {
 }
 
 .Piano {
-	--width-white: min(calc((100vw - 2rem) / 7), 6.25rem);
+	--width-white: min(calc((100% - 2rem) / 7), 6.25rem);
 	--width-black: calc(var(--width-white) * 0.6);
+}
+
+@supports (width: 100dvw) {
+	.Piano {
+		--width-white: min(calc((100dvw - 2rem) / 7), 6.25rem);
+	}
 }
 
 .Piano .Key {
