@@ -1,6 +1,6 @@
 import { RemoveButton } from '@/components/buttons';
+import { useDragDropClassName, useDraggableItem } from '@/hooks';
 import type { NotepadLineData } from '@/types';
-import { useDrag, useDrop } from 'react-dnd';
 
 type NotepadLineProps = {
 	line: NotepadLineData;
@@ -12,47 +12,22 @@ type NotepadLineProps = {
 export function NotepadLine({ line, index, onRemove, onReorder }: NotepadLineProps) {
 	const ID = line.id.toString();
 
-	const [{ isDragging }, drag] = useDrag({
+	const { isDragging, isOver, dragRef } = useDraggableItem({
 		type: 'notepad-line',
-		item: { id: line.id, index },
-		collect: (monitor) => ({
-			isDragging: monitor.isDragging(),
-		}),
+		id: line.id,
+		index,
+		onReorder,
 	});
 
-	const [{ isOver }, drop] = useDrop({
-		accept: 'notepad-line',
-		hover: (draggedItem: { id: number; index: number }) => {
-			if (draggedItem.id !== line.id && draggedItem.index !== index) {
-				onReorder(draggedItem.index, index);
-				draggedItem.index = index;
-			}
-		},
-		collect: (monitor) => ({
-			isOver: monitor.isOver(),
-		}),
+	const className = useDragDropClassName({
+		baseClasses:
+			'NotepadLine relative flex justify-start items-center gap-2 border border-lg p-2 pr-10 transition-all duration-200',
+		isDragging,
+		isOver,
 	});
-
-	const getClassName = () => {
-		const baseClasses =
-			'NotepadLine relative flex justify-start items-center gap-2 border border-lg p-2 pr-10 transition-all duration-200';
-		if (isDragging) {
-			return `${baseClasses} opacity-50 cursor-grabbing shadow-lg`;
-		}
-		if (isOver) {
-			return `${baseClasses} cursor-grab border-blue-500 border-2 bg-blue-50`;
-		}
-		return `${baseClasses} cursor-grab hover:shadow-md hover:border-gray-400`;
-	};
 
 	return (
-		<div
-			className={getClassName()}
-			ref={(node) => {
-				drag(drop(node));
-			}}
-			id={`notepad-line-${ID}`}
-		>
+		<div className={className} ref={dragRef} id={`notepad-line-${ID}`}>
 			<input
 				type='text'
 				className='text-sm w-full p-2'

@@ -1,8 +1,7 @@
 import { EditButton, RemoveButton } from '@/components/buttons';
-import { useChords, useGlobals, usePlay } from '@/hooks';
+import { useChords, useDragDropClassName, useDraggableItem, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData } from '@/types';
 import { getChordSymbol, getNote } from '@/utils';
-import { useDrag, useDrop } from 'react-dnd';
 
 type ChordBinItemProps = {
 	item: ChordBinItemData;
@@ -25,47 +24,22 @@ export function ChordBinItem({ item, index, onRemove, onReorder }: ChordBinItemP
 		setEditingItemId(item.id);
 	};
 
-	const [{ isDragging }, drag] = useDrag({
+	const { isDragging, isOver, dragRef } = useDraggableItem({
 		type: 'chord-bin-item',
-		item: { id: item.id, index },
-		collect: (monitor) => ({
-			isDragging: monitor.isDragging(),
-		}),
+		id: item.id,
+		index,
+		onReorder,
 	});
 
-	const [{ isOver }, drop] = useDrop({
-		accept: 'chord-bin-item',
-		hover: (draggedItem: { id: number; index: number }) => {
-			if (draggedItem.id !== item.id && draggedItem.index !== index) {
-				onReorder(draggedItem.index, index);
-				draggedItem.index = index;
-			}
-		},
-		collect: (monitor) => ({
-			isOver: monitor.isOver(),
-		}),
+	const className = useDragDropClassName({
+		baseClasses:
+			'ChordBinItem relative flex justify-center items-start border border-lg p-2 transition-all duration-200',
+		isDragging,
+		isOver,
 	});
-
-	const getClassName = () => {
-		const baseClasses =
-			'ChordBinItem relative flex justify-center items-start border border-lg p-2 transition-all duration-200';
-		if (isDragging) {
-			return `${baseClasses} opacity-50 cursor-grabbing shadow-lg`;
-		}
-		if (isOver) {
-			return `${baseClasses} cursor-grab border-blue-500 border-2 bg-blue-50`;
-		}
-		return `${baseClasses} cursor-grab hover:shadow-md hover:border-gray-400`;
-	};
 
 	return (
-		<div
-			className={getClassName()}
-			ref={(node) => {
-				drag(drop(node));
-			}}
-			id={`chord-bin-item-${ID}`}
-		>
+		<div className={className} ref={dragRef} id={`chord-bin-item-${ID}`}>
 			{activeInstrument !== null && <EditButton title={`Edit ${chordName}`} onFxn={onEdit} />}
 
 			<span className='text-sm'>{chordName}</span>

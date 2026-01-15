@@ -1,5 +1,8 @@
 export { useButtonHandler } from './useButtonHandler';
 export { useChords } from './useChords';
+export { useDragDropClassName } from './useDragDropClassName';
+export { useDraggableItem } from './useDraggableItem';
+export { useDropZone } from './useDropZone';
 export { useGlobals } from './useGlobals';
 export { useInstrumentNotes } from './useInstrumentNotes';
 export { usePlay } from './usePlay';

@@ -1,15 +1,11 @@
-import { usePlay } from '@/hooks';
-import { useDrop } from 'react-dnd';
+import { useDropZone, usePlay } from '@/hooks';
 import { AddNotepadLine, InstrumentSelector, NotepadLine } from '..';
 
 export function Notepad() {
 	const { notepadLines, addNotepadLine, removeNotepadLine, reorderNotepadLines } = usePlay();
 
-	const [{ isOver }, drop] = useDrop({
+	const { isOver, dropRef } = useDropZone({
 		accept: 'notepad-line',
-		collect: (monitor) => ({
-			isOver: monitor.isOver(),
-		}),
 	});
 
 	return (
@@ -19,9 +15,7 @@ export function Notepad() {
 
 			<div
 				className={`flex flex-col gap-4 transition-all duration-200 ${isOver ? 'bg-gray-50 rounded-lg p-2' : ''}`}
-				ref={(node) => {
-					drop(node);
-				}}
+				ref={dropRef}
 			>
 				{notepadLines.length > 0 ? (
 					notepadLines.map((line, index) => (
