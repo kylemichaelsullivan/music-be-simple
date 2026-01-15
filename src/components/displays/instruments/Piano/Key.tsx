@@ -28,8 +28,12 @@ export function Key({ note, isBlack, isAllowed }: KeyProps) {
 	return (
 		<button
 			type='button'
-			className={clsx('Key border border-black', isBlack ? 'black' : 'white')}
+			className={clsx(
+				'Key border border-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2',
+				isBlack ? 'black' : 'white'
+			)}
 			title={noteName}
+			tabIndex={0}
 			onClick={() => playNote(note)}
 			onKeyDown={(e) => handleKeyDown(e)}
 		>

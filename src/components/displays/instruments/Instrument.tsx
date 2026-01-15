@@ -1,4 +1,3 @@
-import { ICON_MAP } from '@/instruments';
 import type { InstrumentType } from '@/types';
 import type { ReactNode } from 'react';
 
@@ -8,9 +7,10 @@ type InstrumentProps = {
 };
 
 export function Instrument({ instrument, children }: InstrumentProps) {
-	const iconName = ICON_MAP[instrument];
 	return (
-		<div className={`Instrument ${iconName} relative flex min-h-24 w-full justify-center`}>
+		<div
+			className={`Instrument ${instrument} relative flex flex-col justify-center gap-2 w-full min-h-24`}
+		>
 			{children}
 		</div>
 	);

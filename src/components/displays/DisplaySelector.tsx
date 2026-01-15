@@ -21,7 +21,7 @@ export function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelector
 		<button
 			type='button'
 			className={`DisplaySelector flex min-w-4 flex-col items-center justify-center rounded-lg grayscale transition-all sm:p-2 ${
-				!isActive ? 'opacity-30 hover:opacity-50' : 'opacity-100 hover:opacity-65'
+				!isActive ? 'opacity-30 hover:opacity-50' : 'opacity-65 hover:opacity-100'
 			}`}
 			title={text}
 			onClick={handleClick}

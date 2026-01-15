@@ -17,8 +17,9 @@ export function Nut({ note }: NutProps) {
 	return (
 		<button
 			type='button'
-			className='Nut w-8 bg-black'
+			className='Nut w-8 bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2'
 			title={noteName}
+			tabIndex={0}
 			onClick={() => playNote(note)}
 			onKeyDown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {
@@ -26,7 +27,6 @@ export function Nut({ note }: NutProps) {
 					playNote(note);
 				}
 			}}
-			tabIndex={0}
 		>
 			{notes.includes(note) && (
 				<AllowedNote note={noteName} isTonic={note === tonic} borderStyle={borderStyle} />
