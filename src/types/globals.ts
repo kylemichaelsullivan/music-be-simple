@@ -1,4 +1,4 @@
-import type { IconType } from '@/instruments';
+import type { IconType } from '@/types';
 import type { ReactNode } from 'react';
 
 export type GlobalsContextProviderProps = {

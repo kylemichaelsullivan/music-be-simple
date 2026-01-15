@@ -1,4 +1,4 @@
-import type { INSTRUMENTS } from '@/instruments';
+import type { ICONS, INSTRUMENTS } from '@/instruments';
 import type { TABS } from '@/navigation';
 import type { INTERVALS } from '@/utils/notes';
 
@@ -21,6 +21,7 @@ export type Chord_UsingFlats = boolean;
 export type ActionIconName = 'add' | 'pen' | 'save' | 'trash' | YDirectionType;
 export type IconName = InstrumentType | 'Modes';
 export type IconSize = 'lg' | 'md' | 'sm' | 'xs';
+export type IconType = (typeof ICONS)[number];
 export type InstrumentType = (typeof INSTRUMENTS)[number];
 export type NerdModeButtonIcon = '🤓' | '💃🏾';
 export type NoteLabelsButtonIcon = '📖' | '📕';
@@ -53,6 +54,7 @@ export type { Notes_Flats, Notes_Sharps } from '@/utils/notes';
 // Re-export types from type files
 export type { ChordsContextType, ChordsContextProviderProps } from './chords';
 export type { GlobalsContextType, GlobalsContextProviderProps } from './globals';
+export type { InstrumentNotesContextType } from './instrumentNotes';
 export type {
 	PlayContextType,
 	ChordBinItemData,

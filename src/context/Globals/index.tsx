@@ -1,7 +1,6 @@
-import type { IconType } from '@/instruments';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import { GlobalsStorageSchema, IconTypeSchema } from '@/schemas';
-import type { GlobalsContextProviderProps } from '@/types';
+import type { GlobalsContextProviderProps, IconType } from '@/types';
 import { FREQUENCIES } from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';

@@ -4,7 +4,7 @@ import { Title } from '@/components/Title';
 import { TopButton, UseFlatsButton } from '@/components/buttons';
 import { Displays, DisplaysSelector } from '@/components/displays';
 import { useGlobals, useScales } from '@/hooks';
-import type { IconType } from '@/instruments';
+import type { IconType } from '@/types';
 import { Notes, ScaleContainer } from './';
 
 export function Scales() {

@@ -1,16 +1,15 @@
-import type { NoteIndex, border } from '@/types';
+import type { InstrumentNotesContextType, NoteIndex, border } from '@/types';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { InstrumentNotesContext } from './InstrumentNotesContext';
-import type { InstrumentNotesContextType } from './InstrumentNotesContext';
 
 type InstrumentNotesProviderProps = {
-	children: ReactNode;
-	notes: NoteIndex[];
 	tonic: NoteIndex;
-	showNoteLabels?: boolean;
+	notes: NoteIndex[];
+	children: ReactNode;
 	getBorderStyle?: (note: NoteIndex) => border;
 	showNerdMode?: boolean;
+	showNoteLabels?: boolean;
 };
 
 export function InstrumentNotesProvider({
@@ -31,4 +30,3 @@ export function InstrumentNotesProvider({
 }
 
 export { InstrumentNotesContext } from './InstrumentNotesContext';
-export type { InstrumentNotesContextType } from './InstrumentNotesContext';

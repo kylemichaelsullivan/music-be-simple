@@ -1,5 +1,5 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
-import type { IconType } from '@/instruments';
+import type { IconType } from '@/types';
 import type { Chord_Tonic, Chord_UsingFlats, Chord_Variant } from '@/types';
 
 export const initialTonic: Chord_Tonic = 0;
