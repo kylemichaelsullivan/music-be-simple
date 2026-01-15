@@ -264,8 +264,16 @@ All Zod schemas are defined in `src/schemas.ts`:
 ### Schema Examples
 
 ```typescript
-// Basic schema
+// Basic schema (infers 'number' type - use for validation where number is acceptable)
 export const NoteIndexSchema = z.number().int().min(0).max(11);
+
+// NoteIndex union schema (infers 'NoteIndex' union type - use for useLocalStorage and storage schemas)
+// This ensures exact type matching when used with useLocalStorage hook
+export const NoteIndexZodSchema = z.union([
+  z.literal(0), z.literal(1), z.literal(2), z.literal(3),
+  z.literal(4), z.literal(5), z.literal(6), z.literal(7),
+  z.literal(8), z.literal(9), z.literal(10), z.literal(11),
+]);
 
 // Enum schema
 export const ScaleTypeSchema = z.enum(SCALE_TYPES as [string, ...string[]]);
@@ -276,13 +284,15 @@ export const ChordVariantSchema = z.string().refine(
   (val) => ({ message: `Invalid chord variant: ${val}` })
 );
 
-// Storage schema
+// Storage schema (uses NoteIndexZodSchema for exact type matching)
 export const ScalesStorageSchema = z.object({
-  tonic: NoteIndexSchema,
+  tonic: NoteIndexZodSchema, // Uses union schema, not NoteIndexSchema
   variant: ScaleTypeSchema,
   showNoteLabels: z.boolean(),
 });
 ```
+
+**Important**: When creating schemas for use with `useLocalStorage` that contain `NoteIndex` fields, use `NoteIndexZodSchema` (union of literals) instead of `NoteIndexSchema` (number). This ensures TypeScript infers the exact `NoteIndex` union type (`0 | 1 | 2 | ... | 11`) rather than just `number`, which is required for proper type matching with the `useLocalStorage` hook.
 
 ### Input Validation Pattern
 

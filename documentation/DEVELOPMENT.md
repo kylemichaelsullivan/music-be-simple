@@ -45,8 +45,9 @@ export const NoteIndexSchema = z.number().int().min(0).max(11);
 export const ScaleTypeSchema = z.enum(SCALE_TYPES as [string, ...string[]]);
 
 // ✅ Use schemas with useLocalStorage (individual field validation)
+// Important: For types that are union types (like NoteIndex), use schemas that infer the exact union type
 import { useLocalStorage } from '@/context/shared/useLocalStorage';
-import { IconTypeSchema } from '@/schemas';
+import { IconTypeSchema, NoteIndexZodSchema } from '@/schemas';
 import { z } from 'zod';
 
 const [usingFlats, setUsingFlats] = useLocalStorage('usingFlats', z.boolean(), true);
@@ -54,6 +55,14 @@ const [displays, setDisplays] = useLocalStorage(
   'selectedDisplays',
   z.array(IconTypeSchema),
   initialDisplays
+);
+
+// ✅ For schemas used with useLocalStorage that contain NoteIndex, use NoteIndexZodSchema
+// This ensures the schema infers the exact NoteIndex union type, not just 'number'
+const [chordBinItems, setChordBinItems] = useLocalStorage<ChordBinItemData[]>(
+  'chordBinItems',
+  ChordBinStorageSchema, // Uses NoteIndexZodSchema internally
+  []
 );
 
 // ✅ Validate combined storage data (for monitoring/debugging)
@@ -123,6 +132,69 @@ export function Component({ prop1, prop2 }: ComponentProps) {
     // JSX
   );
 }
+```
+
+### JSX Attribute Ordering
+
+**Important**: The attributes `ref`, `key`, and `id` must be the last three attributes (in that order) when present. If only some of them are present, they should still be in that order and be last.
+
+#### Attribute Order Rules
+
+1. All other attributes (type, className, event handlers, ARIA attributes, data attributes, etc.) come first
+2. `ref` - React ref (third to last)
+3. `key` - React key (second to last)
+4. `id` - Element identifier (always last)
+
+#### Examples
+
+```typescript
+// ✅ Correct - ref, key, id in correct order at the end
+<div
+	className='ComponentName base-classes'
+	onClick={handleClick}
+	ref={nodeRef}
+	key={item.id}
+	id={`item-${item.id}`}
+>
+	{/* Content */}
+</div>
+
+// ✅ Correct - only ref and id present, in correct order
+<input
+	type='file'
+	accept='application/json,.json'
+	onChange={handleChange}
+	className='hidden'
+	ref={fileInputRef}
+	id='file-input'
+/>
+
+// ✅ Correct - only key present, at the end
+<NotepadLine
+	line={line}
+	index={index}
+	onRemove={() => removeNotepadLine(line.id)}
+	onReorder={reorderNotepadLines}
+	key={line.id}
+/>
+
+// ❌ Incorrect - ref should come before className
+<div
+	ref={nodeRef}
+	className='ComponentName'
+	id='item-1'
+>
+	{/* Content */}
+</div>
+
+// ❌ Incorrect - key should come after ref
+<div
+	className='ComponentName'
+	key={item.id}
+	ref={nodeRef}
+>
+	{/* Content */}
+</div>
 ```
 
 ### File Naming
