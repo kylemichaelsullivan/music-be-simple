@@ -6,7 +6,7 @@ test.describe('Chords Page', () => {
 	});
 
 	test('should display chords page', async ({ page }) => {
-		await expect(page).toHaveURL(/.*chords/);
+		await expect(page).toHaveURL(/.*\/chords/);
 	});
 
 	test('should have tonic selector', async ({ page }) => {

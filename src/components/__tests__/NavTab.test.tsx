@@ -3,23 +3,21 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { NavTab } from '../nav/NavTab';
 
-// Mock scrollIntoView
-const mockScrollIntoView = vi.fn();
-Element.prototype.scrollIntoView = mockScrollIntoView;
-
 describe('NavTab', () => {
 	it('should render nav tab with title', async () => {
-		render(<NavTab title='Chords' to='/chords' />);
+		const mockOnClick = vi.fn();
+		render(<NavTab title='Chords' isActive={false} onFxn={mockOnClick} />);
 
 		await waitFor(() => {
-			const link = screen.getByTitle('Chords');
-			expect(link).toBeInTheDocument();
-			expect(link).toHaveAttribute('href', '/chords');
+			const button = screen.getByTitle('Chords');
+			expect(button).toBeInTheDocument();
+			expect(button).toHaveAttribute('type', 'button');
 		});
 	});
 
 	it('should display title text', async () => {
-		render(<NavTab title='Scales' to='/scales' />);
+		const mockOnClick = vi.fn();
+		render(<NavTab title='Scales' isActive={false} onFxn={mockOnClick} />);
 
 		await waitFor(() => {
 			expect(screen.getByText('Scales')).toBeInTheDocument();
@@ -27,73 +25,73 @@ describe('NavTab', () => {
 	});
 
 	it('should have correct title attribute', async () => {
-		render(<NavTab title='Play' to='/play' />);
+		const mockOnClick = vi.fn();
+		render(<NavTab title='Play' isActive={false} onFxn={mockOnClick} />);
 
 		await waitFor(() => {
-			const link = screen.getByTitle('Play');
-			expect(link).toHaveAttribute('title', 'Play');
+			const button = screen.getByTitle('Play');
+			expect(button).toHaveAttribute('title', 'Play');
 		});
 	});
 
 	it('should have NavTab class', async () => {
-		render(<NavTab title='Chords' to='/chords' />);
+		const mockOnClick = vi.fn();
+		render(<NavTab title='Chords' isActive={false} onFxn={mockOnClick} />);
 
 		await waitFor(() => {
-			const link = screen.getByTitle('Chords');
-			expect(link).toHaveClass('NavTab');
+			const button = screen.getByTitle('Chords');
+			expect(button).toHaveClass('NavTab');
 		});
 	});
 
-	it('should scroll to main element on click', async () => {
+	it('should call onFxn when clicked', async () => {
 		const user = userEvent.setup();
+		const mockOnClick = vi.fn();
 
-		// Create a main element with the correct class name matching the title
-		const mainElement = document.createElement('main');
-		mainElement.className = 'Chords';
-		document.body.appendChild(mainElement);
-
-		render(<NavTab title='Chords' to='/chords' />);
+		render(<NavTab title='Chords' isActive={false} onFxn={mockOnClick} />);
 
 		await waitFor(() => {
 			expect(screen.getByTitle('Chords')).toBeInTheDocument();
 		});
 
-		const link = screen.getByTitle('Chords');
-		await user.click(link);
+		const button = screen.getByTitle('Chords');
+		await user.click(button);
 
-		expect(mockScrollIntoView).toHaveBeenCalledWith({
-			behavior: 'smooth',
-			block: 'start',
-		});
-
-		// Cleanup
-		document.body.removeChild(mainElement);
+		expect(mockOnClick).toHaveBeenCalledTimes(1);
 	});
 
-	it('should not throw error if main element does not exist', async () => {
-		const user = userEvent.setup();
+	it('should apply active styles when isActive is true', async () => {
+		const mockOnClick = vi.fn();
+		render(<NavTab title='Chords' isActive={true} onFxn={mockOnClick} />);
 
-		// Ensure no main element exists
-		const existingMain = document.querySelector('main');
-		if (existingMain) {
-			document.body.removeChild(existingMain);
-		}
+		await waitFor(() => {
+			const button = screen.getByTitle('Chords');
+			expect(button).toHaveClass('bg-gray-300', 'font-bold');
+			expect(button).toHaveAttribute('aria-current', 'page');
+		});
+	});
 
-		render(<NavTab title='Chords' to='/chords' />);
+	it('should not apply active styles when isActive is false', async () => {
+		const mockOnClick = vi.fn();
+		render(<NavTab title='Chords' isActive={false} onFxn={mockOnClick} />);
 
-		await waitFor(async () => {
-			const link = screen.getByTitle('Chords');
-			// Should not throw error
-			await expect(user.click(link)).resolves.not.toThrow();
+		await waitFor(() => {
+			const button = screen.getByTitle('Chords');
+			expect(button).not.toHaveClass('bg-gray-300', 'font-bold');
+			expect(button).not.toHaveAttribute('aria-current');
 		});
 	});
 
 	it('should render different tabs correctly', async () => {
+		const mockOnClick1 = vi.fn();
+		const mockOnClick2 = vi.fn();
+		const mockOnClick3 = vi.fn();
+
 		render(
 			<>
-				<NavTab title='Chords' to='/chords' />
-				<NavTab title='Scales' to='/scales' />
-				<NavTab title='Play' to='/play' />
+				<NavTab title='Chords' isActive={false} onFxn={mockOnClick1} />
+				<NavTab title='Scales' isActive={false} onFxn={mockOnClick2} />
+				<NavTab title='Play' isActive={false} onFxn={mockOnClick3} />
 			</>
 		);
 

@@ -6,7 +6,7 @@ test.describe('Scales Page', () => {
 	});
 
 	test('should display scales page', async ({ page }) => {
-		await expect(page).toHaveURL(/.*scales/);
+		await expect(page).toHaveURL(/.*\/scales/);
 	});
 
 	test('should have tonic selector', async ({ page }) => {

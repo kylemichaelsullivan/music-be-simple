@@ -6,7 +6,7 @@ test.describe('Play Page', () => {
 	});
 
 	test('should display play page', async ({ page }) => {
-		await expect(page).toHaveURL(/.*play/);
+		await expect(page).toHaveURL(/.*\/play/);
 	});
 
 	test('should have interactive elements', async ({ page }) => {
