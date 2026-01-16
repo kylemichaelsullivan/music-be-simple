@@ -16,7 +16,6 @@ A simple and intuitive web application for learning and exploring music theory. 
 - **React 19** - Modern React with latest features
 - **TypeScript** - Type-safe development
 - **Vite** - Fast build tool and dev server
-- **TanStack Router** - Type-safe routing
 - **React Context API** - State management
 - **Zod** - Runtime type validation and schema definition
 - **Tailwind CSS** - Utility-first styling
@@ -70,20 +69,20 @@ bun dev
 
 ```
 src/
-├── components/     # React components
-│   └── __tests__/  # Component tests
-├── context/        # React Context providers
-├── hooks/          # Custom React hooks
-│   └── __tests__/  # Hook tests
-├── pages/          # Page components
-├── routes/         # TanStack Router route definitions
-├── schemas.ts      # Zod schema definitions
-├── test/           # Test utilities and setup
-│   ├── setup.ts    # Test setup and mocks
+├── App.tsx          # Main application component with routing
+├── components/      # React components
+│   └── __tests__/   # Component tests
+├── context/         # React Context providers
+├── hooks/           # Custom React hooks
+│   └── __tests__/   # Hook tests
+├── pages/           # Page components
+├── schemas.ts       # Zod schema definitions
+├── test/            # Test utilities and setup
+│   ├── setup.ts     # Test setup and mocks
 │   └── test-utils.tsx # Testing utilities
-├── types/          # TypeScript type definitions
-└── utils/          # Utility functions
-    └── __tests__/  # Unit tests
+├── types/           # TypeScript type definitions
+└── utils/           # Utility functions
+    └── __tests__/   # Unit tests
 
 e2e/                # End-to-end tests
 ├── scales.spec.ts

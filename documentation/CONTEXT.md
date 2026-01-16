@@ -339,9 +339,9 @@ The context providers are organized in the following hierarchy:
 
 ```
 GlobalsContextProvider (root)
-├── ScalesContextProvider (for /scales route)
-├── ChordsContextProvider (for /chords route)
-├── PlayContextProvider (for /play route)
+├── ScalesContextProvider (for Scales page)
+├── ChordsContextProvider (for Chords page)
+├── PlayContextProvider (for Play page)
 └── InstrumentNotesContextProvider (where needed)
 ```
 

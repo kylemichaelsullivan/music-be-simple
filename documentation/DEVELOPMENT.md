@@ -202,7 +202,6 @@ export function Component({ prop1, prop2 }: ComponentProps) {
 - Components: PascalCase (e.g., `Guitar.tsx`)
 - Utilities: camelCase (e.g., `notes.ts`)
 - Types: camelCase (e.g., `chords.ts`)
-- Routes: camelCase (e.g., `chords.tsx`)
 
 ### Import Organization
 
@@ -211,7 +210,7 @@ Imports should be ordered as follows (alphabetically within each group):
 1. **Internal project imports with `@/` alias** (alphabetically by path: components, context, hooks, instruments, navigation, schemas, stores, utils)
 2. **Type imports from `@/types` and other `@/` paths** (alphabetically)
 3. **React value imports** (from 'react')
-4. **Third-party libraries** (alphabetically by source: clsx, zod, @tanstack/react-router, etc.)
+4. **Third-party libraries** (alphabetically by source: clsx, zod, etc.)
 5. **Relative imports** (siblings, direct children, direct parents)
 6. **Type imports from React** (import type from 'react') - comes last
 
@@ -529,7 +528,7 @@ test('should navigate to scales page', async ({ page }) => {
 
 ### Test Utilities
 
-- **test-utils.tsx**: Provides a custom `render` function that includes router context and other providers
+- **test-utils.tsx**: Provides a custom `render` function that includes context providers
 - **setup.ts**: Configures `@testing-library/jest-dom` matchers, mocks browser APIs (matchMedia, IntersectionObserver, AudioContext), and cleanup after each test
 
 ### Testing Best Practices
@@ -622,8 +621,8 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ### Common Issues
 
 1. **Type Errors**: Check TypeScript compiler output
-2. **Context Issues**: Verify context provider hierarchy
-3. **Routing Issues**: Check route definitions and navigation
+2. **Context Issues**: Verify context provider hierarchy in `App.tsx`
+3. **Routing Issues**: Check tab state management and URL synchronization in `App.tsx`
 4. **State Issues**: Use React DevTools to inspect state
 
 ## Best Practices
@@ -658,7 +657,6 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ## Resources
 
 - [React Documentation](https://react.dev)
-- [TanStack Router Documentation](https://tanstack.com/router)
 - [Tailwind CSS Documentation](https://tailwindcss.com)
 - [TypeScript Documentation](https://www.typescriptlang.org)
 - [Vite Documentation](https://vitejs.dev)

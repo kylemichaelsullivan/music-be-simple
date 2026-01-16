@@ -20,9 +20,15 @@ Button component for top-level actions.
 **Location**: `@/components/buttons/TopButton`
 
 **Props**:
-- `children` - Button content
-- `onClick` - Click handler
-- Additional props passed to button element
+- `title` - Button title text (string)
+- `icon` - Icon content (string | ReactNode)
+- `position` - Position on screen (`XPositionType`: 'left' | 'right')
+- `onFxn` - Click handler function (() => void)
+
+**Features**:
+- Positioned absolutely at top corners
+- Uses `useButtonHandler` hook for click and keyboard handling
+- Supports emoji icons or ReactNode for icon content
 
 ### TransposeButton
 
@@ -32,7 +38,11 @@ Button for transposing scales up or down by a fifth.
 
 **Props**:
 - `direction` - `YDirectionType` ('up' | 'down')
-- `onClick` - Transpose handler
+
+**Features**:
+- Self-contained component that handles transposition internally
+- Uses `useScales` hook to access and update tonic
+- Automatically validates transposed note index
 
 ### UseFlatsButton
 
@@ -41,8 +51,12 @@ Button to toggle between flats and sharps for note display.
 **Location**: `@/components/buttons/UseFlatsButton`
 
 **Props**:
-- `usingFlats` - Boolean indicating if flats are currently used
-- `onClick` - Toggle handler
+- `position` - Optional `XPositionType` ('left' | 'right'), defaults to 'right'
+
+**Features**:
+- Self-contained component that uses `TopButton` internally
+- Uses `useGlobals` hook to access and toggle `usingFlats` state
+- Displays ♭ when using flats, ♯ when using sharps
 
 ## Display Components
 
@@ -62,9 +76,10 @@ Individual display selector component.
 **Location**: `@/components/displays/DisplaySelector`
 
 **Props**:
-- `icon` - Icon name
-- `selected` - Boolean indicating if selected
-- `onClick` - Selection handler
+- `icon` - Icon name (IconName)
+- `text` - Display text (string)
+- `isActive` - Boolean indicating if selected
+- `onFxn` - Selection handler ((icon: IconName) => void)
 
 ### DisplaysSelector
 
@@ -232,7 +247,9 @@ Main navigation bar component.
 
 **Location**: `@/components/nav/Navbar`
 
-**Props**: None (uses context/hooks internally)
+**Props**:
+- `currentTab` - Current active tab (TabType)
+- `onTabChange` - Handler function for tab changes ((tab: TabType) => void)
 
 ### NavTab
 
@@ -241,9 +258,16 @@ Individual navigation tab component.
 **Location**: `@/components/nav/NavTab`
 
 **Props**:
-- `to` - Route path
-- `label` - Tab label
-- `icon` - Optional icon
+- `title` - Tab title (TabType: 'Scales' | 'Chords' | 'Play')
+- `isActive` - Boolean indicating if tab is currently active
+- `onFxn` - Click handler function (() => void)
+
+**Features**:
+- Uses button element with onFxn handler for navigation
+- Supports active state styling via `isActive` prop
+- Includes keyboard navigation support via `useButtonHandler` hook
+- Memoized component for performance optimization
+
 
 ## Root-Level Components
 

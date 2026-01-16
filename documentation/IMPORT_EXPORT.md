@@ -69,7 +69,6 @@ Imports should be ordered as follows (alphabetically within each group):
 4. **Third-party libraries** (alphabetically by source)
    ```tsx
    import clsx from 'clsx';
-   import { Link } from '@tanstack/react-router';
    import { z } from 'zod';
    ```
 

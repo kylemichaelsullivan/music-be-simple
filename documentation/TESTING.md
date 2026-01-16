@@ -120,7 +120,7 @@ test('should navigate to scales page', async ({ page }) => {
 
 ### `test-utils.tsx`
 
-Provides a custom `render` function that includes router context and other providers:
+Provides a custom `render` function that includes context providers:
 
 ```typescript
 import { render } from '@/test/test-utils';
@@ -166,9 +166,9 @@ bun run test:e2e
 
 ## Troubleshooting
 
-### Tests failing with router errors
+### Tests failing with context errors
 
-Make sure to use the `render` function from `test-utils.tsx` which includes router context.
+Make sure to use the `render` function from `test-utils.tsx` which includes context providers.
 
 ### E2E tests timing out
 

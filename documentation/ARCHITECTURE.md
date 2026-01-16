@@ -4,7 +4,7 @@ This document describes the architecture and structure of the Music Be Simple ap
 
 ## Overview
 
-Music Be Simple is a React-based single-page application built with modern web technologies. The application uses a component-based architecture with React Context API for state management and TanStack Router for type-safe routing.
+Music Be Simple is a React-based single-page application built with modern web technologies. The application uses a component-based architecture with React Context API for state management and manual routing implemented in `App.tsx`.
 
 ## Project Structure
 
@@ -28,7 +28,6 @@ src/
 │   ├── Chords/         # Chords page components
 │   ├── Play/           # Play page components
 │   └── Scales/         # Scales page components
-├── routes/             # TanStack Router route definitions
 ├── types/              # TypeScript type definitions
 └── utils/              # Utility functions
     ├── borders.ts      # Border utility functions
@@ -111,37 +110,41 @@ State persistence uses two strategies:
 
 ## Routing
 
-The application uses TanStack Router for type-safe routing:
+The application uses manual routing implemented in `App.tsx` with React state and browser History API:
 
-- `/` - Home/Index route
+- `/` - Home route (redirects to `/scales`)
 - `/scales` - Scales page
 - `/chords` - Chords page
 - `/play` - Play page
 
-Routes are defined in `src/routes/` and automatically generated via the TanStack Router plugin.
+Routing is managed via React state in `App.tsx`. URL synchronization is handled using `window.history.pushState` and `window.history.replaceState`. Browser back/forward navigation is handled with `popstate` event listeners.
 
 ## Component Architecture
 
 ### Component Hierarchy
 
 ```
-RootRoute
-├── Navbar
-│   └── NavTab (multiple)
-├── Outlet (page content)
-│   ├── Scales Page
-│   │   ├── Tonic selector
-│   │   ├── Variant selector
-│   │   ├── Display components
-│   │   └── Instrument displays
-│   ├── Chords Page
-│   │   ├── Tonic selector
-│   │   ├── Variant selector
-│   │   ├── Chord display
-│   │   └── Instrument displays
-│   └── Play Page
-│       └── Play interface
-└── Footer
+App
+├── GlobalsContextProvider
+│   ├── ScalesContextProvider
+│   ├── ChordsContextProvider
+│   └── PlayContextProvider
+│       ├── Navbar
+│       │   └── NavTab (multiple)
+│       ├── Active Page Component (conditionally rendered based on activeTab)
+│       │   ├── Scales Page
+│       │   │   ├── Tonic selector
+│       │   │   ├── Variant selector
+│       │   │   ├── Display components
+│       │   │   └── Instrument displays
+│       │   ├── Chords Page
+│       │   │   ├── Tonic selector
+│       │   │   ├── Variant selector
+│       │   │   ├── Chord display
+│       │   │   └── Instrument displays
+│       │   └── Play Page
+│       │       └── Play interface
+│       └── Footer
 ```
 
 ### Component Patterns
@@ -390,7 +393,7 @@ e2e/
 ### Test Utilities
 
 **test-utils.tsx**:
-- Custom `render` function that includes TanStack Router context
+- Custom `render` function that includes context providers
 - Wraps components with necessary providers for testing
 
 **setup.ts**:
@@ -414,7 +417,6 @@ e2e/
 - **Zod** - Runtime type validation and schema definition
 - **Zustand** - State management for tonic/variant state
 - **Biome** - Linting and formatting
-- **TanStack Router Plugin** - Route generation
 - **Vitest** - Unit and component testing
 - **Playwright** - End-to-end testing
 
@@ -428,7 +430,7 @@ e2e/
 ## Key Design Decisions
 
 1. **Context API over Redux**: Simpler state management for the application's needs
-2. **TanStack Router**: Type-safe routing with excellent TypeScript support
+2. **Manual routing**: Custom routing implementation in `App.tsx` with React state and browser History API
 3. **Component composition**: Reusable components with clear separation of concerns
 4. **TypeScript strict mode**: Maximum type safety
 5. **Bun**: Fast package management and runtime

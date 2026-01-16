@@ -206,7 +206,7 @@ When committing changes related to components, be specific:
 - **Page Components**: Chords, Scales, Write
 - **Layout Components**: Root Route, Navigation
 - **State Management**: App Store (Zustand), State Persistence
-- **Routing**: TanStack Router configuration, route definitions
+- **Routing**: Manual routing implementation in `App.tsx`
 
 ### Data and State
 
