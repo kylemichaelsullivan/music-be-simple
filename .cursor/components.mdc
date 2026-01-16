@@ -69,13 +69,6 @@ src/pages/
     ├── Notes.tsx
     ├── Scale.tsx
     └── ScaleContainer.tsx
-
-src/routes/
-├── __root.tsx
-├── index.tsx
-├── chords.tsx
-├── play.tsx
-└── scales.tsx
 ```
 
 ## Component Structure Guidelines
@@ -136,9 +129,9 @@ Always use the project's utility components instead of creating custom HTML elem
   - Uses NavTab components for individual tabs
 
 - **NavTab** (`@/components/nav/NavTab`) - Navigation tab component
-  - Required props: `title` (TabType), `to` (string)
-  - Uses TanStack Router Link for navigation
-  - Supports active state styling
+  - Required props: `title` (TabType), `isActive` (boolean), `onFxn` (() => void)
+  - Uses button element for navigation with click handler
+  - Supports active state styling via `isActive` prop
 
 - **TopButton** (`@/components/buttons/TopButton`) - Top button component
   - Required props: `title` (string), `icon` (string), `position` ('left' | 'right'), `onFxn` (() => void)
@@ -257,7 +250,7 @@ export const ComponentName = memo(ComponentName);
   1. Internal project imports with `@/` alias (alphabetically: components, context, hooks, instruments, navigation, schemas, stores, utils)
   2. Type imports from `@/types` and other `@/` paths (alphabetically)
   3. React value imports (from 'react')
-  4. Third-party libraries (alphabetically: clsx, zod, @tanstack/react-router, etc.)
+  4. Third-party libraries (alphabetically: clsx, zod, etc.)
   5. Relative imports (alphabetically)
   6. Type imports from React (import type from 'react') - comes last
 - **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
@@ -363,25 +356,27 @@ export function MyComponent() {
 
 ### Context Provider Pattern
 
-Context providers wrap page components at the route level:
+Context providers wrap page components at the application level in `App.tsx`:
 
 ```tsx
-// Route file (src/routes/scales.tsx)
+// App.tsx
 import { ScalesContextProvider } from '@/context';
 import { Scales } from '@/pages/Scales';
-import { createFileRoute } from '@tanstack/react-router';
 
-export function ScalesPage() {
+export function App() {
   return (
-    <ScalesContextProvider>
-      <Scales />
-    </ScalesContextProvider>
+    <GlobalsContextProvider>
+      <ScalesContextProvider>
+        <ChordsContextProvider>
+          <PlayContextProvider>
+            {/* Page components are rendered based on active tab */}
+            <Scales />
+          </PlayContextProvider>
+        </ChordsContextProvider>
+      </ScalesContextProvider>
+    </GlobalsContextProvider>
   );
 }
-
-export const Route = createFileRoute('/scales')({
-  component: ScalesPage,
-});
 ```
 
 ## Component Best Practices
@@ -453,22 +448,21 @@ import clsx from 'clsx';
 
 ## Routing
 
-- **TanStack Router**: Use TanStack Router for navigation
-- **Link component**: Use Link component from `@tanstack/react-router` for navigation
-- **Active state**: Use `activeProps` prop on Link for active state styling
-- **Route structure**: Routes are defined in `src/routes/` directory
+The application uses manual routing implemented in `App.tsx` with React state and browser History API:
+
+- **Manual routing**: Routes are managed via state in `App.tsx`
+- **URL synchronization**: URL is updated using `window.history.pushState` and `window.history.replaceState`
+- **Browser navigation**: Handles browser back/forward with `popstate` event listener
+- **Navigation components**: Use button elements with handler functions (e.g., `onFxn`) for navigation
+- **Active state**: Active tab state is managed via props passed to navigation components
 
 ```tsx
-import { Link } from '@tanstack/react-router';
-
-<Link
-  to='/chords'
-  className='px-4 py-2 rounded-t-lg hover:bg-gray-100 transition-colors'
-  activeProps={{ className: 'bg-gray-300 font-bold' }}
+// Navigation is handled via click handlers in NavTab component
+<NavTab
   title='Chords'
->
-  Chords
-</Link>
+  isActive={currentTab === 'Chords'}
+  onFxn={() => onTabChange('Chords')}
+/>
 ```
 
 ## Component Testing

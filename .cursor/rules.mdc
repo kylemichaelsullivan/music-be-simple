@@ -13,7 +13,7 @@ Music Be Simple is a web application for learning and exploring music theory. It
 - Always use **bun** for package management and all package-related operations
 - Use **TypeScript** with strict configuration
 - Follow **React 19** with **Vite** architecture
-- Use **TanStack Router** for routing
+- Use **manual routing** implemented in `App.tsx` with React state and browser History API
 - Use **Zustand stores** and **React Context API** for state management (hybrid approach)
 - Use typographic apostrophe ' instead of straight apostrophe ' in ALL user-facing text
 
@@ -51,7 +51,7 @@ Music Be Simple is a web application for learning and exploring music theory. It
 - **Fast HMR**: Hot Module Replacement for instant updates
 - **Optimized builds**: Production builds with code splitting
 - **TypeScript support**: Native TypeScript support
-- **Plugin ecosystem**: Rich plugin ecosystem (React, Tailwind, TanStack Router)
+- **Plugin ecosystem**: Rich plugin ecosystem (React, Tailwind)
 
 ## Project Structure
 
@@ -132,12 +132,6 @@ src/
 │       ├── Notes.tsx
 │       ├── Scale.tsx
 │       └── ScaleContainer.tsx
-├── routes/              # TanStack Router route definitions
-│   ├── __root.tsx       # Root route layout
-│   ├── index.tsx        # Home/index route (redirects to scales)
-│   ├── chords.tsx       # Chords route with context provider
-│   ├── play.tsx         # Play route with context provider
-│   └── scales.tsx       # Scales route with context provider
 ├── stores/              # Zustand stores for state management
 │   ├── chordsStore.ts   # Chords tonic/variant store
 │   ├── scalesStore.ts   # Scales tonic/variant store
@@ -188,7 +182,7 @@ e2e/                     # End-to-end tests
   1. Internal project imports with `@/` alias (alphabetically by path: components, context, hooks, instruments, navigation, schemas, stores, utils)
   2. Type imports from `@/types` and other `@/` paths (alphabetically)
   3. React value imports (from 'react')
-  4. Third-party libraries (alphabetically by source: clsx, zod, @tanstack/react-router, etc.)
+  4. Third-party libraries (alphabetically by source: clsx, zod, etc.)
   5. Relative imports (siblings, direct children, direct parents)
   6. Type imports from React (import type from 'react') - comes last
 - **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
@@ -227,7 +221,6 @@ import { useScales } from '@/hooks';
 import type { TabType } from '@/types';
 import { useState } from 'react';
 import clsx from 'clsx';
-import { Link } from '@tanstack/react-router';
 import { IconButton } from './IconButton';
 import type { ReactNode } from 'react';
 ```
@@ -444,7 +437,7 @@ export function ComponentName({
 - **Named exports only**: Use named exports for components (e.g., `export function ComponentName`) - NO default exports
 - **Path aliases**: Use `@/` alias for imports (configured in tsconfig.json)
 - **State management**: Use React Context API with custom hooks for global state, `useState` for local component state
-- **Router integration**: Components should work seamlessly with TanStack Router
+- **Routing integration**: Components work with manual routing in `App.tsx`
 
 #### Type Assertion Guidelines
 
@@ -476,7 +469,7 @@ The project uses a **hybrid approach** combining **Zustand stores** and **React 
 - **Zustand stores**: Manage tonic and variant state for scales and chords (in `src/stores/`)
 - **Context providers**: Provide computed values, UI state, and additional functionality (in `src/context/`)
 - **Provider location**: Context providers are in `src/context/` directory, stores in `src/stores/`
-- **Provider usage**: Context providers wrap page components at the route level
+- **Provider usage**: Context providers wrap all page components in `App.tsx`
 - **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`) to access context values
 - **Store hooks**: Use store hooks (`useChordsStore`, `useScalesStore`, `usePlayStore`) to access store state
 - **Persistence**: 
@@ -583,42 +576,47 @@ function Component() {
 ### Context Provider Pattern
 
 ```tsx
-// Route file wraps page with context provider
+// ✅ Context providers wrap all pages in App.tsx
 import { ScalesContextProvider } from '@/context';
 import { Scales } from '@/pages/Scales';
 
-function ScalesPage() {
+export function App() {
 	return (
-		<ScalesContextProvider>
-			<Scales />
-		</ScalesContextProvider>
+		<GlobalsContextProvider>
+			<ScalesContextProvider>
+				<ChordsContextProvider>
+					<PlayContextProvider>
+						{/* Pages are rendered based on active tab state */}
+						<Scales />
+					</PlayContextProvider>
+				</ChordsContextProvider>
+			</ScalesContextProvider>
+		</GlobalsContextProvider>
 	);
 }
 ```
 
 ## Routing
 
-### TanStack Router
+### Manual Routing
 
-- **File-based routing**: Routes are defined in `src/routes/` directory
-- **Route generation**: Route tree is auto-generated via TanStack Router plugin
-- **Route structure**: Each route file exports a route definition
-- **Root route**: `__root.tsx` defines the root layout with Navbar and Outlet
-- **Navigation**: Use `Link` component from `@tanstack/react-router` for navigation
+The application uses manual routing implemented in `App.tsx`:
+
+- **Manual routing**: Routes are managed via React state in `App.tsx`
+- **URL synchronization**: URL is updated using `window.history.pushState` and `window.history.replaceState`
+- **Browser navigation**: Handles browser back/forward with `popstate` event listener
+- **Navigation components**: Use button elements with handler functions (e.g., `onFxn`) for navigation
+- **Route paths**: `/scales`, `/chords`, `/play` are mapped to tab states
 
 ### Routing Usage
 
 ```tsx
-// ✅ Use TanStack Router Link
-import { Link } from '@tanstack/react-router';
-
-<Link
-	to='/chords'
-	className='...'
-	activeProps={{ className: '...' }}
->
-	Chords
-</Link>
+// ✅ Use button with onFxn handler for navigation
+<NavTab
+	title='Chords'
+	isActive={currentTab === 'Chords'}
+	onFxn={() => onTabChange('Chords')}
+/>
 ```
 
 ## Testing
@@ -635,7 +633,7 @@ The project uses a comprehensive testing setup:
 - Unit tests: `src/utils/__tests__/`, `src/hooks/__tests__/`
 - Component tests: `src/components/__tests__/`
 - E2E tests: `e2e/`
-- Test utilities: `src/test/test-utils.tsx` (custom render with router context)
+- Test utilities: `src/test/test-utils.tsx` (custom render with context providers)
 - Test setup: `src/test/setup.ts` (mocks and global configuration)
 
 ### Testing Best Practices
@@ -650,7 +648,7 @@ The project uses a comprehensive testing setup:
 
 ### Test Utilities
 
-- Use `render` from `@/test/test-utils` for components that need router context
+- Use `render` from `@/test/test-utils` for components that need context providers
 - Test setup includes mocks for `matchMedia`, `IntersectionObserver`, and `AudioContext`
 - Coverage reports are generated in the `coverage/` directory
 

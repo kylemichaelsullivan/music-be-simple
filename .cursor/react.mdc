@@ -1,6 +1,6 @@
 ---
 globs: **/*.tsx, **/*.ts
-exclude: **/__tests__/**, **/*.test.*, **/*.spec.*, **/routes/**, **/*.css
+exclude: **/__tests__/**, **/*.test.*, **/*.spec.*, **/*.css
 alwaysApply: false
 ---
 
@@ -26,7 +26,7 @@ alwaysApply: false
   1. Internal project imports with `@/` alias (alphabetically: components, context, hooks, instruments, navigation, schemas, stores, utils)
   2. Type imports from `@/types` and other `@/` paths (alphabetically)
   3. React value imports (from 'react')
-  4. Third-party libraries (alphabetically: clsx, zod, @tanstack/react-router, etc.)
+  4. Third-party libraries (alphabetically: clsx, zod, etc.)
   5. Relative imports (alphabetically)
   6. Type imports from React (import type from 'react') - comes last
 - **Separate code and type imports**: If importing both code and types from the same file, use separate import statements
@@ -125,26 +125,16 @@ function SectionComponent({ data }: SectionProps) {
 #### Lazy Loading and Code Splitting
 
 ```typescript
-// ✅ Use lazy loading for page components if needed
+// ✅ Use lazy loading for page components in App.tsx
 import { Suspense, lazy } from 'react';
 
-const Chords = lazy(() => import('@/pages/Chords'));
+const ChordsPage = lazy(() => import('@/pages/Chords').then((m) => ({ default: m.Chords })));
+const ScalesPage = lazy(() => import('@/pages/Scales').then((m) => ({ default: m.Scales })));
 
-function LoadingPage() {
-  return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className='text-lg'>Loading...</div>
-    </div>
-  );
-}
-
-export default function ChordsRoute() {
-  return (
-    <Suspense fallback={<LoadingPage />}>
-      <Chords />
-    </Suspense>
-  );
-}
+// In App component
+<Suspense fallback={<div>Loading...</div>}>
+  <ActivePageComponent />
+</Suspense>
 ```
 
 ### Performance Considerations
@@ -199,7 +189,7 @@ function ComponentWithState() {
 - **Context providers**: Context providers located in `src/context/` directory
 - **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`, `useInstrumentNotes`) to access context values
 - **Store hooks**: Use store hooks (`useChordsStore`, `useScalesStore`, `usePlayStore`) to access store state
-- **Provider pattern**: Context providers wrap page components at the route level
+- **Provider pattern**: Context providers wrap all page components in `App.tsx`
 - **Persistence**: 
   - **sessionStorage** (Zustand): Tonic and variant state (persists during navigation, clears on refresh)
   - **localStorage** (`useLocalStorage`): UI preferences (persists across refreshes)
@@ -331,22 +321,24 @@ export function MyComponent() {
 #### Context Provider Pattern
 
 ```typescript
-// ✅ Route file wraps page with context provider
+// ✅ Context providers wrap all pages in App.tsx
 import { ScalesContextProvider } from '@/context';
 import { Scales } from '@/pages/Scales';
-import { createFileRoute } from '@tanstack/react-router';
 
-function ScalesPage() {
+export function App() {
   return (
-    <ScalesContextProvider>
-      <Scales />
-    </ScalesContextProvider>
+    <GlobalsContextProvider>
+      <ScalesContextProvider>
+        <ChordsContextProvider>
+          <PlayContextProvider>
+            {/* Pages are rendered based on active tab state */}
+            <Scales />
+          </PlayContextProvider>
+        </ChordsContextProvider>
+      </ScalesContextProvider>
+    </GlobalsContextProvider>
   );
 }
-
-export const Route = createFileRoute('/scales')({
-  component: ScalesPage,
-});
 ```
 
 ## Accessibility Standards
@@ -388,16 +380,16 @@ All page components follow similar patterns:
 
 - **Main**: Main content wrapper component with page-specific styling
 - **Navbar**: Navigation bar with tabs for Scales, Chords, and Play
-- **NavTab**: Individual navigation tab component using TanStack Router Link
+- **NavTab**: Individual navigation tab component using button with onFxn handler
 - **Footer**: Footer component with copyright information
 - **Title**: Title component for page headings
 
 ### Routing
 
-- **TanStack Router**: File-based routing in `src/routes/` directory
-- **Route structure**: Each route file exports a route definition
-- **Root route**: `__root.tsx` defines layout with Navbar and Outlet
-- **Navigation**: Use Link component from TanStack Router for navigation
+- **Manual Routing**: Routing is implemented in `App.tsx` using React state and browser History API
+- **URL synchronization**: URL is updated using `window.history.pushState` and `window.history.replaceState`
+- **Browser navigation**: Handles browser back/forward navigation with `popstate` event listener
+- **Navigation components**: Use button elements with handler functions (e.g., `onFxn`) for navigation
 
 ### Typography
 
@@ -443,16 +435,6 @@ src/pages/
     └── index.tsx          # Play page component
 ```
 
-### Route Structure
-
-```
-src/routes/
-├── __root.tsx            # Root route layout
-├── index.tsx             # Home/index route
-├── chords.tsx            # Chords route
-├── play.tsx              # Play route
-└── scales.tsx            # Scales route
-```
 
 ### Store Structure
 
@@ -506,7 +488,7 @@ src/
 - **TypeScript**: Strict type checking enabled
 - **Biome**: Code formatting, linting, and import organization (replaces ESLint + Prettier)
 - **Import organization**: Use `@/` path alias for imports
-- **Vite**: Build tool with React plugin, TanStack Router plugin, and Tailwind CSS v4 integration
+- **Vite**: Build tool with React plugin and Tailwind CSS v4 integration
 
 ### Performance Patterns
 
@@ -530,7 +512,7 @@ The project uses a comprehensive testing setup with Vitest and Playwright:
 - Unit tests: `src/utils/__tests__/`, `src/hooks/__tests__/`
 - Component tests: `src/components/__tests__/`
 - E2E tests: `e2e/`
-- Test utilities: `src/test/test-utils.tsx` (custom render with router context)
+- Test utilities: `src/test/test-utils.tsx` (custom render with context providers)
 - Test setup: `src/test/setup.ts` (mocks and global configuration)
 
 #### Testing Best Practices
@@ -545,7 +527,7 @@ The project uses a comprehensive testing setup with Vitest and Playwright:
 
 #### Test Utilities
 
-- Use `render` from `@/test/test-utils` for components that need router context
+- Use `render` from `@/test/test-utils` for components that need context providers
 - Test setup includes mocks for `matchMedia`, `IntersectionObserver`, and `AudioContext`
 - Coverage reports are generated in the `coverage/` directory
 
