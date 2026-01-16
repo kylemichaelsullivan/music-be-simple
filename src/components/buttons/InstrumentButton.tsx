@@ -1,7 +1,7 @@
 import { InstrumentIcon } from '@/components/icons';
 import { useButtonHandler } from '@/hooks';
 import type { InstrumentType } from '@/types';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 type InstrumentButtonProps = {
 	instrument: InstrumentType;
@@ -9,7 +9,7 @@ type InstrumentButtonProps = {
 	onClick: (instrument: InstrumentType) => void;
 };
 
-export function InstrumentButton({ instrument, isActive, onClick }: InstrumentButtonProps) {
+function InstrumentButtonComponent({ instrument, isActive, onClick }: InstrumentButtonProps) {
 	const { handleClick, handleKeyDown } = useButtonHandler(
 		useCallback(() => {
 			onClick(instrument);
@@ -31,3 +31,5 @@ export function InstrumentButton({ instrument, isActive, onClick }: InstrumentBu
 		</button>
 	);
 }
+
+export const InstrumentButton = memo(InstrumentButtonComponent);

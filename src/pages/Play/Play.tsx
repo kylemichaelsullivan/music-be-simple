@@ -51,9 +51,10 @@ export function Play() {
 					notes={data.notes}
 					tonic={data.tonic}
 					getBorderStyle={isScalesMode ? undefined : chordsData.getBorderStyle}
+					hasModes={isScalesMode}
+					isPlayPage={true}
 					showNerdMode={isScalesMode ? undefined : chordsData.showNerdMode}
 					showNoteLabels={isScalesMode ? scalesData.showNoteLabels : undefined}
-					hasModes={isScalesMode}
 				/>
 
 				<hr className='border-b border-black py-px' />

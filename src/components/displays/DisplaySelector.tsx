@@ -1,7 +1,7 @@
 import { InstrumentIcon } from '@/components/icons';
 import { useButtonHandler } from '@/hooks';
 import type { IconName } from '@/types';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 type DisplaySelectorProps = {
 	icon: IconName;
@@ -10,7 +10,7 @@ type DisplaySelectorProps = {
 	onFxn: (icon: IconName) => void;
 };
 
-export function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelectorProps) {
+function DisplaySelectorComponent({ icon, text, isActive, onFxn }: DisplaySelectorProps) {
 	const { handleClick, handleKeyDown } = useButtonHandler(
 		useCallback(() => {
 			onFxn(icon);
@@ -32,3 +32,5 @@ export function DisplaySelector({ icon, text, isActive, onFxn }: DisplaySelector
 		</button>
 	);
 }
+
+export const DisplaySelector = memo(DisplaySelectorComponent);

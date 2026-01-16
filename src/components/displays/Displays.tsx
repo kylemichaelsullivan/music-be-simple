@@ -3,8 +3,7 @@ import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { InstrumentType, NoteIndex, border } from '@/types';
-import { useLocation } from '@tanstack/react-router';
-import type { ReactElement } from 'react';
+import { type ReactElement, memo, useMemo } from 'react';
 import { Banjo, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from './';
 
 type DisplaysProps = {
@@ -12,6 +11,7 @@ type DisplaysProps = {
 	tonic: NoteIndex;
 	getBorderStyle?: (note: NoteIndex) => border;
 	hasModes?: boolean;
+	isPlayPage?: boolean;
 	showNerdMode?: boolean;
 	showNoteLabels?: boolean;
 };
@@ -24,22 +24,25 @@ const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
 	Ukulele: () => <Ukulele />,
 };
 
-export function Displays({
+function DisplaysComponent({
 	notes,
 	tonic,
 	getBorderStyle,
 	hasModes = false,
 	showNerdMode,
 	showNoteLabels = true,
+	isPlayPage = false,
 }: DisplaysProps) {
 	const { displays } = useGlobals();
-	const location = useLocation();
-	const isPlayPage = location.pathname === '/play';
 
-	const orderedDisplays = INSTRUMENT_ORDER.filter((instrument) => {
-		const iconType = ICON_MAP[instrument];
-		return displays.includes(iconType);
-	});
+	const orderedDisplays = useMemo(
+		() =>
+			INSTRUMENT_ORDER.filter((instrument) => {
+				const iconType = ICON_MAP[instrument];
+				return displays.includes(iconType);
+			}),
+		[displays]
+	);
 
 	const showModes = hasModes && displays.includes('stand');
 
@@ -76,3 +79,5 @@ export function Displays({
 		</InstrumentNotesProvider>
 	);
 }
+
+export const Displays = memo(DisplaysComponent);
