@@ -7,7 +7,10 @@ type MainProps = {
 
 export function Main({ componentName, children }: MainProps) {
 	return (
-		<main className={`${componentName} relative flex flex-col gap-4 flex-1 p-4 z-10`} tabIndex={-1}>
+		<main
+			className={`${componentName} relative flex flex-col gap-4 flex-1 min-w-0 p-4 z-10`}
+			tabIndex={-1}
+		>
 			{children}
 		</main>
 	);

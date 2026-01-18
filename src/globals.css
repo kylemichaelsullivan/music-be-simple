@@ -23,6 +23,7 @@
 }
 
 html {
+	overflow-x: hidden;
 	scroll-snap-type: y proximity;
 }
 
@@ -30,6 +31,7 @@ body {
 	background-color: var(--background);
 	color: var(--black);
 	font-family: "Geist Mono", monospace;
+	overflow-x: hidden;
 }
 
 .Navbar,

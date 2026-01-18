@@ -149,7 +149,7 @@ export function App() {
 						<div className='RootComponent flex flex-col min-h-screen w-full overflow-x-hidden'>
 							<Navbar currentTab={activeTab} onTabChange={handleTabChange} />
 							<div className='ScrollSnap flex flex-col flex-1 scroll-snap-align-start w-full'>
-								<div className='relative flex flex-1 min-h-0'>
+								<div className='relative flex flex-1 min-w-0 min-h-0'>
 									<Suspense
 										fallback={
 											<div className='flex flex-1 justify-center items-center p-4'>

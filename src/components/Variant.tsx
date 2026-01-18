@@ -23,7 +23,7 @@ function ScaleVariant() {
 
 	return (
 		<select
-			className='Variant flex-auto border border-slate-500 rounded-none min-w-16 min-h-12 px-1 hover:ring-1'
+			className='Variant flex-auto border border-slate-500 rounded-none min-w-0 min-h-12 px-1 hover:ring-1'
 			value={variant}
 			name='Scale Variant'
 			aria-label='Scale Variant'

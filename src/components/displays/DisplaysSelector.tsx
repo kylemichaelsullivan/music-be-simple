@@ -38,7 +38,7 @@ export function DisplaysSelector({
 	}, [onFxn]);
 
 	return (
-		<div className='DisplaysSelector relative border border-slate-500'>
+		<div className='DisplaysSelector relative border border-slate-500 min-w-0'>
 			<div className='flex gap-8 justify-center px-4 py-1 overflow-x-auto'>
 				{instrumentSelectors}
 
