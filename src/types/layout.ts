@@ -12,9 +12,9 @@ export type DisplaysProps = {
 };
 
 export type DisplaysSelectorProps = {
-	hasModes?: boolean;
-	displays?: IconType[];
 	onFxn: (icon: IconType) => void;
+	displays?: IconType[];
+	hasModes?: boolean;
 };
 
 export type PageTopButtonProps = {
@@ -24,11 +24,11 @@ export type PageTopButtonProps = {
 };
 
 export type PageLayoutProps = {
-	title: TabType;
-	topButton: PageTopButtonProps;
-	tonicVariantSlot: ReactNode;
-	notesSlot?: ReactNode;
-	hasModes?: boolean;
 	displaysProps: DisplaysProps;
+	title: TabType;
+	tonicVariantSlot: ReactNode;
+	topButton: PageTopButtonProps;
 	afterDisplaysSlot?: ReactNode;
+	hasModes?: boolean;
+	notesSlot?: ReactNode;
 };
