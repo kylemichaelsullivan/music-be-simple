@@ -116,4 +116,12 @@ export const NotepadLineDataSchema = z.object({
 
 export const ChordBinStorageSchema = z.array(ChordBinItemDataSchema);
 
+// Tunings: open string note indices per instrument (Guitar 6, Banjo 5 including drone, Mandolin 4, Ukulele 4)
+export const TuningsStorageSchema = z.object({
+	Banjo: z.array(NoteIndexZodSchema).length(5).optional(),
+	Guitar: z.array(NoteIndexZodSchema).length(6).optional(),
+	Mandolin: z.array(NoteIndexZodSchema).length(4).optional(),
+	Ukulele: z.array(NoteIndexZodSchema).length(4).optional(),
+});
+
 export const NotepadStorageSchema = z.array(NotepadLineDataSchema);

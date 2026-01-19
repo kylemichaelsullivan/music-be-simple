@@ -16,7 +16,8 @@ export function Imports() {
 		const reader = new FileReader();
 		reader.onload = (e) => {
 			try {
-				const content = e.target?.result as string;
+				const content = e.target?.result;
+				if (typeof content !== 'string') return;
 				const data = JSON.parse(content);
 
 				if (importTypeRef.current === 'chordBin') {
