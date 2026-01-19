@@ -1,11 +1,6 @@
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/nav';
-import {
-	ChordsContextProvider,
-	GlobalsContextProvider,
-	PlayContextProvider,
-	ScalesContextProvider,
-} from '@/context';
+import { AppProviders } from '@/context';
 import { TABS } from '@/navigation';
 import type { TabType } from '@/types';
 import type { ComponentType, LazyExoticComponent, ReactElement } from 'react';
@@ -121,7 +116,7 @@ export function App() {
 				window.scrollTo({ top: 0, behavior: 'instant' });
 
 				const focusElement = () => {
-					const mainElement = document.querySelector(`main.${newTab}`) as HTMLElement;
+					const mainElement = document.querySelector<HTMLElement>(`main.${newTab}`);
 					if (mainElement) {
 						mainElement.focus();
 					}
@@ -142,49 +137,41 @@ export function App() {
 	const ActivePageComponent = tabPageComponents[activeTab];
 
 	return (
-		<GlobalsContextProvider>
-			<ScalesContextProvider>
-				<ChordsContextProvider>
-					<PlayContextProvider>
-						<div className='RootComponent flex flex-col min-h-screen w-full overflow-x-hidden'>
-							<Navbar currentTab={activeTab} onTabChange={handleTabChange} />
-							<div className='ScrollSnap flex flex-col flex-1 scroll-snap-align-start w-full'>
-								<div className='relative flex flex-1 min-w-0 min-h-0'>
-									<Suspense
-										fallback={
-											<div className='flex flex-1 justify-center items-center p-4'>
-												Loading . . .
-											</div>
-										}
-									>
-										<ActiveTabWrapper onLoad={handleActiveTabLoaded}>
-											<ActivePageComponent />
-										</ActiveTabWrapper>
-									</Suspense>
-									{shouldPreloadOtherTabs && (
-										<Suspense fallback={null}>
-											{otherTabs.map((tab) => {
-												const PageComponent = tabPageComponents[tab];
-												return (
-													<div
-														key={tab}
-														className='absolute inset-0 z-0 pointer-events-none opacity-0 overflow-hidden'
-														style={{ contain: 'layout' }}
-														aria-hidden={true}
-													>
-														<PageComponent />
-													</div>
-												);
-											})}
-										</Suspense>
-									)}
-								</div>
-								<Footer />
-							</div>
-						</div>
-					</PlayContextProvider>
-				</ChordsContextProvider>
-			</ScalesContextProvider>
-		</GlobalsContextProvider>
+		<AppProviders>
+			<div className='RootComponent flex flex-col min-h-screen w-full overflow-x-hidden'>
+				<Navbar currentTab={activeTab} onTabChange={handleTabChange} />
+				<div className='ScrollSnap flex flex-col flex-1 scroll-snap-align-start w-full'>
+					<div className='relative flex flex-1 min-w-0 min-h-0'>
+						<Suspense
+							fallback={
+								<div className='flex flex-1 justify-center items-center p-4'>Loading . . .</div>
+							}
+						>
+							<ActiveTabWrapper onLoad={handleActiveTabLoaded}>
+								<ActivePageComponent />
+							</ActiveTabWrapper>
+						</Suspense>
+						{shouldPreloadOtherTabs && (
+							<Suspense fallback={null}>
+								{otherTabs.map((tab) => {
+									const PageComponent = tabPageComponents[tab];
+									return (
+										<div
+											key={tab}
+											className='absolute inset-0 z-0 pointer-events-none opacity-0 overflow-hidden'
+											style={{ contain: 'layout' }}
+											aria-hidden={true}
+										>
+											<PageComponent />
+										</div>
+									);
+								})}
+							</Suspense>
+						)}
+					</div>
+					<Footer />
+				</div>
+			</div>
+		</AppProviders>
 	);
 }

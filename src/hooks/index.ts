@@ -7,3 +7,4 @@ export { useGlobals } from './useGlobals';
 export { useInstrumentNotes } from './useInstrumentNotes';
 export { usePlay } from './usePlay';
 export { useScales } from './useScales';
+export { useTunings } from './useTunings';

@@ -25,6 +25,7 @@ export type IconType = (typeof ICONS)[number];
 export type InstrumentType = (typeof INSTRUMENTS)[number];
 export type NerdModeButtonIcon = '🤓' | '💃🏾';
 export type NoteLabelsButtonIcon = '📖' | '📕';
+export type TunableInstrument = 'Banjo' | 'Guitar' | 'Mandolin' | 'Ukulele';
 
 // Navigation types
 export type TabType = (typeof TABS)[number];
@@ -56,17 +57,18 @@ export type { ChordsContextType, ChordsContextProviderProps } from './chords';
 export type { GlobalsContextType, GlobalsContextProviderProps } from './globals';
 export type { InstrumentNotesContextType } from './instrumentNotes';
 export type {
-	PlayContextType,
 	ChordBinItemData,
 	NotepadLineData,
+	PlayContextType,
 	PlayContextProviderProps,
 	ReferenceMode,
 	SaveActionType,
 } from './play';
-export type { ScalesContextType, ScalesContextProviderProps } from './scales';
 export type {
 	DisplaysProps,
 	DisplaysSelectorProps,
 	PageLayoutProps,
 	PageTopButtonProps,
 } from './layout';
+export type { ScalesContextType, ScalesContextProviderProps } from './scales';
+export type { TuningsContextType, TuningsContextProviderProps } from './tunings';
