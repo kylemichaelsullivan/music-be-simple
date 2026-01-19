@@ -40,16 +40,18 @@ test.describe('Navigation', () => {
 		await page.goto('/scales');
 		await page.waitForLoadState('networkidle');
 
-		// Click on Chords tab
-		await page.getByRole('button', { name: 'Chords' }).click();
+		const nav = page.locator('nav');
+
+		// Click on Chords tab (scope to nav to avoid matching TopButton "Show Chords?" on Play)
+		await nav.getByTitle('Chords').click();
 		await expect(page).toHaveURL(/.*\/chords/);
 
-		// Click on Play tab
-		await page.getByRole('button', { name: 'Play' }).click();
+		// Click on Play tab (scope to nav to avoid matching SkipLink "Skip displays selector")
+		await nav.getByTitle('Play').click();
 		await expect(page).toHaveURL(/.*\/play/);
 
-		// Click on Scales tab
-		await page.getByRole('button', { name: 'Scales' }).click();
+		// Click on Scales tab (scope to nav to avoid matching TopButton "Show Scales?" on Play)
+		await nav.getByTitle('Scales').click();
 		await expect(page).toHaveURL(/.*\/scales/);
 	});
 });
