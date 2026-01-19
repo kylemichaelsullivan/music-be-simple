@@ -2,19 +2,9 @@ import { SkipLink } from '@/components/SkipLink';
 import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
-import type { InstrumentType, NoteIndex, border } from '@/types';
+import type { DisplaysProps, InstrumentType } from '@/types';
 import { type ReactElement, memo, useMemo } from 'react';
 import { Banjo, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from './';
-
-type DisplaysProps = {
-	notes: NoteIndex[];
-	tonic: NoteIndex;
-	getBorderStyle?: (note: NoteIndex) => border;
-	hasModes?: boolean;
-	isPlayPage?: boolean;
-	showNerdMode?: boolean;
-	showNoteLabels?: boolean;
-};
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
 	Banjo: () => <Banjo />,
@@ -28,7 +18,7 @@ function DisplaysComponent({
 	notes,
 	tonic,
 	getBorderStyle,
-	hasModes = false,
+	showModes = false,
 	showNerdMode,
 	showNoteLabels = true,
 	isPlayPage = false,
@@ -44,7 +34,7 @@ function DisplaysComponent({
 		[displays]
 	);
 
-	const showModes = hasModes && displays.includes('stand');
+	const renderModes = showModes && displays.includes('stand');
 
 	return (
 		<InstrumentNotesProvider
@@ -74,7 +64,7 @@ function DisplaysComponent({
 					);
 				})}
 
-				{showModes && <Modes />}
+				{renderModes && <Modes />}
 			</div>
 		</InstrumentNotesProvider>
 	);

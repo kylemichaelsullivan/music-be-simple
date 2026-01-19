@@ -1,13 +1,7 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
-import type { IconType } from '@/types';
+import type { DisplaysSelectorProps } from '@/types';
 import { useCallback, useMemo } from 'react';
 import { DisplaySelector } from './';
-
-type DisplaysSelectorProps = {
-	hasModes?: boolean;
-	displays?: IconType[];
-	onFxn: (icon: IconType) => void;
-};
 
 export function DisplaysSelector({
 	onFxn,
