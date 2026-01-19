@@ -1,16 +1,17 @@
-import type { NoteIndex } from '@/types';
+import { useTunings } from '@/hooks';
 import { rangeOfLength } from '@/utils';
 import { FretNumbers } from '../FretNumbers';
 import { FretString } from '../FretString';
 import { Label } from '../Label';
 
 export function Mandolin() {
-	// G D A E
-	const openNotes: NoteIndex[] = [4, 9, 2, 7];
+	// G, D, A, E
+	const { getTuning, openTuningModal } = useTunings();
+	const openNotes = getTuning('Mandolin');
 
 	return (
 		<div className='Mandolin flex w-full justify-center gap-2 sm:gap-4'>
-			<Label icon='Mandolin' title='Mandolin' />
+			<Label icon='Mandolin' title='Mandolin' onTuningClick={() => openTuningModal('Mandolin')} />
 			<div className='flex w-full flex-col'>
 				<FretNumbers />
 
