@@ -16,22 +16,6 @@ const initialVariant: ScaleType = 'major';
 
 const STORE_NAME = 'scales-store';
 
-const clearStorageOnPageRefresh = (): void => {
-	try {
-		if (typeof performance === 'undefined' || typeof sessionStorage === 'undefined') {
-			return;
-		}
-		const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
-		const navType = navEntries[0]?.type;
-		if (navType === 'reload') {
-			sessionStorage.removeItem(STORE_NAME);
-		}
-	} catch {
-	}
-};
-
-clearStorageOnPageRefresh();
-
 const scalesStorage = {
 	getItem: (name: string): string | null => {
 		try {
@@ -79,8 +63,7 @@ const scalesStorage = {
 			if (typeof sessionStorage !== 'undefined') {
 				sessionStorage.removeItem(name);
 			}
-		} catch {
-		}
+		} catch {}
 	},
 };
 
