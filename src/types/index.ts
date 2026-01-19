@@ -64,3 +64,9 @@ export type {
 	SaveActionType,
 } from './play';
 export type { ScalesContextType, ScalesContextProviderProps } from './scales';
+export type {
+	DisplaysProps,
+	DisplaysSelectorProps,
+	PageLayoutProps,
+	PageTopButtonProps,
+} from './layout';
