@@ -362,9 +362,10 @@ export const useScalesStore = create<ScalesStore>()(
 
 ### Context API Usage
 
+- **AppProviders** (`@/context/AppProviders`) composes all context providers in order: Globals → Tunings → Scales → Chords → Play. Use `AppProviders` in `App.tsx`; do not nest individual providers at the root.
 - Create context in `src/context/[Feature]/`
 - Export provider and custom hook
-- Use custom hooks (e.g., `useGlobals()`) instead of `useContext()` directly
+- Use custom hooks (e.g., `useGlobals()`, `useTunings()`) instead of `useContext()` directly
 - Context providers can use Zustand stores for state management
 - Context provides computed values and additional functionality
 
@@ -414,7 +415,7 @@ export const useScalesStore = create<ScalesStore>()(
 ### Tailwind CSS
 
 - Use utility classes for styling
-- Create custom utilities in `tailwind.config.js` if needed
+- The project uses `tailwind.config.js` for content and theme; extend there or in `@tailwindcss/postcss` / CSS as needed (Tailwind v4)
 - Use responsive prefixes (`sm:`, `md:`, `lg:`, etc.)
 - Follow mobile-first approach
 - Use `clsx` for conditional className construction
@@ -477,8 +478,11 @@ e2e/
 ├── scales.spec.ts          # E2E tests for scales page
 ├── chords.spec.ts          # E2E tests for chords page
 ├── play.spec.ts            # E2E tests for play page
-└── navigation.spec.ts      # E2E tests for navigation
+├── navigation.spec.ts      # E2E tests for navigation
+└── fixtures/               # e.g. import-all.json for Import E2E tests
 ```
+
+Other: `src/__tests__/` (e.g. schemas), `src/context/__tests__/`, `src/context/shared/__tests__/`, `src/stores/__tests__/`, `src/components/displays/instruments/__tests__/` (including `Piano/`).
 
 ### Writing Tests
 

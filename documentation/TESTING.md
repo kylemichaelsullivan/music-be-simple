@@ -53,22 +53,22 @@ bun run test:all
 
 ```
 src/
-├── utils/
-│   └── __tests__/          # Unit tests for utility functions
-├── components/
-│   └── __tests__/          # Component tests
-├── hooks/
-│   └── __tests__/          # Hook tests
+├── utils/__tests__/        # Unit tests for utility functions
+├── components/__tests__/   # Component tests
+├── hooks/__tests__/       # Hook tests
 └── test/
-    ├── setup.ts            # Test setup and mocks
-    └── test-utils.tsx      # Testing utilities and helpers
+    ├── setup.ts           # Test setup and mocks
+    └── test-utils.tsx     # Testing utilities and helpers
 
 e2e/
-├── scales.spec.ts          # E2E tests for scales page
-├── chords.spec.ts          # E2E tests for chords page
-├── play.spec.ts            # E2E tests for play page
-└── navigation.spec.ts      # E2E tests for navigation
+├── scales.spec.ts         # E2E tests for scales page
+├── chords.spec.ts         # E2E tests for chords page
+├── play.spec.ts           # E2E tests for play page
+├── navigation.spec.ts     # E2E tests for navigation
+└── fixtures/              # e.g. import-all.json for Import E2E tests
 ```
+
+Additional: `src/__tests__/` (e.g. `schemas.test.ts`), `src/context/__tests__/`, `src/context/shared/__tests__/`, `src/stores/__tests__/`, `src/components/displays/instruments/__tests__/` (including `Piano/`).
 
 ## Writing Tests
 

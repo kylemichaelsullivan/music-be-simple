@@ -6,8 +6,9 @@ A simple and intuitive web application for learning and exploring music theory. 
 
 - **Scales**: Explore musical scales and modes with interactive visualizations
 - **Chords**: Visualize chord construction and relationships
-- **Play**: Interactive instrument exploration with audio playback
+- **Play**: Interactive instrument exploration with audio playback; **Chord Bin** (build custom chord sequences with per-instrument editors); **Notepad** (reorderable lines); **Save/Import/Export** (JSON for chord bin, notepad, and tunings)
 - **Multi-Instrument Support**: Piano, Guitar, Banjo, Ukulele, and Mandolin
+- **Custom Tunings**: Edit and persist instrument tunings via a tuning modal
 - **Transposition**: Transpose scales and chords up or down by fifths
 - **Note Display Options**: Toggle between flats and sharps, show/hide note labels
 
@@ -16,9 +17,11 @@ A simple and intuitive web application for learning and exploring music theory. 
 - **React 19** - Modern React with latest features
 - **TypeScript** - Type-safe development
 - **Vite** - Fast build tool and dev server
-- **React Context API** - State management
+- **Zustand** - Tonic/variant state (sessionStorage)
+- **React Context API** - Computed state, UI, tunings, etc. (AppProviders: Globals → Tunings → Scales → Chords → Play)
 - **Zod** - Runtime type validation and schema definition
-- **Tailwind CSS** - Utility-first styling
+- **Tailwind CSS** - Utility-first styling (v4 with PostCSS)
+- **react-dnd** - Drag-and-drop (e.g. Notepad reordering)
 - **Biome** - Fast linter and formatter
 - **Vitest** - Unit and component testing
 - **React Testing Library** - Component testing utilities
@@ -69,26 +72,19 @@ bun dev
 
 ```
 src/
-├── App.tsx          # Main application component with routing
-├── components/      # React components
-│   └── __tests__/   # Component tests
-├── context/         # React Context providers
-├── hooks/           # Custom React hooks
-│   └── __tests__/   # Hook tests
-├── pages/           # Page components
-├── schemas.ts       # Zod schema definitions
-├── test/            # Test utilities and setup
-│   ├── setup.ts     # Test setup and mocks
-│   └── test-utils.tsx # Testing utilities
-├── types/           # TypeScript type definitions
-└── utils/           # Utility functions
-    └── __tests__/   # Unit tests
+├── App.tsx          # Main app: AppProviders, manual routing, lazy-loaded pages
+├── components/      # buttons/, displays/ (modes/, instruments/), icons/, nav/; PageLayout, SkipLink, TuningModal, etc.
+├── context/         # AppProviders; Chords, Globals, InstrumentNotes, Play, Scales, Tunings; shared/
+├── hooks/           # useChords, useGlobals, useTunings, useDragDropClassName, useDraggableItem, useDropZone, etc.
+├── pages/           # Chords/, Play/ (ChordBin, Notepad, SaveSection), Scales/
+├── stores/          # Zustand: chordsStore, scalesStore, playStore
+├── schemas.ts       # Zod schemas
+├── test/            # setup.ts, test-utils.tsx
+├── types/           # Type definitions
+└── utils/           # borders, chords, notes, scales
 
-e2e/                # End-to-end tests
-├── scales.spec.ts
-├── chords.spec.ts
-├── play.spec.ts
-└── navigation.spec.ts
+e2e/                 # scales, chords, play, navigation specs
+└── fixtures/        # e.g. import-all.json for Import E2E tests
 ```
 
 For detailed architecture information, see [ARCHITECTURE.md](./documentation/ARCHITECTURE.md).
@@ -137,10 +133,11 @@ When contributing to this project, please follow the commit message format outli
 ## Documentation
 
 - [ARCHITECTURE.md](./documentation/ARCHITECTURE.md) - Project structure and architecture
-- [DEVELOPMENT.md](./documentation/DEVELOPMENT.md) - Development guidelines
 - [COMPONENTS.md](./documentation/COMPONENTS.md) - Component documentation
 - [CONTEXT.md](./documentation/CONTEXT.md) - Context API and state management
+- [DEVELOPMENT.md](./documentation/DEVELOPMENT.md) - Development guidelines
 - [GIT_COMMITS.md](./documentation/GIT_COMMITS.md) - Commit message guidelines
+- [IMPORT_EXPORT.md](./documentation/IMPORT_EXPORT.md) - Code import and export rules
 - [TESTING.md](./documentation/TESTING.md) - Testing guide and best practices
 
 ## License

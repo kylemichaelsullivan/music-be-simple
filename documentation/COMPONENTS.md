@@ -6,10 +6,11 @@ This document provides detailed documentation for the components in the Music Be
 
 Components are organized by functionality:
 
-- `components/buttons/` - Button components
-- `components/displays/` - Display components
-- `components/nav/` - Navigation components
-- Root-level components (AllowedNote, Footer, Icon, Main, Title, Tonic, Variant)
+- `components/buttons/` - Button components (AddButton, CloseButton, EditButton, IconButton, InstrumentButton, RemoveButton, SaveSectionButton, ToggleSaveSectionButton, TopButton, TransposeButton, UseFlatsButton)
+- `components/displays/` - Display components (Displays, DisplaySelector, DisplaysSelector; modes/; instruments/)
+- `components/icons/` - ActionIcon, Icon, InstrumentIcon, NavIcon
+- `components/nav/` - Navbar, NavTab
+- Root-level: AllowedNote, Footer, Main, PageLayout, SkipLink, Title, Tonic, TuningModal, Variant
 
 ## Button Components
 
@@ -57,6 +58,16 @@ Button to toggle between flats and sharps for note display.
 - Self-contained component that uses `TopButton` internally
 - Uses `useGlobals` hook to access and toggle `usingFlats` state
 - Displays ♭ when using flats, ♯ when using sharps
+
+### Other Button Components
+
+- **AddButton** - Add items (e.g. Chord Bin, Notepad)
+- **CloseButton** - Close modals or panels (e.g. TuningModal)
+- **EditButton** - Enter edit mode
+- **IconButton** - Icon-only button
+- **InstrumentButton** - Instrument selector on Play page
+- **RemoveButton** - Remove items
+- **SaveSectionButton**, **ToggleSaveSectionButton** - SaveSection (Import/Export) on Play page
 
 ## Display Components
 
@@ -207,6 +218,12 @@ Label component for instrument displays.
 - `text` - Label text
 - `position` - Position type ('left' | 'right' | 'top' | 'bottom')
 
+### LabelContent
+
+Content for instrument labels (e.g. note names, tuning). Used with `Label`.
+
+**Location**: `@/components/displays/instruments/LabelContent`
+
 ## Mode Components
 
 ### Modes
@@ -271,6 +288,24 @@ Individual navigation tab component.
 
 ## Root-Level Components
 
+### SkipLink
+
+Skip-to-main-content link for accessibility. Rendered at the top of the page.
+
+**Location**: `@/components/SkipLink`
+
+### TuningModal
+
+Modal to edit custom instrument tunings. Opened via `useTunings().openTuningModal(instrument)`. Rendered by `TuningsContextProvider` when `tuningModalInstrument` is set.
+
+**Location**: `@/components/TuningModal`
+
+### PageLayout
+
+Layout wrapper for page content (e.g. Play page with Chord Bin, Notepad, SaveSection).
+
+**Location**: `@/components/PageLayout`
+
 ### AllowedNote
 
 Component for displaying allowed/selected notes on instruments.
@@ -297,15 +332,9 @@ Application footer component.
 
 **Props**: None
 
-### Icon
+### Icons
 
-Icon component for displaying SVG icons.
-
-**Location**: `@/components/Icon`
-
-**Props**:
-- `name` - Icon name (instrument type or 'Modes')
-- `className` - Optional CSS classes
+Icon components live in `components/icons/`: **Icon** (SVG by name), **ActionIcon**, **InstrumentIcon**, **NavIcon**. Use `@/components/icons` or the specific component.
 
 ### Main
 
@@ -367,7 +396,7 @@ Main scales page component.
 
 Main chords page component.
 
-**Location**: `@/pages/Chords/index.tsx`
+**Location**: `@/pages/Chords` (Chords, Chord, ChordName, ChordNote, ChordNotes, Notes)
 
 **Features**:
 - Tonic selection
@@ -380,12 +409,14 @@ Main chords page component.
 
 Main play page component.
 
-**Location**: `@/pages/Play/index.tsx`
+**Location**: `@/pages/Play` (Play, InstrumentSelector, ChordBin, Notepad, SaveSection)
 
 **Features**:
-- Interactive instrument exploration
-- Note playback
-- Instrument selection
+- **Instrument selector** - Choose which instrument to display
+- **Chord Bin** - Add, edit (per-instrument ChordBinEditor), and remove chord items; build custom chord sequences
+- **Notepad** - Add, reorder (react-dnd), and remove text lines
+- **SaveSection** - Import and Export JSON (chord bin, notepad, tunings) via Imports and Exports components
+- Interactive instrument exploration and note playback
 
 ## Component Patterns
 

@@ -27,7 +27,7 @@ Use for adding new files, features, or functionality.
 
 - `ADD: Chords Page Component`
 - `ADD: Scales Page Component`
-- `ADD: Write Page Component`
+- `ADD: Play Page Component`
 - `ADD: Navigation Component`
 - `ADD: App Store with Zustand`
 - `ADD: Chord Data Utilities`
@@ -61,7 +61,7 @@ Use for specific, targeted bug fixes.
 
 - `FIX: Resolve Chord Display Issue on Mobile`
 - `FIX: Correct TypeScript Type Definitions`
-- `FIX: Fix State Persistence in Write Page`
+- `FIX: Fix State Persistence in Play Page`
 - `FIX: Address TypeScript Compilation Errors`
 - `FIX: Resolve Navigation Active State Not Updating`
 - `FIX: Fix Scales State Not Persisting`
@@ -118,7 +118,7 @@ Use for updating existing files, features, or functionality.
 - `UPDATE: Upgrade React to Version 19`
 - `UPDATE: Modify Chords Page Component Styling`
 - `UPDATE: Update Scales Data Structure`
-- `UPDATE: Enhance Write Page with New Features`
+- `UPDATE: Enhance Play Page with New Features`
 - `UPDATE: Update Tailwind CSS Configuration`
 - `UPDATE: Improve Navigation Component Layout`
 
@@ -164,7 +164,7 @@ When working with files that have uncommitted changes in an AI chat context, fol
 - `FIX: Resolve Chord Display Issue on Mobile Devices`
 - `ADD: Implement Scales Page with State Persistence`
 - `REFACTOR: Extract Chord Logic into Reusable Component`
-- `UPDATE: Enhance Write Page with Auto-Save Feature`
+- `UPDATE: Enhance Play Page with Auto-Save Feature`
 
 **Bad:**
 
@@ -203,7 +203,7 @@ While not strictly part of commit messages, branch names should follow a similar
 
 When committing changes related to components, be specific:
 
-- **Page Components**: Chords, Scales, Write
+- **Page Components**: Chords, Scales, Play
 - **Layout Components**: Root Route, Navigation
 - **State Management**: App Store (Zustand), State Persistence
 - **Routing**: Manual routing implementation in `App.tsx`

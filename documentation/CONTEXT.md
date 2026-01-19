@@ -4,7 +4,7 @@ This document describes the React Context API usage and state management in the 
 
 ## Overview
 
-The application uses a hybrid state management approach combining **Zustand stores** and **React Context API**. Zustand stores manage tonic and variant state (persisted in sessionStorage), while React Context provides computed values, UI state, and additional functionality. Each context provides a custom hook for easy consumption and includes state persistence where appropriate.
+The application uses a hybrid state management approach combining **Zustand stores** and **React Context API**. Zustand stores manage tonic and variant state (persisted in sessionStorage), while React Context provides computed values, UI state, and additional functionality. **AppProviders** (`@/context/AppProviders`) composes all providers in order: Globals → Tunings → Scales → Chords → Play. `InstrumentNotesProvider` is used in `Displays` when rendering instrument components. Each context provides a custom hook for easy consumption.
 
 ## Context Providers
 
@@ -130,9 +130,38 @@ function ChordsComponent() {
 - `tonic` and `variant` are validated using `NoteIndexSchema` and `ChordVariantSchema` in the store (sessionStorage)
 - Combined data (tonic, variant, showNerdMode) is validated using `ChordsStorageSchema` in a `useEffect` hook for monitoring
 
+### TuningsContext
+
+Custom instrument tunings and TuningModal.
+
+**Location**: `@/context/Tunings`
+
+**Provider**: `TuningsContextProvider`
+
+**Hook**: `useTunings()`
+
+**State**:
+- `getTuning(instrument)` - Get tuning for a tunable instrument (Banjo, Guitar, Mandolin, Ukulele)
+- `setTuning(instrument, notes)` - Set tuning
+- `resetTuning(instrument)` - Reset to default
+- `openTuningModal(instrument)`, `closeTuningModal()` - TuningModal visibility
+- `tuningModalInstrument` - Which instrument’s modal is open, or null
+
+**Persistence**: `instrumentTunings` in localStorage via `TuningsStorageSchema`.
+
+**Usage**:
+```typescript
+import { useTunings } from '@/hooks';
+
+function InstrumentHeader() {
+  const { getTuning, openTuningModal } = useTunings();
+  // ...
+}
+```
+
 ### PlayContext
 
-Play functionality state.
+Play functionality state (Chord Bin, Notepad, Save/Import/Export, note playback).
 
 **Location**: `@/context/Play`
 
@@ -156,17 +185,16 @@ function PlayComponent() {
 
 ### InstrumentNotesContext
 
-Instrument notes display context.
+Instrument notes display context. **Used in** `Displays` (`@/components/displays/Displays`) when rendering instrument components (Piano, Guitar, Banjo, Ukulele, Mandolin) for scales, chords, and play. Not in the root AppProviders stack.
 
 **Location**: `@/context/InstrumentNotes`
 
-**Provider**: `InstrumentNotesContextProvider`
+**Provider**: `InstrumentNotesProvider`
 
 **Hook**: `useInstrumentNotes()`
 
 **State**:
-- Instrument-specific note display state
-- Note mapping for instruments
+- `notes`, `tonic`, `showNoteLabels`, `getBorderStyle?`, `showNerdMode?` — passed into the provider; consumed by `AllowedNote` and instrument components
 
 **Usage**:
 ```typescript
@@ -335,14 +363,15 @@ Hook to ensure GlobalsContext is available.
 
 ## Context Provider Hierarchy
 
-The context providers are organized in the following hierarchy:
+`AppProviders` composes the following order. `InstrumentNotesProvider` is used in `Displays` when rendering instruments, not in the root stack.
 
 ```
 GlobalsContextProvider (root)
-├── ScalesContextProvider (for Scales page)
-├── ChordsContextProvider (for Chords page)
-├── PlayContextProvider (for Play page)
-└── InstrumentNotesContextProvider (where needed)
+└── TuningsContextProvider
+    └── ScalesContextProvider
+        └── ChordsContextProvider
+            └── PlayContextProvider
+                └── (InstrumentNotesProvider in Displays when rendering instruments)
 ```
 
 ## State Persistence
@@ -370,6 +399,7 @@ The application uses two persistence strategies:
 - `selectedDisplays` - Selected instrument displays
 - `showNoteLabels` - Scales note label visibility
 - `showNerdMode` - Chords nerd mode toggle
+- `instrumentTunings` - Custom instrument tunings (TuningsContext)
 
 **Persistence Behavior**:
 - Persists across page refreshes
@@ -398,6 +428,7 @@ The `useLocalStorage` hook and Zustand stores automatically validate data on loa
 All contexts expose custom hooks for consumption:
 
 - `useGlobals()` - Access global context
+- `useTunings()` - Access tunings context
 - `useScales()` - Access scales context
 - `useChords()` - Access chords context
 - `usePlay()` - Access play context

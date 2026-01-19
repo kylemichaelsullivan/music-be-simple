@@ -4,36 +4,24 @@ This document describes the architecture and structure of the Music Be Simple ap
 
 ## Overview
 
-Music Be Simple is a React-based single-page application built with modern web technologies. The application uses a component-based architecture with React Context API for state management and manual routing implemented in `App.tsx`.
+Music Be Simple is a React-based single-page application built with modern web technologies. The application uses a component-based architecture with React Context API and Zustand for state management, and manual routing in `App.tsx`. `AppProviders` composes all context providers (Globals → Tunings → Scales → Chords → Play). The Play page includes Chord Bin (custom chord sequences with per-instrument editors), Notepad (reorderable lines via react-dnd), and SaveSection (Import/Export JSON). Custom instrument tunings are supported via `TuningsContext` and `TuningModal`.
 
 ## Project Structure
 
 ```
 src/
-├── components/          # Reusable React components
-│   ├── buttons/        # Button components (TopButton, TransposeButton, UseFlatsButton)
-│   ├── displays/       # Display components for instruments and modes
-│   │   ├── instruments/ # Instrument-specific display components
-│   │   └── modes/      # Mode display components
-│   ├── nav/            # Navigation components
-├── context/            # React Context providers
-│   ├── Chords/         # Chords context and provider
-│   ├── Globals/        # Global application context
-│   ├── InstrumentNotes/# Instrument notes context
-│   ├── Play/           # Play functionality context
-│   ├── Scales/         # Scales context and provider
-│   └── shared/         # Shared context utilities
-├── hooks/              # Custom React hooks
-├── pages/              # Page-level components
-│   ├── Chords/         # Chords page components
-│   ├── Play/           # Play page components
-│   └── Scales/         # Scales page components
-├── types/              # TypeScript type definitions
-└── utils/              # Utility functions
-    ├── borders.ts      # Border utility functions
-    ├── chords.ts       # Chord calculation utilities
-    ├── notes.ts        # Note-related utilities
-    └── scales.ts       # Scale calculation utilities
+├── components/         # buttons/, displays/ (modes/, instruments/), icons/, nav/; PageLayout, SkipLink, TuningModal, etc.
+├── context/            # AppProviders; Chords, Globals, InstrumentNotes, Play, Scales, Tunings; shared/
+├── hooks/              # useChords, useGlobals, useTunings, useDragDropClassName, useDraggableItem, useDropZone, etc.
+├── pages/              # Chords/, Play/ (ChordBin, Notepad, SaveSection), Scales/
+├── stores/             # chordsStore, scalesStore, playStore (Zustand + sessionStorage)
+├── types/              # chords, globals, instrumentNotes, layout, play, scales, tunings
+├── utils/              # borders, chords, notes, scales
+├── schemas.ts          # Zod schemas
+├── test/               # setup, test-utils
+└── __tests__/          # e.g. schemas.test.ts
+
+e2e/                    # scales, chords, play, navigation specs; fixtures/
 ```
 
 ## State Management
@@ -91,7 +79,11 @@ React Context API provides additional state and computed values:
 4. **PlayContext** - Play functionality state
    - Play-related state and functionality
 
-5. **InstrumentNotesContext** - Instrument notes display
+5. **TuningsContext** - Custom instrument tunings
+   - getTuning, setTuning, resetTuning, openTuningModal, closeTuningModal
+   - TuningModal for editing; persisted to localStorage
+
+6. **InstrumentNotesContext** - Instrument notes display (`InstrumentNotesProvider` in `Displays` when rendering instruments; not in root stack)
    - Instrument-specific note display state
 
 ### State Persistence
@@ -125,26 +117,13 @@ Routing is managed via React state in `App.tsx`. URL synchronization is handled 
 
 ```
 App
-├── GlobalsContextProvider
-│   ├── ScalesContextProvider
-│   ├── ChordsContextProvider
-│   └── PlayContextProvider
-│       ├── Navbar
-│       │   └── NavTab (multiple)
-│       ├── Active Page Component (conditionally rendered based on activeTab)
-│       │   ├── Scales Page
-│       │   │   ├── Tonic selector
-│       │   │   ├── Variant selector
-│       │   │   ├── Display components
-│       │   │   └── Instrument displays
-│       │   ├── Chords Page
-│       │   │   ├── Tonic selector
-│       │   │   ├── Variant selector
-│       │   │   ├── Chord display
-│       │   │   └── Instrument displays
-│       │   └── Play Page
-│       │       └── Play interface
-│       └── Footer
+├── AppProviders (Globals → Tunings → Scales → Chords → Play; InstrumentNotesProvider in Displays when rendering instruments)
+│   ├── Navbar, NavTab (Scales, Chords, Play)
+│   ├── Active Page (lazy-loaded, based on activeTab)
+│   │   ├── Scales: Tonic, Variant, Displays, Modes, Instrument displays
+│   │   ├── Chords: Tonic, Variant, Chord name, Chord notes, Instrument displays
+│   │   └── Play: Instrument selector, Chord Bin, Notepad, SaveSection (Import/Export), Instrument displays
+│   └── Footer
 ```
 
 ### Component Patterns
@@ -253,8 +232,8 @@ All Zod schemas are defined in `src/schemas.ts`:
 - **Basic schemas**: Primitive types and enums (NoteIndex, AccidentalType, ScaleType, ScaleMode, ChordVariant)
 - **UI schemas**: UI-related types (Border, InstrumentType, IconType, TabType, PositionType)
 - **Button schemas**: Button icon types (NerdModeButtonIcon, NoteLabelsButtonIcon)
-- **Storage schemas**: localStorage data structures (GlobalsStorageSchema, ScalesStorageSchema, ChordsStorageSchema) - used for combined data validation in context providers via `useEffect` hooks (fields are also validated individually)
-- **Data schemas**: Complex data structures (ChordInfo, ChordData, ChordGroup)
+- **Storage schemas**: localStorage — GlobalsStorageSchema, ScalesStorageSchema, ChordsStorageSchema; TuningsStorageSchema (TuningsContext); ChordBinStorageSchema, NotepadStorageSchema (PlayContext). Used for validation in `useLocalStorage` and in context `useEffect` hooks for monitoring.
+- **Data schemas**: ChordInfo, ChordData, ChordGroup; ChordBinItemData, NotepadLineData (for Play)
 
 ### Validation Usage
 
@@ -326,10 +305,12 @@ if (result.success) {
 Context providers and Zustand stores use Zod schemas for persistence:
 
 **localStorage (via useLocalStorage hook)**:
-- `GlobalsContext` validates `usingFlats` (with `z.boolean()`) and `selectedDisplays` (with `z.array(IconTypeSchema)`) individually
-- `ScalesContext` validates `showNoteLabels` (with `z.boolean()`) individually
-- `ChordsContext` validates `showNerdMode` (with `z.boolean()`) individually
-- Context providers also validate combined storage data using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in `useEffect` hooks for monitoring and debugging
+- `GlobalsContext`: `usingFlats` (`z.boolean()`), `selectedDisplays` (`z.array(IconTypeSchema)`)
+- `ScalesContext`: `showNoteLabels` (`z.boolean()`)
+- `ChordsContext`: `showNerdMode` (`z.boolean()`)
+- `TuningsContext`: `instrumentTunings` (`TuningsStorageSchema`)
+- `PlayContext`: `chordBinItems` (`ChordBinStorageSchema`), `notepadLines` (`NotepadStorageSchema`)
+- Context providers also validate combined storage data using storage schemas in `useEffect` hooks for monitoring and debugging
 
 **sessionStorage (via Zustand stores)**:
 - `scalesStore` validates `tonic` (with `NoteIndexSchema`) and `variant` (with `ScaleTypeSchema`)

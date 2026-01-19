@@ -1,6 +1,6 @@
 # Import and Export Rules
 
-This document defines the standardized rules for imports and exports throughout the application.
+This document defines *code* import and export rules (import/export statements, index files, named vs default exports). For the Play page's **SaveSection Import/Export** JSON feature (chord bin, notepad, tunings), see [COMPONENTS.md](./COMPONENTS.md#play-page) and [CONTEXT.md](./CONTEXT.md).
 
 ## Import Rules
 
