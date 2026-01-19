@@ -25,7 +25,7 @@ export type IntervalKey = keyof typeof INTERVALS;
 
 function getIntervalKeys(): IntervalKey[] {
 	const keys = Object.keys(INTERVALS);
-	return keys.filter((key) => key in INTERVALS) as IntervalKey[];
+	return keys.filter((key): key is IntervalKey => key in INTERVALS);
 }
 
 export const SCALE_TYPES: readonly IntervalKey[] = getIntervalKeys();

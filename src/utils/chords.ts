@@ -1,4 +1,5 @@
-import { FLATS, SHARPS } from './notes';
+import type { NoteIndex } from '@/types';
+import { FLATS, SHARPS, isValidNoteIndex } from './notes';
 
 export type ChordInfo = {
 	symbol: string;
@@ -765,17 +766,17 @@ export const getChordGroups = () => Object.keys(CHORDS);
 
 export const getChordVariants = (group: string) => Object.keys(CHORDS[group]);
 
-export const generateChordNotes = (tonic: number, variant: Chord_Variant): number[] => {
+export const generateChordNotes = (tonic: NoteIndex, variant: Chord_Variant): NoteIndex[] => {
 	const chordInfo = getChordInfo(variant);
-	const chordNotes: number[] = [tonic];
+	const chordNotes: NoteIndex[] = [tonic];
 	let currentSemitones = 0;
 
 	for (const [interval] of chordInfo.intervals) {
 		// interval is in "steps" where 1 = whole step (2 semitones), 0.5 = half step (1 semitone)
 		currentSemitones += interval * 2;
-		const noteIndex = (tonic + Math.round(currentSemitones)) % 12;
-		if (noteIndex >= 0 && noteIndex <= 11) {
-			chordNotes.push(noteIndex);
+		const n = (tonic + Math.round(currentSemitones)) % 12;
+		if (isValidNoteIndex(n)) {
+			chordNotes.push(n);
 		}
 	}
 
