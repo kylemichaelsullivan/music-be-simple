@@ -4,7 +4,7 @@ alwaysApply: true
 
 # Music Be Simple Project Rules
 
-Music Be Simple is a web application for learning and exploring music theory. It provides interactive visualizations of scales and chords across multiple instruments (Piano, Guitar, Banjo, Ukulele, Mandolin), allowing users to understand music theory concepts through visual representation and audio playback. The app features three main sections: Scales (for exploring musical scales and modes), Chords (for chord construction and visualization), and Play (for interactive instrument exploration).
+Music Be Simple is a web application for learning and exploring music theory. It provides interactive visualizations of scales and chords across multiple instruments (Piano, Guitar, Banjo, Ukulele, Mandolin), allowing users to understand music theory concepts through visual representation and audio playback. The app features three main sections: Scales (exploring scales and modes), Chords (chord construction and visualization), and Play (interactive instruments, Chord Bin, Notepad, Save/Import/Export).
 
 ## Core Principles
 
@@ -59,90 +59,20 @@ Music Be Simple is a web application for learning and exploring music theory. It
 src/
 ├── components/          # React components
 │   ├── __tests__/       # Component tests
-│   ├── buttons/         # Button components
-│   │   ├── TopButton.tsx
-│   │   ├── TransposeButton.tsx
-│   │   └── UseFlatsButton.tsx
-│   ├── displays/        # Display components
-│   │   ├── Displays.tsx
-│   │   ├── DisplaySelector.tsx
-│   │   ├── DisplaysSelector.tsx
-│   │   ├── Modes.tsx
-│   │   └── instruments/ # Instrument display components
-│   │       ├── Banjo.tsx
-│   │       ├── Guitar.tsx
-│   │       ├── Instrument.tsx
-│   │       ├── Mandolin.tsx
-│   │       ├── Piano.tsx
-│   │       └── Ukulele.tsx
-│   ├── nav/             # Navigation components
-│   │   ├── Navbar.tsx
-│   │   └── NavTab.tsx
-│   ├── AllowedNote.tsx  # Note display component
-│   ├── Footer.tsx       # Footer component
-│   ├── Icon.tsx         # Icon component
-│   ├── Main.tsx         # Main content wrapper component
-│   ├── Title.tsx        # Title component
-│   ├── Tonic.tsx        # Tonic selector component
-│   └── Variant.tsx      # Variant selector component
-├── context/             # React Context providers
-│   ├── Chords/          # Chords context provider
-│   │   ├── ChordsContext.tsx
-│   │   └── index.tsx
-│   ├── Globals/         # Global context provider
-│   │   ├── GlobalsContext.tsx
-│   │   └── index.tsx
-│   ├── InstrumentNotes/ # Instrument notes context provider
-│   │   ├── InstrumentNotesContext.tsx
-│   │   └── index.tsx
-│   ├── Play/            # Play context provider
-│   │   ├── PlayContext.tsx
-│   │   └── index.tsx
-│   ├── Scales/          # Scales context provider
-│   │   ├── ScalesContext.tsx
-│   │   └── index.tsx
-│   ├── shared/          # Shared context utilities
-│   │   ├── index.ts
-│   │   ├── useEscapeReset.ts
-│   │   ├── useLocalStorage.ts
-│   │   └── useRequireGlobals.ts
-│   ├── defaults.tsx     # Default context values
-│   └── index.ts         # Context exports
-├── hooks/               # Custom React hooks
-│   ├── __tests__/       # Hook tests
-│   ├── useButtonHandler.ts
-│   ├── useChords.ts
-│   ├── useGlobals.ts
-│   ├── useInstrumentNotes.ts
-│   ├── usePlay.ts
-│   ├── usePlayNote.ts
-│   └── useScales.ts
-├── pages/               # Page components
-│   ├── Chords/
-│   │   ├── index.tsx    # Chords page
-│   │   ├── Chord.tsx
-│   │   ├── ChordName.tsx
-│   │   ├── ChordNote.tsx
-│   │   ├── ChordNotes.tsx
-│   │   └── Notes.tsx
-│   ├── Play/
-│   │   └── index.tsx    # Play page
-│   └── Scales/
-│       ├── index.tsx    # Scales page
-│       ├── Notes.tsx
-│       ├── Scale.tsx
-│       └── ScaleContainer.tsx
+│   ├── buttons/         # AddButton, CloseButton, EditButton, IconButton, InstrumentButton, RemoveButton, SaveSectionButton, ToggleSaveSectionButton, TopButton, TransposeButton, UseFlatsButton
+│   ├── displays/        # Displays, DisplaySelector, DisplaysSelector; modes/ (Mode, Modes, ModesHeading); instruments/ (Banjo, Guitar, Mandolin, Piano, Ukulele; Fret, FretNumbers, FretString, Instrument, Label, LabelContent, Nut)
+│   ├── icons/           # ActionIcon, Icon, InstrumentIcon, NavIcon
+│   ├── nav/             # Navbar, NavTab
+│   ├── AllowedNote.tsx, Footer.tsx, Main.tsx, PageLayout.tsx, SkipLink.tsx, Title.tsx, Tonic.tsx, TuningModal.tsx, Variant.tsx
+├── context/             # AppProviders (composes all); Chords, Globals, InstrumentNotes, Play, Scales, Tunings; shared/ (useChordState, useEscapeReset, useLocalStorage, useRequireGlobals, useScaleState); defaults.tsx, index.ts
+├── hooks/               # useButtonHandler, useChords, useDragDropClassName, useDraggableItem, useDropZone, useGlobals, useInstrumentNotes, usePlay, usePlayNote, useScales, useTunings
+├── pages/               # Chords/ (Chords, Chord, ChordName, ChordNote, ChordNotes, Notes); Play/ (Play, ChordBin, ChordBinEditor, Notepad, SaveSection, InstrumentSelector, etc.); Scales/ (Scales, Notes, Scale, ScaleContainer)
 ├── stores/              # Zustand stores for state management
 │   ├── chordsStore.ts   # Chords tonic/variant store
 │   ├── scalesStore.ts   # Scales tonic/variant store
 │   ├── playStore.ts     # Play functionality store
 │   └── index.ts         # Store exports
-├── types/               # TypeScript type definitions
-│   ├── chords.ts
-│   ├── globals.ts
-│   ├── index.ts
-│   ├── play.ts
-│   └── scales.ts
+├── types/               # chords, globals, instrumentNotes, layout, play, scales, tunings
 ├── utils/               # Utility functions
 │   ├── __tests__/       # Unit tests for utility functions
 │   ├── borders.ts
@@ -150,20 +80,13 @@ src/
 │   ├── index.ts
 │   ├── notes.ts
 │   └── scales.ts
-├── test/                # Test utilities and setup
-│   ├── setup.ts         # Test setup and mocks
-│   └── test-utils.tsx   # Testing utilities and helpers
-├── main.tsx             # Application entry point
-├── navigation.ts        # Navigation constants and schemas
-├── instruments.ts       # Instrument definitions
-├── globals.css          # Global styles and CSS variables
-└── vite-env.d.ts        # Vite environment type definitions
+├── test/                # setup.ts, test-utils.tsx
+├── __tests__/           # Root-level tests (e.g. schemas.test.ts)
+├── main.tsx, navigation.ts, instruments.ts, schemas.ts, globals.css, vite-env.d.ts
 
-e2e/                     # End-to-end tests
-├── scales.spec.ts       # E2E tests for scales page
-├── chords.spec.ts       # E2E tests for chords page
-├── play.spec.ts         # E2E tests for play page
-└── navigation.spec.ts   # E2E tests for navigation
+e2e/
+├── fixtures/            # import-all.json and other E2E fixtures
+├── scales.spec.ts, chords.spec.ts, play.spec.ts, navigation.spec.ts
 ```
 
 ## Code Organization
@@ -469,8 +392,8 @@ The project uses a **hybrid approach** combining **Zustand stores** and **React 
 - **Zustand stores**: Manage tonic and variant state for scales and chords (in `src/stores/`)
 - **Context providers**: Provide computed values, UI state, and additional functionality (in `src/context/`)
 - **Provider location**: Context providers are in `src/context/` directory, stores in `src/stores/`
-- **Provider usage**: Context providers wrap all page components in `App.tsx`
-- **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`) to access context values
+- **Provider usage**: `AppProviders` in `App.tsx` composes all context providers and wraps the app (Navbar, pages, Footer)
+- **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`, `useInstrumentNotes`, `useTunings`) to access context values
 - **Store hooks**: Use store hooks (`useChordsStore`, `useScalesStore`, `usePlayStore`) to access store state
 - **Persistence**: 
   - **sessionStorage** (via Zustand): Tonic and variant state (persists during navigation, clears on refresh)
@@ -537,7 +460,7 @@ const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
 - **Basic schemas**: `NoteIndexSchema` (infers `number`), `NoteIndexZodSchema` (infers `NoteIndex` union type), `AccidentalTypeSchema`, `ScaleTypeSchema`, `ScaleModeSchema`, `ChordVariantSchema`
 - **UI schemas**: `BorderSchema`, `InstrumentTypeSchema`, `IconTypeSchema`, `TabTypeSchema`, `PositionTypeSchema`
 - **Button schemas**: `NerdModeButtonIconSchema`, `NoteLabelsButtonIconSchema`
-- **Storage schemas**: `GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema` (used for combined data validation in context providers via `useEffect` hooks)
+- **Storage schemas**: `GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`; `TuningsStorageSchema` (TuningsContext); `ChordBinStorageSchema`, `NotepadStorageSchema` (PlayContext). Used in `useLocalStorage` and in context `useEffect` hooks for monitoring.
 - **Data schemas**: `ChordInfoSchema`, `ChordDataSchema`, `ChordGroupSchema`
 
 **Important**: When creating schemas for use with `useLocalStorage` that contain `NoteIndex` fields, use `NoteIndexZodSchema` (union of literals) instead of `NoteIndexSchema` (number). This ensures TypeScript infers the exact `NoteIndex` union type (`0 | 1 | 2 | ... | 11`) rather than just `number`, which is required for proper type matching.
@@ -553,9 +476,11 @@ const handleChordVariantChange = (e: ChangeEvent<HTMLSelectElement>) => {
 ### Context Structure
 
 - **GlobalsContext**: Global application state (note display preferences, selected displays, etc.) - uses localStorage
+- **TuningsContext**: Custom instrument tunings (getTuning, setTuning, resetTuning, openTuningModal, closeTuningModal); TuningModal; persisted via localStorage
 - **ScalesContext**: Scales-specific state (uses scalesStore for tonic/variant, computed notes, display options) - showNoteLabels in localStorage
 - **ChordsContext**: Chords-specific state (uses chordsStore for tonic/variant, computed notes, chord info) - showNerdMode in localStorage
-- **PlayContext**: Play functionality state (audio context, note playing)
+- **PlayContext**: Play functionality state (audio context, note playing, Chord Bin, Notepad, Save/Import/Export)
+- **InstrumentNotesContext**: Instrument notes display (InstrumentNotesProvider in `Displays` when rendering instruments; not in root stack)
 
 ### State Usage
 
@@ -575,23 +500,17 @@ function Component() {
 
 ### Context Provider Pattern
 
+`App.tsx` uses `AppProviders`, which composes all context providers in order: Globals → Tunings → Scales → Chords → Play. `InstrumentNotesProvider` is used in `Displays` when rendering instruments, not in the root stack.
+
 ```tsx
-// ✅ Context providers wrap all pages in App.tsx
-import { ScalesContextProvider } from '@/context';
-import { Scales } from '@/pages/Scales';
+// App.tsx
+import { AppProviders } from '@/context';
 
 export function App() {
 	return (
-		<GlobalsContextProvider>
-			<ScalesContextProvider>
-				<ChordsContextProvider>
-					<PlayContextProvider>
-						{/* Pages are rendered based on active tab state */}
-						<Scales />
-					</PlayContextProvider>
-				</ChordsContextProvider>
-			</ScalesContextProvider>
-		</GlobalsContextProvider>
+		<AppProviders>
+			{/* Navbar, active page, Footer */}
+		</AppProviders>
 	);
 }
 ```
@@ -630,11 +549,11 @@ The project uses a comprehensive testing setup:
 
 ### Test Structure
 
-- Unit tests: `src/utils/__tests__/`, `src/hooks/__tests__/`
-- Component tests: `src/components/__tests__/`
-- E2E tests: `e2e/`
-- Test utilities: `src/test/test-utils.tsx` (custom render with context providers)
-- Test setup: `src/test/setup.ts` (mocks and global configuration)
+- Unit: `src/utils/__tests__/`, `src/hooks/__tests__/`
+- Component: `src/components/__tests__/`
+- E2E: `e2e/` (scales, chords, play, navigation), `e2e/fixtures/` (e.g. import-all.json for Import tests)
+- Other: `src/__tests__/` (e.g. schemas.test.ts), plus `__tests__/` under context, context/shared, stores, instruments
+- Test utilities: `src/test/test-utils.tsx`, `src/test/setup.ts`
 
 ### Testing Best Practices
 

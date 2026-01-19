@@ -11,9 +11,9 @@ alwaysApply: false
 ```
 src/components/
 ├── buttons/
-│   ├── TopButton.tsx
-│   ├── TransposeButton.tsx
-│   └── UseFlatsButton.tsx
+│   ├── AddButton, CloseButton, EditButton, IconButton, InstrumentButton, RemoveButton
+│   ├── SaveSectionButton, ToggleSaveSectionButton, TopButton, TransposeButton, UseFlatsButton
+│   └── index.ts
 ├── displays/
 │   ├── Displays.tsx
 │   ├── DisplaySelector.tsx
@@ -36,39 +36,18 @@ src/components/
 │       │   └── Piano.tsx
 │       ├── Ukulele/
 │       │   └── Ukulele.tsx
-│       ├── Fret.tsx
-│       ├── FretNumbers.tsx
-│       ├── FretString.tsx
-│       ├── Instrument.tsx
-│       ├── Label.tsx
-│       ├── Nut.tsx
+│       ├── Fret.tsx, FretNumbers.tsx, FretString.tsx, Instrument.tsx, Label.tsx, LabelContent.tsx, Nut.tsx
 │       └── index.tsx
 ├── nav/
 │   ├── Navbar.tsx
 │   └── NavTab.tsx
-├── AllowedNote.tsx
-├── Footer.tsx
-├── Icon.tsx
-├── Main.tsx
-├── Title.tsx
-├── Tonic.tsx
-└── Variant.tsx
+├── AllowedNote.tsx, Footer.tsx, Main.tsx, PageLayout.tsx, SkipLink.tsx, Title.tsx, Tonic.tsx, TuningModal.tsx, Variant.tsx
+└── icons/ (ActionIcon, Icon, InstrumentIcon, NavIcon)
 
 src/pages/
-├── Chords/
-│   ├── index.tsx
-│   ├── Chord.tsx
-│   ├── ChordName.tsx
-│   ├── ChordNote.tsx
-│   ├── ChordNotes.tsx
-│   └── Notes.tsx
-├── Play/
-│   └── index.tsx
-└── Scales/
-    ├── index.tsx
-    ├── Notes.tsx
-    ├── Scale.tsx
-    └── ScaleContainer.tsx
+├── Chords/ (Chords, Chord, ChordName, ChordNote, ChordNotes, Notes, index.ts)
+├── Play/ (Play, ChordBin with ChordBinEditor, ChordBinItem, etc.; Notepad; SaveSection with Exports, Imports; InstrumentSelector; index.ts)
+└── Scales/ (Scales, Notes, Scale, ScaleContainer, index.ts)
 ```
 
 ## Component Structure Guidelines
@@ -263,17 +242,20 @@ export const ComponentName = memo(ComponentName);
 
 ### Layout Components
 
-- **Main** (`@/components/Main`) - Main content wrapper component with page-specific styling
-- **Navbar** (`@/components/nav/Navbar`) - Navigation bar with tabs for Scales, Chords, and Play
-- **NavTab** (`@/components/nav/NavTab`) - Individual navigation tab component
-- **Footer** (`@/components/Footer`) - Footer component with copyright information
-- **Title** (`@/components/Title`) - Title component for page headings
+- **Main** (`@/components/Main`) - Main content wrapper with page-specific styling
+- **PageLayout** (`@/components/PageLayout`) - Page layout wrapper (e.g. for Play)
+- **Navbar**, **NavTab** - Navigation (Scales, Chords, Play)
+- **Footer**, **Title**
+- **SkipLink** (`@/components/SkipLink`) - Skip-to-content link for accessibility
+- **TuningModal** (`@/components/TuningModal`) - Modal to edit instrument tunings (via TuningsContext)
 
 ### Button Components
 
-- **TopButton** (`@/components/buttons/TopButton`) - Top button component for page-specific actions
-- **TransposeButton** (`@/components/buttons/TransposeButton`) - Button to transpose scales up or down by a fifth
-- **UseFlatsButton** (`@/components/buttons/UseFlatsButton`) - Button to toggle between flats and sharps
+- **TopButton** (`@/components/buttons/TopButton`) - Top button for page-specific actions (icon: string | ReactNode)
+- **TransposeButton** - Transpose scales up or down by a fifth
+- **UseFlatsButton** - Toggle flats/sharps
+- **AddButton**, **CloseButton**, **EditButton**, **IconButton**, **InstrumentButton**, **RemoveButton** - Shared action buttons
+- **SaveSectionButton**, **ToggleSaveSectionButton** - Save/Import/Export section on Play page
 
 ### Display Components
 
@@ -285,15 +267,13 @@ export const ComponentName = memo(ComponentName);
 - **ModesHeading** (`@/components/displays/modes/ModesHeading`) - Modes section heading component
 - **Instrument** (`@/components/displays/instruments/Instrument`) - Base instrument display component wrapper
 - **Banjo, Guitar, Mandolin, Piano, Ukulele** - Specific instrument display components
-- **Fret, FretNumbers, FretString, Label, Nut** - Shared fretboard components
+- **Fret, FretNumbers, FretString, Label, LabelContent, Nut** - Shared fretboard components
 
 ### Page Components
 
-All page components follow a similar pattern:
-
-- **Chords** (`@/pages/Chords`) - Chords page for chord-related functionality (named export)
-- **Play** (`@/pages/Play`) - Play page for music playback functionality (named export)
-- **Scales** (`@/pages/Scales`) - Scales page for scale-related functionality (named export)
+- **Chords** (`@/pages/Chords`) - Chords page (tonic, variant, chord name, instrument displays)
+- **Play** (`@/pages/Play`) - Play page: instrument selector, Chord Bin (add/edit/remove chord items with per-instrument editors), Notepad (reorderable lines, react-dnd), SaveSection (Import/Export JSON)
+- **Scales** (`@/pages/Scales`) - Scales page (tonic, variant, modes, instrument displays)
 
 ## State Management
 
@@ -307,19 +287,19 @@ The project uses a hybrid approach combining Zustand stores and React Context AP
 
 ### Context Providers
 
-- **ChordsContext** (`@/context/Chords`) - Chords-specific state (uses chordsStore for tonic/variant, computed notes, chordName, noteCount, showNerdMode) - showNerdMode in localStorage
-- **GlobalsContext** (`@/context/Globals`) - Global application state (note display preferences, selected displays, using flats/sharps, audio context, note playback) - uses localStorage
-- **InstrumentNotesContext** (`@/context/InstrumentNotes`) - Instrument notes display context
-- **PlayContext** (`@/context/Play`) - Play functionality state
-- **ScalesContext** (`@/context/Scales`) - Scales-specific state (uses scalesStore for tonic/variant, computed notes, showNoteLabels) - showNoteLabels in localStorage
+`AppProviders` (`@/context/AppProviders`) composes all providers in order: Globals → Tunings → Scales → Chords → Play. `InstrumentNotesProvider` is used in `Displays` when rendering instruments.
+
+- **GlobalsContext** (`@/context/Globals`) - Global state (displays, usingFlats, audio context, note playback) - localStorage
+- **TuningsContext** (`@/context/Tunings`) - Custom instrument tunings, TuningModal (openTuningModal, closeTuningModal, getTuning, setTuning, resetTuning) - localStorage
+- **ScalesContext** (`@/context/Scales`) - Scales state (scalesStore, notes, showNoteLabels) - showNoteLabels in localStorage
+- **ChordsContext** (`@/context/Chords`) - Chords state (chordsStore, notes, chordName, noteCount, showNerdMode) - showNerdMode in localStorage
+- **PlayContext** (`@/context/Play`) - Play state (Chord Bin, Notepad, Save/Import/Export, note playback)
+- **InstrumentNotesContext** (`@/context/InstrumentNotes`) - Instrument notes display (`InstrumentNotesProvider` in `Displays` when rendering instruments)
 
 ### Custom Hooks
 
-- **useChords** (`@/hooks/useChords`) - Access chords context
-- **useGlobals** (`@/hooks/useGlobals`) - Access global context
-- **useInstrumentNotes** (`@/hooks/useInstrumentNotes`) - Access instrument notes context
-- **usePlay** (`@/hooks/usePlay`) - Access play context
-- **useScales** (`@/hooks/useScales`) - Access scales context
+- **useChords**, **useGlobals**, **useInstrumentNotes**, **usePlay**, **useScales**, **useTunings** - Access their contexts
+- **useDragDropClassName**, **useDraggableItem**, **useDropZone** - Drag-and-drop (react-dnd) for Notepad reordering, etc.
 
 ### Using State
 
@@ -356,25 +336,17 @@ export function MyComponent() {
 
 ### Context Provider Pattern
 
-Context providers wrap page components at the application level in `App.tsx`:
+`App.tsx` uses `AppProviders`, which composes Globals → Tunings → Scales → Chords → Play. `InstrumentNotesProvider` wraps instrument displays in `Displays`.
 
 ```tsx
 // App.tsx
-import { ScalesContextProvider } from '@/context';
-import { Scales } from '@/pages/Scales';
+import { AppProviders } from '@/context';
 
 export function App() {
   return (
-    <GlobalsContextProvider>
-      <ScalesContextProvider>
-        <ChordsContextProvider>
-          <PlayContextProvider>
-            {/* Page components are rendered based on active tab */}
-            <Scales />
-          </PlayContextProvider>
-        </ChordsContextProvider>
-      </ScalesContextProvider>
-    </GlobalsContextProvider>
+    <AppProviders>
+      {/* Navbar, active page (Scales | Chords | Play), Footer */}
+    </AppProviders>
   );
 }
 ```

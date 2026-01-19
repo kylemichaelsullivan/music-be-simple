@@ -187,9 +187,9 @@ function ComponentWithState() {
 - **Zustand stores**: Manage tonic and variant state (in `src/stores/`) with sessionStorage persistence
 - **React Context API**: Provides computed values, UI state, and additional functionality
 - **Context providers**: Context providers located in `src/context/` directory
-- **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`, `useInstrumentNotes`) to access context values
+- **Custom hooks**: Use custom hooks (`useChords`, `useScales`, `usePlay`, `useGlobals`, `useInstrumentNotes`, `useTunings`) to access context values
 - **Store hooks**: Use store hooks (`useChordsStore`, `useScalesStore`, `usePlayStore`) to access store state
-- **Provider pattern**: Context providers wrap all page components in `App.tsx`
+- **Provider pattern**: `AppProviders` in `App.tsx` composes all providers and wraps the app (Navbar, pages, Footer)
 - **Persistence**: 
   - **sessionStorage** (Zustand): Tonic and variant state (persists during navigation, clears on refresh)
   - **localStorage** (`useLocalStorage`): UI preferences (persists across refreshes)
@@ -208,7 +208,8 @@ function ComponentWithState() {
 - **ScalesContext**: Scales-specific state (uses scalesStore for tonic/variant, computed notes, showNoteLabels) - showNoteLabels in localStorage
 - **ChordsContext**: Chords-specific state (uses chordsStore for tonic/variant, computed notes, chordName, noteCount, showNerdMode) - showNerdMode in localStorage
 - **PlayContext**: Play functionality state
-- **InstrumentNotesContext**: Instrument notes display context (provides notes, tonic, and styling to instrument components)
+- **InstrumentNotesContext**: Instrument notes display (`InstrumentNotesProvider` in `Displays` when rendering instruments)
+- **TuningsContext**: Custom instrument tunings, TuningModal (getTuning, setTuning, resetTuning, openTuningModal, closeTuningModal); persisted in localStorage
 
 #### Schema Validation
 
@@ -222,7 +223,7 @@ All context providers and Zustand stores use Zod schemas for runtime validation:
 - **Error handling**: Validation errors are logged and fall back to default values gracefully
 - **Persistence scope**: 
   - **sessionStorage** (Zustand): `tonic` and `variant` for scales and chords (persists during navigation, clears on refresh)
-  - **localStorage**: `usingFlats`, `selectedDisplays`, `showNoteLabels`, `showNerdMode` (persists across refreshes)
+  - **localStorage**: `usingFlats`, `selectedDisplays`, `showNoteLabels`, `showNerdMode`, `instrumentTunings` (Tunings), `chordBinItems`, `notepadLines` (Play) (persists across refreshes)
 
 ```typescript
 // ✅ Schema validation in context providers (localStorage - individual fields)
@@ -320,23 +321,17 @@ export function MyComponent() {
 
 #### Context Provider Pattern
 
+`App.tsx` uses `AppProviders`, which composes: Globals → Tunings → Scales → Chords → Play. `InstrumentNotesProvider` is used in `Displays` when rendering instruments.
+
 ```typescript
-// ✅ Context providers wrap all pages in App.tsx
-import { ScalesContextProvider } from '@/context';
-import { Scales } from '@/pages/Scales';
+// App.tsx
+import { AppProviders } from '@/context';
 
 export function App() {
   return (
-    <GlobalsContextProvider>
-      <ScalesContextProvider>
-        <ChordsContextProvider>
-          <PlayContextProvider>
-            {/* Pages are rendered based on active tab state */}
-            <Scales />
-          </PlayContextProvider>
-        </ChordsContextProvider>
-      </ScalesContextProvider>
-    </GlobalsContextProvider>
+    <AppProviders>
+      {/* Navbar, active page, Footer */}
+    </AppProviders>
   );
 }
 ```
@@ -367,7 +362,7 @@ All page components follow similar patterns:
 
 - **Chords**: Chords page for chord-related functionality
 - **Scales**: Scales page for scale-related functionality
-- **Play**: Play page for music playback functionality
+- **Play**: Play page (instruments, Chord Bin, Notepad, Save/Import/Export, note playback)
 
 ### Page Component Pattern
 
@@ -415,63 +410,54 @@ All page components follow similar patterns:
 
 ### Component Structure
 
+Abbreviated; see `.cursor/rules.mdc` and `documentation/COMPONENTS.md` for full structure.
+
 ```
 src/components/
-├── Main.tsx              # Main content wrapper component
-├── Navbar.tsx            # Navigation bar component
-├── NavTab.tsx            # Navigation tab component
-└── TopButton.tsx         # Top button component
+├── buttons/ (TopButton, AddButton, CloseButton, TransposeButton, UseFlatsButton, ...)
+├── displays/ (Displays, DisplaySelector, modes/, instruments/)
+├── icons/, nav/
+├── Main, PageLayout, SkipLink, TuningModal, Title, Tonic, Variant, ...
 ```
 
 ### Page Structure
 
 ```
 src/pages/
-├── Chords/
-│   └── index.tsx         # Chords page component
-├── Scales/
-│   └── index.tsx         # Scales page component
-└── Play/
-    └── index.tsx          # Play page component
+├── Chords/ (Chords, Chord, ChordName, ChordNotes, Notes, ...)
+├── Play/ (Play, ChordBin, Notepad, SaveSection, InstrumentSelector, ...)
+└── Scales/ (Scales, Notes, Scale, ScaleContainer, ...)
 ```
 
 
 ### Store Structure
 
 ```
-src/stores/
-├── chordsStore.ts
-├── scalesStore.ts
-├── playStore.ts
-└── index.ts
+src/stores/ (chordsStore, scalesStore, playStore, index.ts)
 
 src/context/
-├── Chords/
-├── Globals/
-├── Play/
-├── Scales/
-├── shared/
+├── AppProviders.tsx   # Composes Globals → Tunings → Scales → Chords → Play
+├── Chords/, Globals/, InstrumentNotes/, Play/, Scales/, Tunings/
+├── shared/ (useChordState, useEscapeReset, useLocalStorage, useRequireGlobals, useScaleState)
 └── index.ts
 
 src/hooks/
-├── useButtonHandler.ts
-├── useChords.ts
-├── useGlobals.ts
-├── useInstrumentNotes.ts
-├── usePlay.ts
-├── usePlayNote.ts
-└── useScales.ts
+├── useButtonHandler, useChords, useDragDropClassName, useDraggableItem, useDropZone
+├── useGlobals, useInstrumentNotes, usePlay, usePlayNote, useScales, useTunings
+└── index.ts
 ```
 
 ### Entry Point
 
 ```
 src/
-├── main.tsx              # Application entry point
+├── main.tsx              # Application entry point (StrictMode, App)
+├── App.tsx               # AppProviders, routing, lazy-loaded pages
 ├── globals.css           # Global styles and CSS variables
-├── navigation.ts         # Navigation constants and schemas
+├── navigation.ts         # TABS, route helpers
 ├── instruments.ts        # Instrument definitions
-└── vite-env.d.ts         # Vite environment type definitions
+├── schemas.ts            # Zod schemas
+└── vite-env.d.ts
 ```
 
 ## Development Workflow
@@ -509,11 +495,11 @@ The project uses a comprehensive testing setup with Vitest and Playwright:
 
 #### Test Structure
 
-- Unit tests: `src/utils/__tests__/`, `src/hooks/__tests__/`
-- Component tests: `src/components/__tests__/`
-- E2E tests: `e2e/`
-- Test utilities: `src/test/test-utils.tsx` (custom render with context providers)
-- Test setup: `src/test/setup.ts` (mocks and global configuration)
+- Unit: `src/utils/__tests__/`, `src/hooks/__tests__/`
+- Component: `src/components/__tests__/`
+- E2E: `e2e/` (scales, chords, play, navigation), `e2e/fixtures/` (e.g. import-all.json)
+- Other: `src/__tests__/` (e.g. schemas), `context/__tests__/`, `context/shared/__tests__/`, `stores/__tests__/`, `components/displays/instruments/__tests__/`
+- Test utilities: `src/test/test-utils.tsx`, `src/test/setup.ts`
 
 #### Testing Best Practices
 
