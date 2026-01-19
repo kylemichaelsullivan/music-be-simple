@@ -5,6 +5,8 @@ import {
 	getChordInfo,
 	getChordSymbol,
 	getChordVariants,
+	isValidChordVariant,
+	parseChordName,
 } from '../chords';
 import type { Chord_Variant } from '../chords';
 
@@ -111,6 +113,56 @@ describe('chords utilities', () => {
 			expect(notes).toContain(11); // B
 			expect(notes).toContain(3); // D#
 			expect(notes).toContain(6); // F#
+		});
+	});
+
+	describe('isValidChordVariant', () => {
+		it('should return true for known variants', () => {
+			expect(isValidChordVariant('major')).toBe(true);
+			expect(isValidChordVariant('minor')).toBe(true);
+			expect(isValidChordVariant('dominant-7')).toBe(true);
+			expect(isValidChordVariant('diminished')).toBe(true);
+		});
+
+		it('should return false for unknown variants', () => {
+			expect(isValidChordVariant('unknown')).toBe(false);
+			expect(isValidChordVariant('')).toBe(false);
+		});
+	});
+
+	describe('parseChordName', () => {
+		it('should return null tonic and variant for empty or whitespace input', () => {
+			expect(parseChordName('', true)).toEqual({ tonic: null, variant: null });
+			expect(parseChordName('   ', false)).toEqual({ tonic: null, variant: null });
+		});
+
+		it('should parse note only as major (usingFlats)', () => {
+			expect(parseChordName('C', true)).toEqual({ tonic: 0, variant: 'major' });
+			expect(parseChordName('D♭', true)).toEqual({ tonic: 1, variant: 'major' });
+			expect(parseChordName('G', true)).toEqual({ tonic: 7, variant: 'major' });
+		});
+
+		it('should parse note only as major (usingSharps)', () => {
+			expect(parseChordName('C', false)).toEqual({ tonic: 0, variant: 'major' });
+			// C♯: 'C' matches first, remaining '♯' has no variant match → major
+			expect(parseChordName('C♯', false)).toEqual({ tonic: 0, variant: 'major' });
+		});
+
+		it('should parse note with variant symbol', () => {
+			// 'A–' uses jazz symbol for minor; 'm' matches major's 'M' first
+			expect(parseChordName('A–', true)).toEqual({ tonic: 9, variant: 'minor' });
+			expect(parseChordName('C–', false)).toEqual({ tonic: 0, variant: 'minor' });
+		});
+
+		it('should default to major when variant cannot be matched', () => {
+			const r = parseChordName('Cxyz', true);
+			expect(r.tonic).toBe(0);
+			expect(r.variant).toBe('major');
+		});
+
+		it('should return null when note cannot be parsed', () => {
+			expect(parseChordName('Z', true)).toEqual({ tonic: null, variant: null });
+			expect(parseChordName('Xm', false)).toEqual({ tonic: null, variant: null });
 		});
 	});
 });

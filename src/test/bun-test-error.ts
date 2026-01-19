@@ -1,8 +1,8 @@
-// This file is preloaded by bunfig.toml to prevent use of Bun's test runner
+// This file is preloaded by bunfig.toml to prevent use of Bun’s test runner
 // Tests should be run using `bun run test` (Vitest) instead
 
 console.error('\n');
-console.error("❌ Bun's built-in test runner is not supported for this project.\n");
+console.error('❌ Bun’s built-in test runner is not supported for this project.\n');
 console.error('Please use: bun run test\n');
 console.error('This project uses Vitest for better compatibility with Testing Library.\n');
 console.error('Available test commands:');
