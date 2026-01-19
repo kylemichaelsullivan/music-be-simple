@@ -41,6 +41,7 @@ body {
 }
 
 button,
+label,
 select {
 	cursor: pointer;
 }
