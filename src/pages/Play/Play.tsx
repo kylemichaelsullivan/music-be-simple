@@ -1,70 +1,52 @@
-import { Main } from '@/components/Main';
-import { SkipLink } from '@/components/SkipLink';
-import { Title } from '@/components/Title';
+import { PageLayout } from '@/components/PageLayout';
 import { Tonic } from '@/components/Tonic';
 import { Variant } from '@/components/Variant';
-import { TopButton, UseFlatsButton } from '@/components/buttons';
-import { Displays, DisplaysSelector } from '@/components/displays';
 import { NavIcon } from '@/components/icons';
-import { useChords, useGlobals, usePlay, useScales } from '@/hooks';
+import { useChords, usePlay, useScales } from '@/hooks';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { ChordBin, Notepad, SaveSection } from './';
+import { PlayBottomSection } from './PlayBottomSection';
 
 export function Play() {
-	const title = 'Play';
-	const { displays, handleDisplaysClick } = useGlobals();
 	const { referenceMode, toggleReferenceMode } = usePlay();
-
 	const chordsData = useChords();
 	const scalesData = useScales();
 
 	const isScalesMode = referenceMode === 'Scales';
 	const data = isScalesMode ? scalesData : chordsData;
+	const hasModes = isScalesMode;
 
-	const referenceModeButtonTitle = isScalesMode ? 'Show Chords?' : 'Show Scales?';
+	const displaysProps = {
+		notes: data.notes,
+		tonic: data.tonic,
+		getBorderStyle: isScalesMode ? undefined : chordsData.getBorderStyle,
+		showModes: isScalesMode ? (scalesData.showModes ?? true) : scalesData.showModes,
+		isPlayPage: true,
+		showNerdMode: isScalesMode ? undefined : chordsData.showNerdMode,
+		showNoteLabels: isScalesMode ? scalesData.showNoteLabels : undefined,
+	};
 
 	return (
 		<DndProvider backend={HTML5Backend}>
-			<Main componentName={title}>
-				<Title title={title} />
-				<TopButton
-					icon={<NavIcon name={referenceMode} size='sm' />}
-					title={referenceModeButtonTitle}
-					position='left'
-					onFxn={toggleReferenceMode}
-				/>
-				<UseFlatsButton />
-
-				<SkipLink text='Skip tonic/variant' targetSelector='.DisplaysSelector' />
-				<div
-					className={`${isScalesMode ? 'Scale' : 'Chord'} flex justify-center ${isScalesMode ? '' : 'align-center'} gap-1 w-full ${isScalesMode ? '' : 'mx-auto'}`}
-				>
-					<Tonic tonic={data.tonic} handleTonicChange={data.handleTonicChange} />
-					<Variant type={isScalesMode ? 'scale' : 'chord'} />
-				</div>
-
-				<SkipLink text='Skip displays selector' targetSelector='.Displays' />
-				<DisplaysSelector onFxn={handleDisplaysClick} displays={displays} hasModes={isScalesMode} />
-
-				<Displays
-					notes={data.notes}
-					tonic={data.tonic}
-					getBorderStyle={isScalesMode ? undefined : chordsData.getBorderStyle}
-					hasModes={isScalesMode}
-					isPlayPage={true}
-					showNerdMode={isScalesMode ? undefined : chordsData.showNerdMode}
-					showNoteLabels={isScalesMode ? scalesData.showNoteLabels : undefined}
-				/>
-
-				<hr className='border-b border-black py-px' />
-
-				<ChordBin />
-
-				<Notepad />
-
-				<SaveSection />
-			</Main>
+			<PageLayout
+				title='Play'
+				topButton={{
+					icon: <NavIcon name={referenceMode} size='sm' />,
+					title: isScalesMode ? 'Show Chords?' : 'Show Scales?',
+					onFxn: toggleReferenceMode,
+				}}
+				tonicVariantSlot={
+					<div
+						className={`${isScalesMode ? 'Scale' : 'Chord'} flex justify-center ${isScalesMode ? '' : 'align-center'} gap-1 w-full ${isScalesMode ? '' : 'mx-auto'}`}
+					>
+						<Tonic tonic={data.tonic} handleTonicChange={data.handleTonicChange} />
+						<Variant type={isScalesMode ? 'scale' : 'chord'} />
+					</div>
+				}
+				hasModes={hasModes}
+				displaysProps={displaysProps}
+				afterDisplaysSlot={<PlayBottomSection />}
+			/>
 		</DndProvider>
 	);
 }
