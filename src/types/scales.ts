@@ -15,6 +15,7 @@ export type ScalesContextType = {
 	noteLabelsButtonTitle: string;
 	notes: NoteIndex[];
 	reset: () => void;
+	showModes: boolean;
 	showNoteLabels: boolean;
 	tonic: NoteIndex;
 	toggleNoteLabels: () => void;

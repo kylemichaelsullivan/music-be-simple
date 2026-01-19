@@ -17,6 +17,7 @@ import { ScalesContext } from './ScalesContext';
 
 export { ScalesContext };
 
+const initialShowModes: boolean = true;
 const initialShowNoteLabels: boolean = true;
 
 export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) => {
@@ -56,6 +57,12 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 		resetStore();
 	}, [resetStore]);
 
+	const [showModes, setShowModes] = useLocalStorage(
+		'showModes',
+		z.boolean(),
+		initialShowModes
+	);
+
 	const [showNoteLabels, setShowNoteLabels] = useLocalStorage(
 		'showNoteLabels',
 		z.boolean(),
@@ -66,13 +73,14 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 		const combinedData = {
 			tonic,
 			variant,
+			showModes,
 			showNoteLabels,
 		};
 		const result = ScalesStorageSchema.safeParse(combinedData);
 		if (!result.success) {
 			console.warn('Scales storage data validation failed:', result.error.format());
 		}
-	}, [tonic, variant, showNoteLabels]);
+	}, [tonic, variant, showModes, showNoteLabels]);
 
 	const getRelativeMajor = useCallback(
 		(mode: ScaleMode) => {
@@ -173,6 +181,7 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 			tonic,
 			variant,
 			notes,
+			showModes,
 			showNoteLabels,
 			handleTonicChange,
 			handleVariantChange,
@@ -188,6 +197,7 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 			tonic,
 			variant,
 			notes,
+			showModes,
 			showNoteLabels,
 			handleTonicChange,
 			handleVariantChange,

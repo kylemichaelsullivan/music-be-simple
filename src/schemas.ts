@@ -93,6 +93,7 @@ export const GlobalsStorageSchema = z.object({
 export const ScalesStorageSchema = z.object({
 	tonic: NoteIndexZodSchema,
 	variant: ScaleTypeSchema,
+	showModes: z.boolean(),
 	showNoteLabels: z.boolean(),
 });
 
