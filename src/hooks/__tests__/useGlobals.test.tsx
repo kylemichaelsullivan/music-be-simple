@@ -31,4 +31,12 @@ describe('useGlobals', () => {
 		expect(typeof result.current.handleDisplaysClick).toBe('function');
 		expect(typeof result.current.playNote).toBe('function');
 	});
+
+	it('should not throw when playNote is called', () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<GlobalsContextProvider>{children}</GlobalsContextProvider>
+		);
+		const { result } = renderHook(() => useGlobals(), { wrapper });
+		expect(() => result.current.playNote(0)).not.toThrow();
+	});
 });

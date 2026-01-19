@@ -1,10 +1,15 @@
 import { GlobalsContextProvider } from '@/context/Globals';
 import { ScalesContextProvider } from '@/context/Scales';
-import { renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { useScalesStore } from '@/stores/scalesStore';
+import { renderHook, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useScales } from '../useScales';
 
 describe('useScales', () => {
+	afterEach(() => {
+		useScalesStore.getState().reset();
+	});
+
 	it('should throw error when used outside provider', () => {
 		// Suppress console.error for this test
 		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -41,5 +46,58 @@ describe('useScales', () => {
 		expect(typeof result.current.getRelativeMajor).toBe('function');
 		expect(typeof result.current.getRelativeMinor).toBe('function');
 		expect(typeof result.current.toggleNoteLabels).toBe('function');
+	});
+
+	it('should return getRelativeMajor for ionian as tonic note', () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<GlobalsContextProvider>
+				<ScalesContextProvider>{children}</ScalesContextProvider>
+			</GlobalsContextProvider>
+		);
+		const { result } = renderHook(() => useScales(), { wrapper });
+		expect(result.current.getRelativeMajor('ionian')).toBe('C');
+	});
+
+	it('should return getRelativeMinor for aeolian as tonic note', () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<GlobalsContextProvider>
+				<ScalesContextProvider>{children}</ScalesContextProvider>
+			</GlobalsContextProvider>
+		);
+		const { result } = renderHook(() => useScales(), { wrapper });
+		expect(result.current.getRelativeMinor('aeolian')).toBe('C');
+	});
+
+	it('should update notes when makeScale is called', async () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<GlobalsContextProvider>
+				<ScalesContextProvider>{children}</ScalesContextProvider>
+			</GlobalsContextProvider>
+		);
+		const { result } = renderHook(() => useScales(), { wrapper });
+		expect(result.current.tonic).toBe(0);
+		expect(result.current.variant).toBe('major');
+		result.current.makeScale(7, 'dorian');
+		await waitFor(() => {
+			expect(result.current.tonic).toBe(7);
+			expect(result.current.variant).toBe('dorian');
+		});
+		// G dorian: G A Bb C D E F
+		expect(result.current.notes).toContain(7);
+		expect(result.current.notes).toHaveLength(7);
+	});
+
+	it('should toggle showNoteLabels via toggleNoteLabels', async () => {
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
+			<GlobalsContextProvider>
+				<ScalesContextProvider>{children}</ScalesContextProvider>
+			</GlobalsContextProvider>
+		);
+		const { result } = renderHook(() => useScales(), { wrapper });
+		const initial = result.current.showNoteLabels;
+		result.current.toggleNoteLabels();
+		await waitFor(() => {
+			expect(result.current.showNoteLabels).toBe(!initial);
+		});
 	});
 });
