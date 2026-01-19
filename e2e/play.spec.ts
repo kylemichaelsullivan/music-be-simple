@@ -1,4 +1,10 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const fixtureImportAll = path.join(__dirname, 'fixtures', 'import-all.json');
 
 test.describe('Play Page', () => {
 	test.beforeEach(async ({ page }) => {
@@ -149,5 +155,95 @@ test.describe('Play Page', () => {
 		await expect(exportChordBin).toBeVisible({ timeout: 2000 });
 		await expect(exportNotepad).toBeVisible({ timeout: 2000 });
 		await expect(exportAll).toBeVisible({ timeout: 2000 });
+	});
+
+	test.describe('Tuning modal', () => {
+		test('should open Edit Tuning modal when clicking Edit Tuning for Guitar', async ({ page }) => {
+			await page.waitForLoadState('networkidle');
+			const editTuningBtn = page.getByRole('button', { name: 'Edit Tuning for Guitar' });
+			await editTuningBtn.scrollIntoViewIfNeeded();
+			await editTuningBtn.click();
+
+			await expect(page.getByRole('heading', { name: /Edit Tuning/i })).toBeVisible({
+				timeout: 2000,
+			});
+			await expect(page.getByRole('button', { name: /Reset to Default/i })).toBeVisible();
+			await expect(page.getByLabel('String 1')).toBeVisible();
+		});
+
+		test('should change a string and close the tuning modal', async ({ page }) => {
+			await page.waitForLoadState('networkidle');
+			const editTuningBtn = page.getByRole('button', { name: 'Edit Tuning for Guitar' });
+			await editTuningBtn.scrollIntoViewIfNeeded();
+			await editTuningBtn.click();
+
+			const string1 = page.getByLabel('String 1');
+			await expect(string1).toBeVisible({ timeout: 2000 });
+			await string1.selectOption('5'); // F
+			await expect(string1).toHaveValue('5');
+
+			await page.getByTitle('Close').click();
+			await expect(page.getByRole('heading', { name: /Edit Tuning/i })).not.toBeVisible({
+				timeout: 2000,
+			});
+		});
+	});
+
+	test.describe('Import and Export', () => {
+		test('should import Chord Bin and Notepad from fixture', async ({ page }) => {
+			await page.waitForLoadState('networkidle');
+			await page.getByTitle('Open Save Section').click();
+			await expect(page.getByRole('heading', { name: 'Import' })).toBeVisible({ timeout: 2000 });
+
+			await page.locator('.Imports input[type="file"]').setInputFiles(fixtureImportAll);
+
+			// Chord Bin: fixture has one item (C major)
+			const chordItems = page.locator('[id^="chord-bin-item-"]');
+			await expect(chordItems.first()).toBeVisible({ timeout: 3000 });
+			// Notepad: fixture has one line with "Imported from e2e fixture" in an input
+			await expect(page.locator('input[value="Imported from e2e fixture"]').first()).toBeVisible({
+				timeout: 3000,
+			});
+		});
+
+		test('should export Chord Bin and have valid JSON', async ({ page }) => {
+			await page.waitForLoadState('networkidle');
+			await page.getByTitle('Add Chord to Bin').click();
+			await expect(page.locator('[id^="chord-bin-item-"]').first()).toBeVisible({ timeout: 2000 });
+
+			await page.getByTitle('Open Save Section').click();
+			await expect(page.getByRole('heading', { name: 'Export' })).toBeVisible({ timeout: 2000 });
+
+			const [download] = await Promise.all([
+				page.waitForEvent('download'),
+				page.getByTitle('Export Chord Bin').click(),
+			]);
+			const downloadPath = await download.path();
+			if (!downloadPath) throw new Error('Download path is null');
+			const content = await readFile(downloadPath, 'utf-8');
+			const data = JSON.parse(content);
+			expect(Array.isArray(data.chordBin)).toBe(true);
+			expect(data.chordBin.length).toBeGreaterThanOrEqual(1);
+		});
+
+		test('should export Notepad and have valid JSON', async ({ page }) => {
+			await page.waitForLoadState('networkidle');
+			await page.getByTitle('Add Line to Notepad').click();
+			await expect(page.locator('[id^="notepad-line-"]').first()).toBeVisible({ timeout: 2000 });
+
+			await page.getByTitle('Open Save Section').click();
+			await expect(page.getByRole('heading', { name: 'Export' })).toBeVisible({ timeout: 2000 });
+
+			const [download] = await Promise.all([
+				page.waitForEvent('download'),
+				page.getByTitle('Export Notepad').click(),
+			]);
+			const downloadPath = await download.path();
+			if (!downloadPath) throw new Error('Download path is null');
+			const content = await readFile(downloadPath, 'utf-8');
+			const data = JSON.parse(content);
+			expect(Array.isArray(data.notepad)).toBe(true);
+			expect(data.notepad.length).toBeGreaterThanOrEqual(1);
+		});
 	});
 });

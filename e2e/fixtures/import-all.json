@@ -1,0 +1,4 @@
+{
+	"chordBin": [{ "id": 1001, "tonic": 0, "variant": "major" }],
+	"notepad": [{ "id": 2001, "content": "Imported from e2e fixture" }]
+}
