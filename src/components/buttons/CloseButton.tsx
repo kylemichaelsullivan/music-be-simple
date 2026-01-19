@@ -31,7 +31,8 @@ export function CloseButton<T extends HTMLElement = HTMLElement>({
 		if (!containerRef) return;
 
 		const handleClickOutside = (e: MouseEvent) => {
-			if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+			const node = e.target instanceof Node ? e.target : null;
+			if (containerRef.current && !containerRef.current.contains(node)) {
 				onFxn();
 			}
 		};

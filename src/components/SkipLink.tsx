@@ -19,9 +19,9 @@ export function SkipLink({ targetSelector, text }: SkipLinkProps) {
 			});
 
 			const focusTarget = () => {
-				const focusableElement = targetElement.querySelector(
+				const focusableElement = targetElement.querySelector<HTMLElement>(
 					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-				) as HTMLElement | null;
+				);
 
 				if (focusableElement) {
 					focusableElement.focus();
