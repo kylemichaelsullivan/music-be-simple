@@ -1,6 +1,10 @@
 import { useCallback, useState } from 'react';
 import type { z } from 'zod';
 
+function isUpdater<T>(v: T | ((prev: T) => T)): v is (prev: T) => T {
+	return typeof v === 'function';
+}
+
 export const useLocalStorage = <T>(
 	key: string,
 	schema: z.ZodType<T>,
@@ -23,16 +27,17 @@ export const useLocalStorage = <T>(
 
 	const setValue = useCallback(
 		(value: T | ((prev: T) => T)) => {
-			try {
-				setStoredValue((prev) => {
-					const newValue = typeof value === 'function' ? (value as (prev: T) => T)(prev) : value;
+			setStoredValue((prev) => {
+				const newValue = isUpdater(value) ? value(prev) : value;
+				try {
 					const validated = schema.parse(newValue);
 					localStorage.setItem(key, JSON.stringify(validated));
 					return validated;
-				});
-			} catch (error) {
-				console.error(`Failed to validate or save localStorage key "${key}":`, error);
-			}
+				} catch (error) {
+					console.error(`Failed to validate or save localStorage key "${key}":`, error);
+					return prev;
+				}
+			});
 		},
 		[key, schema]
 	);

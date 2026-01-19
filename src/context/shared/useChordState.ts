@@ -26,8 +26,8 @@ export function useChordState({
 }: UseChordStateOptions): UseChordStateReturn {
 	const [tonic, setTonic] = useState<Chord_Tonic>(initialTonic);
 	const [variant, setVariant] = useState<Chord_Variant>(initialVariant);
-	const [notes, setNotes] = useState<NoteIndex[]>(
-		() => generateChordNotes(initialTonic, initialVariant) as NoteIndex[]
+	const [notes, setNotes] = useState<NoteIndex[]>(() =>
+		generateChordNotes(initialTonic, initialVariant)
 	);
 
 	const handleTonicChange = useCallback((newTonic: Chord_Tonic) => {
@@ -39,8 +39,7 @@ export function useChordState({
 	}, []);
 
 	const makeChord = useCallback((chordTonic: Chord_Tonic, chordVariant: Chord_Variant) => {
-		const chordNotes = generateChordNotes(chordTonic, chordVariant);
-		setNotes(chordNotes as NoteIndex[]);
+		setNotes(generateChordNotes(chordTonic, chordVariant));
 	}, []);
 
 	const reset = useCallback(() => {

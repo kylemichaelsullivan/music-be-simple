@@ -24,13 +24,10 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 	const { usingFlats } = useGlobals();
 	const { tonic, variant, setTonic, setVariant, reset: resetStore } = useChordsStore();
 
-	const [notes, setNotes] = useState<NoteIndex[]>(
-		() => generateChordNotes(tonic, variant) as NoteIndex[]
-	);
+	const [notes, setNotes] = useState<NoteIndex[]>(() => generateChordNotes(tonic, variant));
 
 	useEffect(() => {
-		const chordNotes = generateChordNotes(tonic, variant);
-		setNotes(chordNotes as NoteIndex[]);
+		setNotes(generateChordNotes(tonic, variant));
 	}, [tonic, variant]);
 
 	const handleTonicChange = useCallback(
