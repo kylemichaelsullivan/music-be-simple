@@ -46,6 +46,16 @@ select {
 	cursor: pointer;
 }
 
+.Chord,
+.Scale,
+.Notes {
+	font-size: min(1rem, 4vw);
+}
+
+.DisplaySelector {
+	font-size: min(0.875rem, 3vw);
+}
+
 .Chords {
 	background-color: var(--chords);
 }
@@ -206,6 +216,18 @@ select {
 
 .Mandolin {
 	--fretboard-color: var(--mandolin-color);
+}
+
+.Modes .ModesHeading {
+	font-size: clamp(0.375rem, 4vw, 1rem);
+}
+
+.Mode .ModeHeadingText {
+	font-size: clamp(0.375rem, 2.25vw, 1.25rem);
+}
+
+.Mode .ModeNote {
+	font-size: clamp(min(2.5vw, 1.25rem), 0.675rem, 0.675rem);
 }
 
 /* Jazz Mode Note Border Classes */
