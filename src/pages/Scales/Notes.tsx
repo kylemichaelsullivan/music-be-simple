@@ -33,7 +33,7 @@ export function Notes() {
 	const gridClass = getGridClass(noteCount);
 
 	return (
-		<div className='Notes flex flex-col gap-1 overflow-x-auto border border-slate-500 bg-slate-200 text-center min-w-0 shadow-md px-1 py-2'>
+		<div className='Notes flex flex-col gap-1 overflow-x-auto border border-slate-500 bg-slate-200 text-center min-w-0 shadow-md p-2'>
 			<div className={`grid ${gridClass} min-w-0`}>
 				{rangeOfLength(noteCount).map((index) => (
 					<div key={`note-count-${index + 1}`}>{index + 1}</div>
