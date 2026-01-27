@@ -28,7 +28,7 @@ function DisplaySelectorComponent({ icon, text, isActive, onFxn }: DisplaySelect
 			onKeyDown={handleKeyDown}
 		>
 			<InstrumentIcon name={icon} />
-			<span className='text-xs font-bold sm:text-sm'>{text}</span>
+			<span className='font-bold'>{text}</span>
 		</button>
 	);
 }

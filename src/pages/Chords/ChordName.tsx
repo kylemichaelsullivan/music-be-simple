@@ -8,7 +8,7 @@ const ChordName = memo(function ChordName({ chordName }: ChordNameProps) {
 	const parts = chordName.split(/([♭♯]|\d+)/).filter(Boolean);
 
 	return (
-		<div className='ChordName col-span-2 border-r border-black font-bold text-md text-center sm:text-lg'>
+		<div className='ChordName col-span-2 border-r border-black font-bold text-center'>
 			{parts.map((part, index) => {
 				const key = `chord-name-part-${part}-${index}`;
 				if (part === '♭') {
