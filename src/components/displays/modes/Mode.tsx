@@ -1,6 +1,8 @@
 import type { ScaleMode, ScaleType } from '@/types';
 import clsx from 'clsx';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
+import { ModeHeading } from './ModeHeading';
+import { ModeNote } from './ModeNote';
 
 type ModeProps = {
 	mode: ScaleMode | ScaleType;
@@ -11,34 +13,26 @@ type ModeProps = {
 	relativeMinor: string;
 };
 
-const Mode = ({ mode, background, isCurrent, notes, relativeMajor, relativeMinor }: ModeProps) => {
+const ModeComponent = ({ mode, background, isCurrent, notes, relativeMajor, relativeMinor }: ModeProps) => {
 	const noteElements = useMemo(
 		() =>
-			notes.map((note: string) => (
-				<div className='text-xxs col-span-2 sm:text-base' key={note}>
-					{note}
-				</div>
-			)),
+			notes.map((note: string) => <ModeNote note={note} key={note} />),
 		[notes]
 	);
 
+	const containerClassName = useMemo(
+		() => clsx('Mode grid-cols-17 grid items-center', background, 'capitalize'),
+		[background]
+	);
+
 	return (
-		<div className={clsx('Mode grid-cols-17 grid items-center', background, 'capitalize')}>
-			<div
-				className={clsx(
-					'flex flex-col text-xxs col-span-3 sm:text-base',
-					isCurrent ? 'font-bold' : 'font-normal'
-				)}
-			>
-				{mode}
-				<span className='hidden text-gray-500 text-xxs leading-snug sm:block'>
-					[{relativeMajor}, {relativeMinor}
-					<span className='lowercase'>m</span>]
-				</span>
-			</div>
+		<div className={containerClassName}>
+			<ModeHeading mode={mode} isCurrent={isCurrent} relativeMajor={relativeMajor} relativeMinor={relativeMinor} />
 			{noteElements}
 		</div>
 	);
 };
+
+const Mode = memo(ModeComponent);
 
 export { Mode };
