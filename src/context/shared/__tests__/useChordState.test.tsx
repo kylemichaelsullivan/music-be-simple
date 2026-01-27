@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { useChordState } from '../useChordState';
 
@@ -18,7 +18,9 @@ describe('useChordState', () => {
 		const { result } = renderHook(() =>
 			useChordState({ initialTonic: 0, initialVariant: 'major' })
 		);
-		result.current.handleTonicChange(7);
+		act(() => {
+			result.current.handleTonicChange(7);
+		});
 		await waitFor(() => {
 			expect(result.current.tonic).toBe(7);
 		});
@@ -28,7 +30,9 @@ describe('useChordState', () => {
 		const { result } = renderHook(() =>
 			useChordState({ initialTonic: 0, initialVariant: 'major' })
 		);
-		result.current.handleVariantChange('minor');
+		act(() => {
+			result.current.handleVariantChange('minor');
+		});
 		await waitFor(() => {
 			expect(result.current.variant).toBe('minor');
 		});
@@ -38,7 +42,9 @@ describe('useChordState', () => {
 		const { result } = renderHook(() =>
 			useChordState({ initialTonic: 0, initialVariant: 'major' })
 		);
-		result.current.makeChord(9, 'minor');
+		act(() => {
+			result.current.makeChord(9, 'minor');
+		});
 		await waitFor(() => {
 			expect(result.current.notes).toContain(9);
 			expect(result.current.notes).toContain(0);
@@ -50,9 +56,11 @@ describe('useChordState', () => {
 		const { result } = renderHook(() =>
 			useChordState({ initialTonic: 5, initialVariant: 'dominant-7' })
 		);
-		result.current.handleTonicChange(0);
-		result.current.handleVariantChange('major');
-		result.current.reset();
+		act(() => {
+			result.current.handleTonicChange(0);
+			result.current.handleVariantChange('major');
+			result.current.reset();
+		});
 		await waitFor(() => {
 			expect(result.current.tonic).toBe(5);
 			expect(result.current.variant).toBe('dominant-7');

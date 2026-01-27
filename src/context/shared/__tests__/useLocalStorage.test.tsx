@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { useLocalStorage } from '../useLocalStorage';
@@ -22,7 +22,9 @@ describe('useLocalStorage', () => {
 	it('should update value and persist when setValue is called with raw value', async () => {
 		const { result } = renderHook(() => useLocalStorage('test-key', z.number(), 0));
 		expect(result.current[0]).toBe(0);
-		result.current[1](42);
+		act(() => {
+			result.current[1](42);
+		});
 		await waitFor(() => {
 			expect(result.current[0]).toBe(42);
 		});
@@ -33,7 +35,9 @@ describe('useLocalStorage', () => {
 		window.localStorage.setItem('test-key', JSON.stringify(10));
 		const { result } = renderHook(() => useLocalStorage('test-key', z.number(), 0));
 		expect(result.current[0]).toBe(10);
-		result.current[1]((prev) => prev + 5);
+		act(() => {
+			result.current[1]((prev) => prev + 5);
+		});
 		await waitFor(() => {
 			expect(result.current[0]).toBe(15);
 		});
