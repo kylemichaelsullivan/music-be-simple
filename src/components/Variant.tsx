@@ -44,7 +44,9 @@ function ChordVariant() {
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const result = ChordVariantSchema.safeParse(e.target.value);
 		if (result.success && isValidChordVariant(result.data)) {
-			handleVariantChange(result.data);
+			if (result.data !== variant) {
+				handleVariantChange(result.data);
+			}
 		}
 	};
 

@@ -769,14 +769,16 @@ export const getChordVariants = (group: string) => Object.keys(CHORDS[group]);
 export const generateChordNotes = (tonic: NoteIndex, variant: Chord_Variant): NoteIndex[] => {
 	const chordInfo = getChordInfo(variant);
 	const chordNotes: NoteIndex[] = [tonic];
+	const seen = new Set([tonic]);
 	let currentSemitones = 0;
 
 	for (const [interval] of chordInfo.intervals) {
 		// interval is in "steps" where 1 = whole step (2 semitones), 0.5 = half step (1 semitone)
 		currentSemitones += interval * 2;
 		const n = (tonic + Math.round(currentSemitones)) % 12;
-		if (isValidNoteIndex(n)) {
+		if (isValidNoteIndex(n) && !seen.has(n)) {
 			chordNotes.push(n);
+			seen.add(n);
 		}
 	}
 
