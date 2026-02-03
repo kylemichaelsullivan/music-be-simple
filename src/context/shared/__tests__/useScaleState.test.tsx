@@ -1,7 +1,7 @@
+import { useScaleState } from '@/context';
 import type { ScaleType } from '@/types';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { useScaleState } from '../useScaleState';
 
 describe('useScaleState', () => {
 	it('should return initial tonic, variant, and notes', () => {

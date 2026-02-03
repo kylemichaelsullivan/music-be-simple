@@ -1,6 +1,6 @@
+import { useChordState } from '@/context';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { useChordState } from '../useChordState';
 
 describe('useChordState', () => {
 	it('should return initial tonic, variant, and notes', () => {

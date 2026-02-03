@@ -1,8 +1,7 @@
-import { useEscapeReset } from '@/context/shared/useEscapeReset';
-import { useLocalStorage } from '@/context/shared/useLocalStorage';
+import { useEscapeReset, useLocalStorage } from '@/context/shared';
 import { useGlobals } from '@/hooks';
 import { ChordsStorageSchema } from '@/schemas';
-import { useChordsStore } from '@/stores/chordsStore';
+import { useChordsStore } from '@/stores';
 import type {
 	Chord_Tonic,
 	Chord_Variant,

@@ -1,5 +1,5 @@
 import type { NoteIndex, ScaleType } from '@/types';
-import { generateNotesFromIntervals } from '@/utils/scales';
+import { generateNotesFromIntervals } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
 
 export type UseScaleStateOptions<Variant extends ScaleType> = {

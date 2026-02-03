@@ -1,7 +1,6 @@
-import { GlobalsContextProvider } from '@/context/Globals';
+import { GlobalsContextProvider, useRequireGlobals } from '@/context';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useRequireGlobals } from '../useRequireGlobals';
 
 describe('useRequireGlobals', () => {
 	it('should throw when used outside GlobalsContextProvider', () => {

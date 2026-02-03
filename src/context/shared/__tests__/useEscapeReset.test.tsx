@@ -1,7 +1,7 @@
+import { useEscapeReset } from '@/context';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { useEscapeReset } from '../useEscapeReset';
 
 function TestComponent({ onReset }: { onReset: () => void }) {
 	useEscapeReset(onReset);

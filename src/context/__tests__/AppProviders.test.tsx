@@ -1,7 +1,7 @@
+import { AppProviders } from '@/context';
 import { useGlobals, useTunings } from '@/hooks';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { AppProviders } from '../AppProviders';
 
 function ContextConsumer() {
 	useGlobals();

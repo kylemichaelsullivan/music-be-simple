@@ -8,13 +8,14 @@ import {
 import type {
 	ChordBinItemData,
 	InstrumentType,
+	NotepadItemData,
 	NotepadLineData,
 	PlayContextProviderProps,
 	ReferenceMode,
 } from '@/types';
 import { useCallback, useMemo, useState } from 'react';
-import { useLocalStorage } from '../shared/useLocalStorage';
-import { useRequireGlobals } from '../shared/useRequireGlobals';
+import type { z } from 'zod';
+import { useLocalStorage, useRequireGlobals } from '../shared';
 import { PlayContext } from './PlayContext';
 
 export { PlayContext };
@@ -46,9 +47,9 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		[]
 	);
 
-	const [notepadLines, setNotepadLines] = useLocalStorage<NotepadLineData[]>(
+	const [notepadItems, setNotepadItems] = useLocalStorage<NotepadItemData[]>(
 		'notepadLines',
-		NotepadStorageSchema,
+		NotepadStorageSchema as z.ZodType<NotepadItemData[]>,
 		[]
 	);
 
@@ -65,7 +66,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	);
 
 	const updateChordBinItem = useCallback(
-		(id: number, updates: Partial<Pick<ChordBinItemData, 'tonic' | 'variant'>>) => {
+		(id: number, updates: Partial<Pick<ChordBinItemData, 'tonic' | 'variant' | 'name'>>) => {
 			setChordBinItems((prev) =>
 				prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
 			);
@@ -87,33 +88,72 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 
 	// Notepad operations
 	const addNotepadLine = useCallback(() => {
-		setNotepadLines((prev) => [...prev, { id: Date.now(), content: '' }]);
-	}, [setNotepadLines]);
+		setNotepadItems((prev) => [
+			...prev,
+			{ id: Date.now(), text: '', chords: Array(60).fill(null) },
+		]);
+	}, [setNotepadItems]);
 
-	const removeNotepadLine = useCallback(
+	const addNotepadTitle = useCallback(() => {
+		setNotepadItems((prev) => [...prev, { type: 'title' as const, id: Date.now(), title: '' }]);
+	}, [setNotepadItems]);
+
+	const removeNotepadItem = useCallback(
 		(id: number) => {
-			setNotepadLines((prev) => prev.filter((line) => line.id !== id));
+			setNotepadItems((prev) => prev.filter((item) => item.id !== id));
 		},
-		[setNotepadLines]
+		[setNotepadItems]
 	);
 
 	const updateNotepadLine = useCallback(
-		(id: number, content: string) => {
-			setNotepadLines((prev) => prev.map((line) => (line.id === id ? { ...line, content } : line)));
+		(id: number, text: string) => {
+			setNotepadItems((prev) =>
+				prev.map((item) => (item.id === id && 'text' in item ? { ...item, text } : item))
+			);
 		},
-		[setNotepadLines]
+		[setNotepadItems]
 	);
 
-	const reorderNotepadLines = useCallback(
+	const updateNotepadTitle = useCallback(
+		(id: number, title: string) => {
+			setNotepadItems((prev) =>
+				prev.map((item) =>
+					item.id === id && 'type' in item && item.type === 'title' ? { ...item, title } : item
+				)
+			);
+		},
+		[setNotepadItems]
+	);
+
+	const updateNotepadLineChord = useCallback(
+		(lineId: number, slotIndex: number, chordId: number | null) => {
+			const clampedSlot = Math.max(0, Math.min(59, slotIndex));
+			setNotepadItems((prev) =>
+				prev.map((item) => {
+					if (item.id === lineId && 'chords' in item) {
+						const existing = item.chords ?? [];
+						const newChords = Array.from({ length: 60 }, (_, i) =>
+							i === clampedSlot ? chordId : (existing[i] ?? null)
+						);
+						return { ...item, chords: newChords };
+					}
+					return item;
+				})
+			);
+		},
+		[setNotepadItems]
+	);
+
+	const reorderNotepadItems = useCallback(
 		(fromIndex: number, toIndex: number) => {
-			setNotepadLines((prev) => {
-				const newLines = [...prev];
-				const [movedLine] = newLines.splice(fromIndex, 1);
-				newLines.splice(toIndex, 0, movedLine);
-				return newLines;
+			setNotepadItems((prev) => {
+				const next = [...prev];
+				const [moved] = next.splice(fromIndex, 1);
+				next.splice(toIndex, 0, moved);
+				return next;
 			});
 		},
-		[setNotepadLines]
+		[setNotepadItems]
 	);
 
 	// Import operations
@@ -125,18 +165,54 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	);
 
 	const importNotepad = useCallback(
-		(lines: NotepadLineData[]) => {
-			setNotepadLines(lines);
+		(items: NotepadItemData[]) => {
+			const migrated = items.map((item) => {
+				if ('type' in item && item.type === 'title') return item;
+				const line = item as NotepadLineData & { content?: string };
+				const text =
+					'text' in line && line.text !== undefined
+						? line.text
+						: ((line as { content?: string }).content ?? '');
+				const chords =
+					!line.chords || line.chords.length !== 60
+						? (() => {
+								const existing = line.chords ?? [];
+								const next = Array(60).fill(null) as (number | null)[];
+								for (let i = 0; i < Math.min(60, existing.length); i++) next[i] = existing[i];
+								return next;
+							})()
+						: line.chords;
+				return { id: line.id, text, chords };
+			});
+			setNotepadItems(migrated);
 		},
-		[setNotepadLines]
+		[setNotepadItems]
 	);
 
 	const importAll = useCallback(
-		(data: { chordBin: ChordBinItemData[]; notepad: NotepadLineData[] }) => {
+		(data: { chordBin: ChordBinItemData[]; notepad: NotepadItemData[] }) => {
 			setChordBinItems(data.chordBin);
-			setNotepadLines(data.notepad);
+			const migrated = data.notepad.map((item) => {
+				if ('type' in item && item.type === 'title') return item;
+				const line = item as NotepadLineData & { content?: string };
+				const text =
+					'text' in line && line.text !== undefined
+						? line.text
+						: ((line as { content?: string }).content ?? '');
+				const chords =
+					!line.chords || line.chords.length !== 60
+						? (() => {
+								const existing = line.chords ?? [];
+								const next = Array(60).fill(null) as (number | null)[];
+								for (let i = 0; i < Math.min(60, existing.length); i++) next[i] = existing[i];
+								return next;
+							})()
+						: line.chords;
+				return { id: line.id, text, chords };
+			});
+			setNotepadItems(migrated);
 		},
-		[setChordBinItems, setNotepadLines]
+		[setChordBinItems, setNotepadItems]
 	);
 
 	// Export operations
@@ -154,7 +230,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	}, [chordBinItems]);
 
 	const exportNotepad = useCallback(() => {
-		const data = { notepad: notepadLines };
+		const data = { notepad: notepadItems };
 		const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
@@ -164,10 +240,10 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
-	}, [notepadLines]);
+	}, [notepadItems]);
 
 	const exportAll = useCallback(() => {
-		const data = { chordBin: chordBinItems, notepad: notepadLines };
+		const data = { chordBin: chordBinItems, notepad: notepadItems };
 		const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
@@ -177,7 +253,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
-	}, [chordBinItems, notepadLines]);
+	}, [chordBinItems, notepadItems]);
 
 	// Other operations
 	const toggleReferenceMode = useCallback(() => {
@@ -186,8 +262,8 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 
 	const reset = useCallback(() => {
 		setChordBinItems([]);
-		setNotepadLines([]);
-	}, [setChordBinItems, setNotepadLines]);
+		setNotepadItems([]);
+	}, [setChordBinItems, setNotepadItems]);
 
 	// Context value
 	const contextValue = useMemo(
@@ -195,6 +271,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			activeInstrument,
 			addChordBinItem,
 			addNotepadLine,
+			addNotepadTitle,
 			chordBinItems,
 			editingItemId,
 			exportAll,
@@ -203,23 +280,26 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			importAll,
 			importChordBin,
 			importNotepad,
-			notepadLines,
+			notepadItems,
 			referenceMode,
 			removeChordBinItem,
-			removeNotepadLine,
+			removeNotepadItem,
 			reorderChordBinItems,
-			reorderNotepadLines,
+			reorderNotepadItems,
 			reset,
 			setActiveInstrument,
 			setEditingItemId,
 			toggleReferenceMode,
 			updateChordBinItem,
 			updateNotepadLine,
+			updateNotepadTitle,
+			updateNotepadLineChord,
 		}),
 		[
 			activeInstrument,
 			addChordBinItem,
 			addNotepadLine,
+			addNotepadTitle,
 			chordBinItems,
 			editingItemId,
 			exportAll,
@@ -228,17 +308,19 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			importAll,
 			importChordBin,
 			importNotepad,
-			notepadLines,
+			notepadItems,
 			referenceMode,
 			removeChordBinItem,
-			removeNotepadLine,
+			removeNotepadItem,
 			reorderChordBinItems,
-			reorderNotepadLines,
+			reorderNotepadItems,
 			reset,
 			setActiveInstrument,
 			toggleReferenceMode,
 			updateChordBinItem,
 			updateNotepadLine,
+			updateNotepadTitle,
+			updateNotepadLineChord,
 		]
 	);
 

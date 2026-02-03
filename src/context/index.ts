@@ -8,11 +8,13 @@ export {
 } from './defaults';
 
 // Shared
-export { useChordState } from './shared/useChordState';
-export { useEscapeReset } from './shared/useEscapeReset';
-export { useLocalStorage } from './shared/useLocalStorage';
-export { useRequireGlobals } from './shared/useRequireGlobals';
-export { useScaleState } from './shared/useScaleState';
+export {
+	useChordState,
+	useEscapeReset,
+	useLocalStorage,
+	useRequireGlobals,
+	useScaleState,
+} from './shared';
 
 // Composed providers
 export { AppProviders } from './AppProviders';

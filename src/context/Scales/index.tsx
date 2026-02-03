@@ -1,8 +1,7 @@
-import { useEscapeReset } from '@/context/shared/useEscapeReset';
-import { useLocalStorage } from '@/context/shared/useLocalStorage';
+import { useEscapeReset, useLocalStorage } from '@/context/shared';
 import { useGlobals } from '@/hooks';
 import { ScalesStorageSchema } from '@/schemas';
-import { useScalesStore } from '@/stores/scalesStore';
+import { useScalesStore } from '@/stores';
 import type {
 	NoteIndex,
 	NoteLabelsButtonIcon,
@@ -57,11 +56,7 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 		resetStore();
 	}, [resetStore]);
 
-	const [showModes, setShowModes] = useLocalStorage(
-		'showModes',
-		z.boolean(),
-		initialShowModes
-	);
+	const [showModes, setShowModes] = useLocalStorage('showModes', z.boolean(), initialShowModes);
 
 	const [showNoteLabels, setShowNoteLabels] = useLocalStorage(
 		'showNoteLabels',

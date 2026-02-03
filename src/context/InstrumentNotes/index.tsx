@@ -1,7 +1,7 @@
 import type { InstrumentNotesContextType, NoteIndex, border } from '@/types';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
-import { InstrumentNotesContext } from './InstrumentNotesContext';
+import { InstrumentNotesContext } from '.';
 
 type InstrumentNotesProviderProps = {
 	tonic: NoteIndex;
