@@ -1,4 +1,4 @@
-import { ActionIcon } from '@/components/icons/ActionIcon';
+import { ActionIcon } from '@/components/icons';
 import { useButtonHandler } from '@/hooks';
 import type { YDirectionType } from '@/types';
 import { useCallback, useState } from 'react';

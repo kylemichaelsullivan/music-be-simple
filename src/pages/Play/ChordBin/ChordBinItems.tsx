@@ -1,5 +1,6 @@
 import { useDropZone, usePlay } from '@/hooks';
-import { ChordBinItem } from '..';
+import clsx from 'clsx';
+import { ChordBinItem } from '.';
 
 export function ChordBinItems() {
 	const { chordBinItems, removeChordBinItem, reorderChordBinItems } = usePlay();
@@ -10,7 +11,11 @@ export function ChordBinItems() {
 
 	return (
 		<div
-			className={`ChordBinItems grid gap-4 transition-all duration-200 ${isOver ? 'bg-gray-50 rounded-lg p-2' : ''}`}
+			className={clsx(
+				'ChordBinItems grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-4 items-start text-center transition-all duration-200',
+				chordBinItems.length > 0 ? 'justify-items-start' : 'justify-items-center',
+				isOver && 'bg-gray-50 p-2'
+			)}
 			ref={dropRef}
 		>
 			{chordBinItems.length > 0 ? (
@@ -24,7 +29,7 @@ export function ChordBinItems() {
 					/>
 				))
 			) : (
-				<span className='text-sm italic text-center'>add a chord</span>
+				<span className='col-span-full text-sm italic text-center'>add a chord</span>
 			)}
 		</div>
 	);

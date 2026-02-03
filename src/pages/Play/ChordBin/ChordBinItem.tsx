@@ -18,7 +18,8 @@ export function ChordBinItem({ item, index, onRemove, onReorder }: ChordBinItemP
 
 	const note = getNote(item.tonic, usingFlats);
 	const symbol = getChordSymbol(item.variant, showNerdMode);
-	const chordName = item.variant === 'major' ? note : `${note}${symbol}`;
+	const computedChordName = item.variant === 'major' ? note : `${note}${symbol}`;
+	const chordName = item.name ?? computedChordName;
 
 	const onEdit = () => {
 		setEditingItemId(item.id);
@@ -29,20 +30,21 @@ export function ChordBinItem({ item, index, onRemove, onReorder }: ChordBinItemP
 		id: item.id,
 		index,
 		onReorder,
+		customPreview: true,
 	});
 
 	const className = useDragDropClassName({
 		baseClasses:
-			'ChordBinItem relative flex justify-center items-start border border-lg p-2 transition-all duration-200',
+			'ChordBinItem relative flex justify-center items-start rounded-lg border p-2 transition-all duration-200',
 		isDragging,
 		isOver,
 	});
 
 	return (
-		<div className={className} ref={dragRef} id={`chord-bin-item-${ID}`}>
+		<div className={`${className} w-full min-w-0 overflow-hidden`} ref={dragRef} id={`chord-bin-item-${ID}`}>
 			{activeInstrument !== null && <EditButton title={`Edit ${chordName}`} onFxn={onEdit} />}
 
-			<span className='text-sm'>{chordName}</span>
+			<span className='truncate text-sm'>{chordName}</span>
 
 			<RemoveButton title={`Remove ${chordName}`} onFxn={onRemove} />
 		</div>
