@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import type { IntervalKey } from '@/utils';
 import {
 	FLATS,
 	FREQUENCIES,
@@ -8,8 +8,8 @@ import {
 	getIntervalsForVariant,
 	getNote,
 	isValidNoteIndex,
-} from '../notes';
-import type { IntervalKey } from '../notes';
+} from '@/utils';
+import { describe, expect, it } from 'vitest';
 
 describe('notes utilities', () => {
 	describe('FLATS and SHARPS', () => {

@@ -1,6 +1,6 @@
+import { useChordsStore } from '@/stores';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { useChordsStore } from '../chordsStore';
 
 describe('chordsStore', () => {
 	afterEach(() => {

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import type { Chord_Variant } from '@/utils';
 import {
 	generateChordNotes,
 	getChordGroups,
@@ -7,8 +7,8 @@ import {
 	getChordVariants,
 	isValidChordVariant,
 	parseChordName,
-} from '../chords';
-import type { Chord_Variant } from '../chords';
+} from '@/utils';
+import { describe, expect, it } from 'vitest';
 
 describe('chords utilities', () => {
 	describe('getChordInfo', () => {

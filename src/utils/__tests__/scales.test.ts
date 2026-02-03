@@ -1,5 +1,5 @@
+import { generateNotesFromIntervals } from '@/utils';
 import { describe, expect, it } from 'vitest';
-import { generateNotesFromIntervals } from '../scales';
 
 describe('scales utilities', () => {
 	describe('generateNotesFromIntervals', () => {
