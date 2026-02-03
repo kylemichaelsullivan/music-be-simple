@@ -1,6 +1,7 @@
 import { RemoveButton } from '@/components/buttons';
-import { useDragDropClassName, useDraggableItem } from '@/hooks';
+import { useDragDropClassName, useDraggableItem, usePlay } from '@/hooks';
 import type { NotepadLineData } from '@/types';
+import { NotepadLineChords, NotepadLineText } from '.';
 
 type NotepadLineProps = {
 	line: NotepadLineData;
@@ -11,6 +12,7 @@ type NotepadLineProps = {
 
 export function NotepadLine({ line, index, onRemove, onReorder }: NotepadLineProps) {
 	const ID = line.id.toString();
+	const { chordBinItems, updateNotepadLine } = usePlay();
 
 	const { isDragging, isOver, dragRef } = useDraggableItem({
 		type: 'notepad-line',
@@ -21,21 +23,22 @@ export function NotepadLine({ line, index, onRemove, onReorder }: NotepadLinePro
 
 	const className = useDragDropClassName({
 		baseClasses:
-			'NotepadLine relative flex justify-start items-center gap-2 border border-lg p-2 pr-10 transition-all duration-200',
+			'NotepadLine relative flex flex-col justify-start items-center border border-lg p-2 pr-10 transition-all duration-200',
 		isDragging,
 		isOver,
 	});
 
 	return (
 		<div className={className} ref={dragRef} id={`notepad-line-${ID}`}>
-			<input
-				type='text'
-				className='text-sm w-full p-2'
-				value={line.content || `Notepad Line ${ID}`}
-				onChange={(e) => {
-					console.log('change', e.target.value);
-				}}
-			/>
+			<div className='NotepadLineContent w-xl max-w-full flex flex-col gap-1'>
+				<NotepadLineChords lineId={line.id} chords={line.chords} chordBinItems={chordBinItems} />
+				<NotepadLineText
+					text={line.text ?? ''}
+					onTextChange={(text) => {
+						updateNotepadLine(line.id, text);
+					}}
+				/>
+			</div>
 
 			<RemoveButton title={`Remove Notepad Line ${ID}`} onFxn={onRemove} />
 		</div>

@@ -1,38 +1,26 @@
 import { useDropZone, usePlay } from '@/hooks';
-import { AddNotepadLine, InstrumentSelector, NotepadLine } from '..';
+import { NotepadContent } from '.';
 
 export function Notepad() {
-	const { notepadLines, addNotepadLine, removeNotepadLine, reorderNotepadLines } = usePlay();
+	const { notepadItems, addNotepadLine, addNotepadTitle, removeNotepadItem, reorderNotepadItems } =
+		usePlay();
 
 	const { isOver, dropRef } = useDropZone({
 		accept: 'notepad-line',
 	});
 
 	return (
-		<div className='Notepad flex flex-col gap-4 border shadow-xl p-4'>
+		<div className='Notepad flex flex-col gap-4 items-center border shadow-xl p-4'>
 			<h2 className='text-2xl font-bold text-center'>Notepad</h2>
-			<InstrumentSelector />
-
-			<div
-				className={`flex flex-col gap-4 transition-all duration-200 ${isOver ? 'bg-gray-50 rounded-lg p-2' : ''}`}
-				ref={dropRef}
-			>
-				{notepadLines.length > 0 ? (
-					notepadLines.map((line, index) => (
-						<NotepadLine
-							line={line}
-							index={index}
-							onReorder={reorderNotepadLines}
-							onRemove={() => removeNotepadLine(line.id)}
-							key={line.id}
-						/>
-					))
-				) : (
-					<span className='text-sm italic text-center'>add a line</span>
-				)}
-			</div>
-
-			<AddNotepadLine onAdd={addNotepadLine} />
+			<NotepadContent
+				notepadItems={notepadItems}
+				isOver={isOver}
+				dropRef={dropRef}
+				onAddTitle={addNotepadTitle}
+				onAddLine={addNotepadLine}
+				onReorder={reorderNotepadItems}
+				onRemoveItem={removeNotepadItem}
+			/>
 		</div>
 	);
 }
