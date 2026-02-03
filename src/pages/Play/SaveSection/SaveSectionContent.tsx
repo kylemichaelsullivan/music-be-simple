@@ -1,4 +1,4 @@
-import { Exports, Imports } from '..';
+import { Exports, Imports } from '.';
 
 export function SaveSectionContent() {
 	return (

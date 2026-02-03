@@ -1,6 +1,6 @@
 import { ToggleSaveSectionButton } from '@/components/buttons';
 import { useState } from 'react';
-import { SaveSectionContent } from '..';
+import { SaveSectionContent } from '.';
 
 export function SaveSection() {
 	const [isSaveSectionOpen, setIsSaveSectionOpen] = useState(false);
