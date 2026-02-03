@@ -1,6 +1,6 @@
 import { PageLayout } from '@/components/PageLayout';
 import { useScales } from '@/hooks';
-import { Notes, ScaleContainer } from './';
+import { Notes, ScaleContainer } from '.';
 
 export function Scales() {
 	const {

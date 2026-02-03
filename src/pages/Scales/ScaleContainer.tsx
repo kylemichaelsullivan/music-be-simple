@@ -1,5 +1,5 @@
 import { TransposeButton } from '@/components/buttons';
-import { Scale } from './Scale';
+import { Scale } from '.';
 
 export function ScaleContainer() {
 	return (

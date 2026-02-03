@@ -1,6 +1,6 @@
 import { PageLayout } from '@/components/PageLayout';
 import { useChords } from '@/hooks';
-import { Chord, Notes } from './';
+import { Chord, Notes } from '.';
 
 export function Chords() {
 	const {
