@@ -78,24 +78,21 @@ test.describe('Play Page', () => {
 
 	test('should add notepad lines', async ({ page }) => {
 		await page.waitForLoadState('networkidle');
-		const addButton = page.getByTitle('Add Line to Notepad');
+		const addButton = page.getByTitle('Add to Notepad');
 		await expect(addButton).toBeVisible();
 
-		// Click add button
 		await addButton.click();
+		await page.getByRole('button', { name: 'Line' }).click();
 
-		// Should see a notepad line
 		const notepadLine = page.locator('[id^="notepad-line-"]').first();
 		await expect(notepadLine).toBeVisible({ timeout: 2000 });
 	});
 
 	test('should remove notepad lines', async ({ page }) => {
 		await page.waitForLoadState('networkidle');
-		// First add a line
-		const addButton = page.getByTitle('Add Line to Notepad');
-		await addButton.click();
+		await page.getByTitle('Add to Notepad').click();
+		await page.getByRole('button', { name: 'Line' }).click();
 
-		// Wait for line to appear
 		const notepadLine = page.locator('[id^="notepad-line-"]').first();
 		await expect(notepadLine).toBeVisible({ timeout: 2000 });
 
@@ -228,7 +225,8 @@ test.describe('Play Page', () => {
 
 		test('should export Notepad and have valid JSON', async ({ page }) => {
 			await page.waitForLoadState('networkidle');
-			await page.getByTitle('Add Line to Notepad').click();
+			await page.getByTitle('Add to Notepad').click();
+			await page.getByRole('button', { name: 'Line' }).click();
 			await expect(page.locator('[id^="notepad-line-"]').first()).toBeVisible({ timeout: 2000 });
 
 			await page.getByTitle('Open Save Section').click();
