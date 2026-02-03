@@ -1,7 +1,7 @@
-import { InstrumentNotesProvider } from '@/context/InstrumentNotes';
+import { InstrumentNotesProvider } from '@/context';
+import { useInstrumentNotes } from '@/hooks';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useInstrumentNotes } from '../useInstrumentNotes';
 
 describe('useInstrumentNotes', () => {
 	it('should throw error when used outside provider', () => {

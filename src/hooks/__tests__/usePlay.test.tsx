@@ -1,11 +1,13 @@
-import { ChordsContextProvider } from '@/context/Chords';
-import { GlobalsContextProvider } from '@/context/Globals';
-import { PlayContextProvider } from '@/context/Play';
-import { ScalesContextProvider } from '@/context/Scales';
+import {
+	ChordsContextProvider,
+	GlobalsContextProvider,
+	PlayContextProvider,
+	ScalesContextProvider,
+} from '@/context';
+import { usePlay } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { usePlay } from '../usePlay';
 
 // Mock URL.createObjectURL and URL.revokeObjectURL
 const createObjectURLMock = vi.fn(() => 'blob:mock-url');
@@ -75,11 +77,12 @@ describe('usePlay', () => {
 		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		expect(result.current).toHaveProperty('chordBinItems');
-		expect(result.current).toHaveProperty('notepadLines');
+		expect(result.current).toHaveProperty('notepadItems');
 		expect(result.current).toHaveProperty('addChordBinItem');
 		expect(result.current).toHaveProperty('removeChordBinItem');
 		expect(result.current).toHaveProperty('addNotepadLine');
-		expect(result.current).toHaveProperty('removeNotepadLine');
+		expect(result.current).toHaveProperty('addNotepadTitle');
+		expect(result.current).toHaveProperty('removeNotepadItem');
 		expect(result.current).toHaveProperty('importChordBin');
 		expect(result.current).toHaveProperty('importNotepad');
 		expect(result.current).toHaveProperty('importAll');
@@ -89,18 +92,19 @@ describe('usePlay', () => {
 		expect(result.current).toHaveProperty('reset');
 
 		expect(Array.isArray(result.current.chordBinItems)).toBe(true);
-		expect(Array.isArray(result.current.notepadLines)).toBe(true);
+		expect(Array.isArray(result.current.notepadItems)).toBe(true);
 		expect(typeof result.current.addChordBinItem).toBe('function');
 		expect(typeof result.current.removeChordBinItem).toBe('function');
 		expect(typeof result.current.addNotepadLine).toBe('function');
-		expect(typeof result.current.removeNotepadLine).toBe('function');
+		expect(typeof result.current.addNotepadTitle).toBe('function');
+		expect(typeof result.current.removeNotepadItem).toBe('function');
 	});
 
 	it('should initialize with empty arrays', () => {
 		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		expect(result.current.chordBinItems).toEqual([]);
-		expect(result.current.notepadLines).toEqual([]);
+		expect(result.current.notepadItems).toEqual([]);
 	});
 
 	it('should add chord bin items', async () => {
@@ -166,27 +170,27 @@ describe('usePlay', () => {
 	it('should add notepad lines', async () => {
 		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
-		expect(result.current.notepadLines).toHaveLength(0);
+		expect(result.current.notepadItems).toHaveLength(0);
 
 		act(() => {
 			result.current.addNotepadLine();
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.length).toBeGreaterThan(0);
+			expect(result.current.notepadItems.length).toBeGreaterThan(0);
 		});
 
-		const initialLength = result.current.notepadLines.length;
+		const initialLength = result.current.notepadItems.length;
 		act(() => {
 			result.current.addNotepadLine();
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.length).toBe(initialLength + 1);
+			expect(result.current.notepadItems.length).toBe(initialLength + 1);
 		});
 	});
 
-	it('should remove notepad lines', async () => {
+	it('should remove notepad items', async () => {
 		// Clear localStorage before this test to ensure clean state
 		if (typeof window !== 'undefined' && window.localStorage) {
 			window.localStorage.clear();
@@ -200,7 +204,7 @@ describe('usePlay', () => {
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.length).toBe(1);
+			expect(result.current.notepadItems.length).toBe(1);
 		});
 
 		act(() => {
@@ -208,18 +212,18 @@ describe('usePlay', () => {
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.length).toBe(2);
+			expect(result.current.notepadItems.length).toBe(2);
 		});
 
-		const firstLine = result.current.notepadLines[0];
-		const firstId = firstLine.id;
+		const firstItem = result.current.notepadItems[0];
+		const firstId = firstItem.id;
 		act(() => {
-			result.current.removeNotepadLine(firstId);
+			result.current.removeNotepadItem(firstId);
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.find((line) => line.id === firstId)).toBeUndefined();
-			expect(result.current.notepadLines.length).toBe(1);
+			expect(result.current.notepadItems.find((item) => item.id === firstId)).toBeUndefined();
+			expect(result.current.notepadItems.length).toBe(1);
 		});
 	});
 
@@ -244,16 +248,20 @@ describe('usePlay', () => {
 		const { result } = renderHook(() => usePlay(), { wrapper: createWrapper() });
 
 		const lines = [
-			{ id: 400, content: 'Line 1' },
-			{ id: 500, content: 'Line 2' },
-			{ id: 600, content: 'Line 3' },
+			{ id: 400, text: 'Line 1' },
+			{ id: 500, text: 'Line 2' },
+			{ id: 600, text: 'Line 3' },
 		];
 		act(() => {
 			result.current.importNotepad(lines);
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines).toEqual(lines);
+			const expectedLines = lines.map((line) => ({
+				...line,
+				chords: Array(60).fill(null),
+			}));
+			expect(result.current.notepadItems).toEqual(expectedLines);
 		});
 	});
 
@@ -266,8 +274,8 @@ describe('usePlay', () => {
 				{ id: 200, tonic: 2 as NoteIndex, variant: 'minor' },
 			],
 			notepad: [
-				{ id: 300, content: 'Note 1' },
-				{ id: 400, content: 'Note 2' },
+				{ id: 300, text: 'Note 1' },
+				{ id: 400, text: 'Note 2' },
 			],
 		};
 
@@ -277,7 +285,11 @@ describe('usePlay', () => {
 
 		await waitFor(() => {
 			expect(result.current.chordBinItems).toEqual(data.chordBin);
-			expect(result.current.notepadLines).toEqual(data.notepad);
+			const expectedNotepad = data.notepad.map((line) => ({
+				...line,
+				chords: Array(60).fill(null),
+			}));
+			expect(result.current.notepadItems).toEqual(expectedNotepad);
 		});
 	});
 
@@ -356,7 +368,7 @@ describe('usePlay', () => {
 
 		await waitFor(() => {
 			expect(result.current.chordBinItems.length).toBeGreaterThan(0);
-			expect(result.current.notepadLines.length).toBeGreaterThan(0);
+			expect(result.current.notepadItems.length).toBeGreaterThan(0);
 		});
 
 		// Clear previous calls
@@ -389,7 +401,7 @@ describe('usePlay', () => {
 
 		await waitFor(() => {
 			expect(result.current.chordBinItems.length).toBeGreaterThan(0);
-			expect(result.current.notepadLines.length).toBeGreaterThan(0);
+			expect(result.current.notepadItems.length).toBeGreaterThan(0);
 		});
 
 		act(() => {
@@ -398,7 +410,7 @@ describe('usePlay', () => {
 
 		await waitFor(() => {
 			expect(result.current.chordBinItems).toEqual([]);
-			expect(result.current.notepadLines).toEqual([]);
+			expect(result.current.notepadItems).toEqual([]);
 		});
 	});
 });

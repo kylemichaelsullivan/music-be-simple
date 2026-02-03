@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 type DraggableItem = {
 	id: number;
@@ -10,6 +12,8 @@ type UseDraggableItemOptions = {
 	id: number;
 	index: number;
 	onReorder: (fromIndex: number, toIndex: number) => void;
+	// When true, suppresses the default drag image so a custom DragLayer can be used.
+	customPreview?: boolean;
 };
 
 type UseDraggableItemReturn = {
@@ -23,14 +27,21 @@ export function useDraggableItem({
 	id,
 	index,
 	onReorder,
+	customPreview = false,
 }: UseDraggableItemOptions): UseDraggableItemReturn {
-	const [{ isDragging }, drag] = useDrag({
+	const [{ isDragging }, drag, preview] = useDrag({
 		type,
 		item: { id, index },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 		}),
 	});
+
+	useEffect(() => {
+		if (customPreview) {
+			preview(getEmptyImage(), { captureDraggingState: true });
+		}
+	}, [customPreview, preview]);
 
 	const [{ isOver }, drop] = useDrop({
 		accept: type,

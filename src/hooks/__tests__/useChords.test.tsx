@@ -1,9 +1,8 @@
-import { ChordsContextProvider } from '@/context/Chords';
-import { GlobalsContextProvider } from '@/context/Globals';
-import { useChordsStore } from '@/stores/chordsStore';
+import { ChordsContextProvider, GlobalsContextProvider } from '@/context';
+import { useChords } from '@/hooks';
+import { useChordsStore } from '@/stores';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { useChords } from '../useChords';
 
 describe('useChords', () => {
 	afterEach(() => {

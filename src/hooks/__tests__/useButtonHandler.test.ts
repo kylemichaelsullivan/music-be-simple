@@ -1,6 +1,6 @@
+import { useButtonHandler } from '@/hooks';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useButtonHandler } from '../useButtonHandler';
 
 describe('useButtonHandler', () => {
 	it('should return handleClick, handleKeyDown, and handleKeyUp', () => {

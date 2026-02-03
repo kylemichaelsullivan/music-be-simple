@@ -1,7 +1,7 @@
-import { GlobalsContextProvider } from '@/context/Globals';
+import { GlobalsContextProvider } from '@/context';
+import { useGlobals } from '@/hooks';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useGlobals } from '../useGlobals';
 
 describe('useGlobals', () => {
 	it('should throw error when used outside provider', () => {

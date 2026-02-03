@@ -1,8 +1,8 @@
+import { useDraggableItem } from '@/hooks';
 import { renderHook } from '@testing-library/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { describe, expect, it } from 'vitest';
-import { useDraggableItem } from '../useDraggableItem';
 
 function wrapper({ children }: { children: React.ReactNode }) {
 	return <DndProvider backend={HTML5Backend}>{children}</DndProvider>;

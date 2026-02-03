@@ -1,6 +1,6 @@
+import { useDragDropClassName } from '@/hooks';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { useDragDropClassName } from '../useDragDropClassName';
 
 describe('useDragDropClassName', () => {
 	it('should return baseClasses with default cursor-grab when not dragging or over', () => {

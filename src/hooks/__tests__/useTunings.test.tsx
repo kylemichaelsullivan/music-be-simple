@@ -1,7 +1,7 @@
 import { TuningsContextProvider } from '@/context';
+import { useTunings } from '@/hooks';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useTunings } from '../useTunings';
 
 describe('useTunings', () => {
 	it('should throw when used outside TuningsContextProvider', () => {
