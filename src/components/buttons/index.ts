@@ -1,4 +1,5 @@
 export { AddButton } from './AddButton';
+export { CloseButton } from './CloseButton';
 export { EditButton } from './EditButton';
 export { IconButton } from './IconButton';
 export { InstrumentButton } from './InstrumentButton';

@@ -1,5 +1,5 @@
 import { ActionIcon } from '@/components/icons';
-import { IconButton } from './IconButton';
+import { IconButton } from '.';
 
 type AddButtonProps = {
 	onFxn: () => void;
