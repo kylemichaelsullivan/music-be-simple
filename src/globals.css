@@ -271,16 +271,19 @@ select {
 	border-color: hsl(from var(--border) h s l / 1.0);
 }
 
-/* Chord Bin */
-.ChordBinItems {
-	grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
-}
-
-.ChordBinItem {
-	min-width: 0;
+.NotepadLineText {
+	font-size: clamp(0.75rem, 2.5vw, 1rem);
 }
 
 /* Utility Classes */
+.grid-cols-36 {
+	grid-template-columns: repeat(36, minmax(0, 1fr));
+}
+
+.small-caps {
+	font-variant: small-caps;
+}
+
 .text-xxxs {
 	font-size: 0.5rem;
 }
