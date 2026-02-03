@@ -4,6 +4,8 @@ import {
 	ChordVariantSchema,
 	NoteIndexSchema,
 	NotepadLineDataSchema,
+	NotepadLineTitleDataSchema,
+	NotepadStorageSchema,
 	TuningsStorageSchema,
 } from '../schemas';
 
@@ -62,10 +64,68 @@ describe('schemas', () => {
 
 	describe('NotepadLineDataSchema', () => {
 		it('accepts valid notepad line', () => {
-			expect(NotepadLineDataSchema.safeParse({ id: 1, content: 'Hello' }).success).toBe(true);
+			expect(NotepadLineDataSchema.safeParse({ id: 1, text: 'Hello' }).success).toBe(true);
 		});
-		it('rejects missing content', () => {
+		it('adds chords array when missing', () => {
+			const result = NotepadLineDataSchema.safeParse({ id: 1, text: 'Hello' });
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.data.chords).toHaveLength(60);
+				expect(result.data.chords.every((chord) => chord === null)).toBe(true);
+			}
+		});
+		it('rejects missing text', () => {
 			expect(NotepadLineDataSchema.safeParse({ id: 1 }).success).toBe(false);
+		});
+	});
+
+	describe('NotepadLineTitleDataSchema', () => {
+		it('accepts valid notepad title', () => {
+			expect(
+				NotepadLineTitleDataSchema.safeParse({
+					type: 'title',
+					id: 1,
+					title: 'Verse',
+				}).success
+			).toBe(true);
+		});
+		it('rejects missing type', () => {
+			expect(NotepadLineTitleDataSchema.safeParse({ id: 1, title: 'Chorus' }).success).toBe(false);
+		});
+		it('rejects missing title', () => {
+			expect(NotepadLineTitleDataSchema.safeParse({ type: 'title', id: 1 }).success).toBe(false);
+		});
+	});
+
+	describe('NotepadStorageSchema', () => {
+		it('accepts empty array', () => {
+			expect(NotepadStorageSchema.safeParse([]).success).toBe(true);
+		});
+		it('accepts lines only', () => {
+			const result = NotepadStorageSchema.safeParse([
+				{ id: 1, text: 'Line 1' },
+				{ id: 2, text: 'Line 2' },
+			]);
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.data).toHaveLength(2);
+				expect(result.data[0]).toMatchObject({ id: 1, text: 'Line 1' });
+				expect(result.data[1]).toMatchObject({ id: 2, text: 'Line 2' });
+			}
+		});
+		it('accepts mixed lines and titles', () => {
+			const result = NotepadStorageSchema.safeParse([
+				{ type: 'title', id: 10, title: 'Verse' },
+				{ id: 1, text: 'Line 1' },
+				{ type: 'title', id: 11, title: 'Chorus' },
+			]);
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.data).toHaveLength(3);
+				expect(result.data[0]).toEqual({ type: 'title', id: 10, title: 'Verse' });
+				expect(result.data[1]).toMatchObject({ id: 1, text: 'Line 1' });
+				expect(result.data[2]).toEqual({ type: 'title', id: 11, title: 'Chorus' });
+			}
 		});
 	});
 });

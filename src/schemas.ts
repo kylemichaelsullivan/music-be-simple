@@ -1,7 +1,6 @@
 import { ICONS, INSTRUMENTS } from '@/instruments';
 import { TABS } from '@/navigation';
-import { CHORDS } from '@/utils/chords';
-import { SCALE_TYPES } from '@/utils/notes';
+import { CHORDS, SCALE_TYPES } from '@/utils';
 import { z } from 'zod';
 
 const chordVariantKeys = new Set<string>();
@@ -107,12 +106,27 @@ export const ChordBinItemDataSchema = z.object({
 	id: z.number(),
 	tonic: NoteIndexZodSchema,
 	variant: ChordVariantSchema,
+	name: z.string().optional(),
 });
 
-export const NotepadLineDataSchema = z.object({
+export const NotepadLineDataSchema = z
+	.object({
+		id: z.number(),
+		text: z.string(),
+		chords: z.array(z.number().nullable()).length(60).optional(),
+	})
+	.transform((data) => ({
+		...data,
+		chords: data.chords ?? Array(60).fill(null),
+	}));
+
+export const NotepadLineTitleDataSchema = z.object({
+	type: z.literal('title'),
 	id: z.number(),
-	content: z.string(),
+	title: z.string(),
 });
+
+export const NotepadItemSchema = z.union([NotepadLineTitleDataSchema, NotepadLineDataSchema]);
 
 export const ChordBinStorageSchema = z.array(ChordBinItemDataSchema);
 
@@ -124,4 +138,4 @@ export const TuningsStorageSchema = z.object({
 	Ukulele: z.array(NoteIndexZodSchema).length(4).optional(),
 });
 
-export const NotepadStorageSchema = z.array(NotepadLineDataSchema);
+export const NotepadStorageSchema = z.array(NotepadItemSchema);

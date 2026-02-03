@@ -58,7 +58,9 @@ export type { GlobalsContextType, GlobalsContextProviderProps } from './globals'
 export type { InstrumentNotesContextType } from './instrumentNotes';
 export type {
 	ChordBinItemData,
+	NotepadItemData,
 	NotepadLineData,
+	NotepadLineTitleData,
 	PlayContextType,
 	PlayContextProviderProps,
 	ReferenceMode,
