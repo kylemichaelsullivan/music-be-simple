@@ -1,7 +1,7 @@
+import { RemoveButton } from '@/components/buttons';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { RemoveButton } from '../buttons/RemoveButton';
 
 describe('RemoveButton', () => {
 	const mockOnFxn = vi.fn();

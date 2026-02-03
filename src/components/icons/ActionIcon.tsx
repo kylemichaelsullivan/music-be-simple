@@ -5,7 +5,7 @@ import penIcon from '/icons/pen.svg';
 import saveIcon from '/icons/save.svg';
 import trashIcon from '/icons/trash.svg';
 import upIcon from '/icons/up.svg';
-import { Icon } from './Icon';
+import { Icon } from '.';
 
 const actionIconMap: Record<ActionIconName, string> = {
 	add: addIcon,

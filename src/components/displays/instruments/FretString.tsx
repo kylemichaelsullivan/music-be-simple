@@ -1,7 +1,6 @@
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
-import { Fret } from './Fret';
-import { Nut } from './Nut';
+import { Fret, Nut } from '.';
 
 type FretStringProps = {
 	openNote: NoteIndex;

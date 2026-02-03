@@ -1,6 +1,12 @@
 export { Banjo } from './Banjo';
+export { Fret } from './Fret';
+export { FretNumbers } from './FretNumbers';
+export { FretString } from './FretString';
 export { Guitar } from './Guitar';
 export { Instrument } from './Instrument';
+export { Label } from './Label';
+export { LabelContent } from './LabelContent';
 export { Mandolin } from './Mandolin';
+export { Nut } from './Nut';
 export { Piano } from './Piano';
 export { Ukulele } from './Ukulele';

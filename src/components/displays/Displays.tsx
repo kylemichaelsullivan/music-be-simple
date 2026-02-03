@@ -4,7 +4,7 @@ import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { DisplaysProps, InstrumentType } from '@/types';
 import { type ReactElement, memo, useMemo } from 'react';
-import { Banjo, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from './';
+import { Banjo, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from '.';
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
 	Banjo: () => <Banjo />,

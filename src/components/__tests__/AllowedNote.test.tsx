@@ -1,7 +1,7 @@
-import { InstrumentNotesProvider } from '@/context/InstrumentNotes';
+import { AllowedNote } from '@/components';
+import { InstrumentNotesProvider } from '@/context';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { AllowedNote } from '../AllowedNote';
 
 describe('AllowedNote', () => {
 	afterEach(() => {

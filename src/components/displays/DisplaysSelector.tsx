@@ -1,7 +1,7 @@
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { DisplaysSelectorProps } from '@/types';
 import { useCallback, useMemo } from 'react';
-import { DisplaySelector } from './';
+import { DisplaySelector } from '.';
 
 export function DisplaysSelector({
 	onFxn,

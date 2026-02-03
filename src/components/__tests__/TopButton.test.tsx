@@ -1,7 +1,7 @@
+import { TopButton } from '@/components/buttons';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { TopButton } from '../buttons/TopButton';
 
 describe('TopButton', () => {
 	const mockOnFxn = vi.fn();

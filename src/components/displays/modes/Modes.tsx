@@ -1,6 +1,6 @@
 import type { NoteIndex, ScaleMode } from '@/types';
 import { memo, useMemo } from 'react';
-import { Mode, ModesHeading } from './';
+import { Mode, ModesHeading } from '.';
 import { useGlobals, useScales } from '@/hooks';
 import { ScaleModeSchema } from '@/schemas';
 import { INTERVALS, SCALE_TYPES, getNote, isValidNoteIndex } from '@/utils';

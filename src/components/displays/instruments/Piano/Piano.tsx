@@ -1,7 +1,7 @@
 import { useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
-import { Key } from './Key';
+import { Key } from '.';
 
 export function Piano() {
 	const keys = 12;

@@ -5,7 +5,7 @@ import pianoIcon from '/icons/keyboard.svg';
 import mandolinIcon from '/icons/mandolin.svg';
 import modesIcon from '/icons/stand.svg';
 import ukuleleIcon from '/icons/ukulele.svg';
-import { Icon } from './Icon';
+import { Icon } from '.';
 
 const iconMap: Record<IconName, string> = {
 	Banjo: banjoIcon,

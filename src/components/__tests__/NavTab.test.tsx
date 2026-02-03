@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from '@/test/test-utils';
+import { NavTab } from '@/components/nav';
+import { render, screen, waitFor } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { NavTab } from '../nav/NavTab';
 
 describe('NavTab', () => {
 	it('should render nav tab with title', async () => {

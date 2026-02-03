@@ -1,7 +1,7 @@
+import { IconButton } from '@/components/buttons';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { IconButton } from '../buttons/IconButton';
 
 describe('IconButton', () => {
 	const mockOnFxn = vi.fn();

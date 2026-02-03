@@ -1,8 +1,8 @@
 import { InstrumentNotesProvider } from '@/context';
-import { render, screen } from '@/test/test-utils';
+import { render, screen } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { Fret } from '../Fret';
+import { Fret } from '..';
 
 function wrap(ui: React.ReactElement) {
 	return (

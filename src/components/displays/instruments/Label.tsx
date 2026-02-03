@@ -1,5 +1,5 @@
 import type { IconName } from '@/types';
-import { LabelContent } from './LabelContent';
+import { LabelContent } from '.';
 
 type LabelProps = {
 	icon: IconName;

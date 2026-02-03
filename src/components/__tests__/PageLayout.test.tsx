@@ -1,7 +1,7 @@
+import { PageLayout } from '@/components';
 import { AppProviders } from '@/context';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { PageLayout } from '../PageLayout';
 
 describe('PageLayout', () => {
 	it('should render without throwing', () => {

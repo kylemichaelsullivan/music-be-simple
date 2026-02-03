@@ -4,7 +4,7 @@ import { rangeOfLength } from '@/utils';
 import { FretNumbers } from '../FretNumbers';
 import { FretString } from '../FretString';
 import { Label } from '../Label';
-import { DroneString } from './DroneString';
+import { DroneString } from '.';
 
 export function Banjo() {
 	// [G], D, B, G, D

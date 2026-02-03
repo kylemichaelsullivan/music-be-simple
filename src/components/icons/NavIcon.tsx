@@ -2,7 +2,7 @@ import type { IconSize, TabType } from '@/types';
 import chordsIcon from '/icons/chords.svg';
 import playIcon from '/icons/play.svg';
 import scalesIcon from '/icons/scales.svg';
-import { Icon } from './Icon';
+import { Icon } from '.';
 
 const iconMap: Record<TabType, string> = {
 	Chords: chordsIcon,

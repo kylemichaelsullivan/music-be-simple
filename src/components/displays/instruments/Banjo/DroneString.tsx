@@ -2,7 +2,7 @@ import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
 import { Fret } from '../Fret';
 import { Nut } from '../Nut';
-import { SkippedFret } from './SkippedFret';
+import { SkippedFret } from '.';
 
 type DroneStringProps = {
 	openNote: NoteIndex;

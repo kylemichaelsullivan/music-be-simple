@@ -1,7 +1,7 @@
 import type { ScaleMode, ScaleType } from '@/types';
 import clsx from 'clsx';
 import { memo, useMemo } from 'react';
-import { ModeRelatives } from './ModeRelatives';
+import { ModeRelatives } from '.';
 
 type ModeHeadingProps = {
 	mode: ScaleMode | ScaleType;
