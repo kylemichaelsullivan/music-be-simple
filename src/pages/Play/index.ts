@@ -1,16 +1,26 @@
-export { AddChordBinItem } from './ChordBin/AddChordBinItem';
-export { AddNotepadLine } from './Notepad/AddNotepadLine';
-export { ChordBin } from './ChordBin/ChordBin';
-export { ChordBinEditor } from './ChordBin/ChordBinEditor/ChordBinEditor';
-export { ChordBinItem } from './ChordBin/ChordBinItem';
-export { ChordBinItems } from './ChordBin/ChordBinItems';
-export { Exports } from './SaveSection/Exports';
-export { Imports } from './SaveSection/Imports';
-export { InstrumentButton } from '../../components/buttons/InstrumentButton';
+export {
+	AddChordBinItem,
+	ChordBin,
+	ChordBinDragPreview,
+	ChordBinEditor,
+	ChordBinItem,
+	ChordBinItems,
+} from './ChordBin';
+export { InstrumentButton } from '@/components/buttons';
 export { InstrumentSelector } from './InstrumentSelector';
-export { Notepad } from './Notepad/Notepad';
-export { NotepadLine } from './Notepad/NotepadLine';
+export {
+	AddNotepadLine,
+	Notepad,
+	NotepadContent,
+	NotepadLine,
+	NotepadLineTitle,
+} from './Notepad';
 export { Play } from './Play';
-export { SaveSection } from './SaveSection/SaveSection';
-export { SaveSectionButtons } from './SaveSection/SaveSectionButtons';
-export { SaveSectionContent } from './SaveSection/SaveSectionContent';
+export { PlayBottomSection } from './PlayBottomSection';
+export {
+	Exports,
+	Imports,
+	SaveSection,
+	SaveSectionButtons,
+	SaveSectionContent,
+} from './SaveSection';

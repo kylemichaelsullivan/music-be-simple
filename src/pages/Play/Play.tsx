@@ -5,7 +5,7 @@ import { NavIcon } from '@/components/icons';
 import { useChords, usePlay, useScales } from '@/hooks';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { PlayBottomSection } from './PlayBottomSection';
+import { ChordBinDragPreview, PlayBottomSection } from '.';
 
 export function Play() {
 	const { referenceMode, toggleReferenceMode } = usePlay();
@@ -28,6 +28,7 @@ export function Play() {
 
 	return (
 		<DndProvider backend={HTML5Backend}>
+			<ChordBinDragPreview />
 			<PageLayout
 				title='Play'
 				topButton={{

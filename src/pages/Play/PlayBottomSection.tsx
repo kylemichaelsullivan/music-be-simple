@@ -1,6 +1,4 @@
-import { ChordBin } from './ChordBin/ChordBin';
-import { Notepad } from './Notepad/Notepad';
-import { SaveSection } from './SaveSection/SaveSection';
+import { ChordBin, Notepad, SaveSection } from '.';
 
 export function PlayBottomSection() {
 	return (
