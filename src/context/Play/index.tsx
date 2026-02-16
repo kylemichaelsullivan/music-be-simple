@@ -90,7 +90,36 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 	const addNotepadLine = useCallback(() => {
 		setNotepadItems((prev) => [
 			...prev,
-			{ id: Date.now(), text: '', chords: Array(60).fill(null) },
+			{
+				id: Date.now(),
+				text: '',
+				chords: Array(60).fill(null),
+				supports: { chords: true, lyrics: true },
+			},
+		]);
+	}, [setNotepadItems]);
+
+	const addNotepadLineChords = useCallback(() => {
+		setNotepadItems((prev) => [
+			...prev,
+			{
+				id: Date.now(),
+				text: '',
+				chords: Array(60).fill(null),
+				supports: { chords: true, lyrics: false },
+			},
+		]);
+	}, [setNotepadItems]);
+
+	const addNotepadLineLyrics = useCallback(() => {
+		setNotepadItems((prev) => [
+			...prev,
+			{
+				id: Date.now(),
+				text: '',
+				chords: Array(60).fill(null),
+				supports: { chords: false, lyrics: true },
+			},
 		]);
 	}, [setNotepadItems]);
 
@@ -144,6 +173,30 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		[setNotepadItems]
 	);
 
+	const reorderNotepadLineChords = useCallback(
+		(lineId: number, fromFilledIndex: number, toFilledIndex: number) => {
+			if (fromFilledIndex === toFilledIndex) return;
+			setNotepadItems((prev) =>
+				prev.map((item) => {
+					if (item.id !== lineId || !('chords' in item)) return item;
+					const existing = item.chords ?? [];
+					const chordIds = existing.filter((c): c is number => c !== null);
+					if (fromFilledIndex < 0 || fromFilledIndex >= chordIds.length) return item;
+					const toIndex = Math.max(0, Math.min(chordIds.length - 1, toFilledIndex));
+					const reordered = [...chordIds];
+					const [moved] = reordered.splice(fromFilledIndex, 1);
+					reordered.splice(toIndex, 0, moved);
+					const newChords = [
+						...reordered,
+						...Array(60).fill(null),
+					].slice(0, 60) as (number | null)[];
+					return { ...item, chords: newChords };
+				})
+			);
+		},
+		[setNotepadItems]
+	);
+
 	const reorderNotepadItems = useCallback(
 		(fromIndex: number, toIndex: number) => {
 			setNotepadItems((prev) => {
@@ -168,7 +221,10 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 		(items: NotepadItemData[]) => {
 			const migrated = items.map((item) => {
 				if ('type' in item && item.type === 'title') return item;
-				const line = item as NotepadLineData & { content?: string };
+				const line = item as NotepadLineData & {
+					content?: string;
+					kind?: 'chords' | 'lyrics' | 'chords-lyrics';
+				};
 				const text =
 					'text' in line && line.text !== undefined
 						? line.text
@@ -182,7 +238,23 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 								return next;
 							})()
 						: line.chords;
-				return { id: line.id, text, chords };
+
+				const existingSupports = line.supports;
+				const supports =
+					existingSupports && (existingSupports.chords !== undefined || existingSupports.lyrics !== undefined)
+						? {
+								chords: existingSupports.chords ?? true,
+								lyrics: existingSupports.lyrics ?? true,
+							}
+						: (() => {
+								// Legacy kind field
+								const kind = line.kind ?? 'chords-lyrics';
+								if (kind === 'chords') return { chords: true, lyrics: false };
+								if (kind === 'lyrics') return { chords: false, lyrics: true };
+								return { chords: true, lyrics: true };
+							})();
+
+				return { id: line.id, text, chords, supports };
 			});
 			setNotepadItems(migrated);
 		},
@@ -194,7 +266,10 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			setChordBinItems(data.chordBin);
 			const migrated = data.notepad.map((item) => {
 				if ('type' in item && item.type === 'title') return item;
-				const line = item as NotepadLineData & { content?: string };
+				const line = item as NotepadLineData & {
+					content?: string;
+					kind?: 'chords' | 'lyrics' | 'chords-lyrics';
+				};
 				const text =
 					'text' in line && line.text !== undefined
 						? line.text
@@ -208,7 +283,22 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 								return next;
 							})()
 						: line.chords;
-				return { id: line.id, text, chords };
+
+				const existingSupports = line.supports;
+				const supports =
+					existingSupports && (existingSupports.chords !== undefined || existingSupports.lyrics !== undefined)
+						? {
+								chords: existingSupports.chords ?? true,
+								lyrics: existingSupports.lyrics ?? true,
+							}
+						: (() => {
+								const kind = line.kind ?? 'chords-lyrics';
+								if (kind === 'chords') return { chords: true, lyrics: false };
+								if (kind === 'lyrics') return { chords: false, lyrics: true };
+								return { chords: true, lyrics: true };
+							})();
+
+				return { id: line.id, text, chords, supports };
 			});
 			setNotepadItems(migrated);
 		},
@@ -271,6 +361,8 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			activeInstrument,
 			addChordBinItem,
 			addNotepadLine,
+			addNotepadLineChords,
+			addNotepadLineLyrics,
 			addNotepadTitle,
 			chordBinItems,
 			editingItemId,
@@ -294,11 +386,14 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			updateNotepadLine,
 			updateNotepadTitle,
 			updateNotepadLineChord,
+			reorderNotepadLineChords,
 		}),
 		[
 			activeInstrument,
 			addChordBinItem,
 			addNotepadLine,
+			addNotepadLineChords,
+			addNotepadLineLyrics,
 			addNotepadTitle,
 			chordBinItems,
 			editingItemId,
@@ -321,6 +416,7 @@ export const PlayContextProvider = ({ children }: PlayContextProviderProps) => {
 			updateNotepadLine,
 			updateNotepadTitle,
 			updateNotepadLineChord,
+			reorderNotepadLineChords,
 		]
 	);
 
