@@ -4,5 +4,7 @@ export { NotepadContent } from './NotepadContent';
 export { NotepadLine } from './NotepadLine';
 export { NotepadLineChord } from './NotepadLineChord';
 export { NotepadLineChords } from './NotepadLineChords';
+export { NotepadLineChordsOnly } from './NotepadLineChordsOnly';
+export { NotepadLineLyricsOnly } from './NotepadLineLyricsOnly';
 export { NotepadLineText } from './NotepadLineText';
 export { NotepadLineTitle } from './NotepadLineTitle';

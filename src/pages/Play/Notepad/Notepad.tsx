@@ -2,8 +2,15 @@ import { useDropZone, usePlay } from '@/hooks';
 import { NotepadContent } from '.';
 
 export function Notepad() {
-	const { notepadItems, addNotepadLine, addNotepadTitle, removeNotepadItem, reorderNotepadItems } =
-		usePlay();
+	const {
+		notepadItems,
+		addNotepadLine,
+		addNotepadLineChords,
+		addNotepadLineLyrics,
+		addNotepadTitle,
+		removeNotepadItem,
+		reorderNotepadItems,
+	} = usePlay();
 
 	const { isOver, dropRef } = useDropZone({
 		accept: 'notepad-line',
@@ -18,6 +25,8 @@ export function Notepad() {
 				dropRef={dropRef}
 				onAddTitle={addNotepadTitle}
 				onAddLine={addNotepadLine}
+				onAddLineChords={addNotepadLineChords}
+				onAddLineLyrics={addNotepadLineLyrics}
 				onReorder={reorderNotepadItems}
 				onRemoveItem={removeNotepadItem}
 			/>
