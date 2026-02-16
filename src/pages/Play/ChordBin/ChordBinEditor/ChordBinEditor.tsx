@@ -5,12 +5,14 @@ import type { ChordBinItemData, InstrumentType } from '@/types';
 import { getChordSymbol, getNote, isValidNoteIndex, parseChordName } from '@/utils';
 import type { ChangeEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { BanjoEditor } from './BanjoEditor';
-import { GuitarEditor } from './GuitarEditor';
-import { MandolinEditor } from './MandolinEditor';
-import { PianoEditor } from './PianoEditor';
-import { StartFret } from '.';
-import { UkuleleEditor } from './UkuleleEditor';
+import {
+	BanjoEditor,
+	GuitarEditor,
+	MandolinEditor,
+	PianoEditor,
+	StartFret,
+	UkuleleEditor,
+} from '.';
 
 type ChordBinEditorProps = {
 	item: ChordBinItemData;
@@ -39,7 +41,6 @@ export function ChordBinEditor({ item, onClose }: ChordBinEditorProps) {
 		const newSymbol = getChordSymbol(item.variant, showNerdMode);
 		const newComputedChordName = item.variant === 'major' ? newNote : `${newNote}${newSymbol}`;
 		const newChordName = item.name ?? newComputedChordName;
-		// Don't reset if we just saved this exact value
 		if (justSavedRef.current === newChordName) {
 			justSavedRef.current = null;
 			return;
@@ -61,14 +62,12 @@ export function ChordBinEditor({ item, onClose }: ChordBinEditorProps) {
 		// Mark that we're saving this value to prevent useEffect from resetting it
 		justSavedRef.current = inputValue;
 		if (parsed.tonic !== null && isValidNoteIndex(parsed.tonic) && parsed.variant !== null) {
-			// If the input can be parsed as a valid chord, update the chord data and save the input as custom name
 			updateChordBinItem(item.id, {
 				tonic: parsed.tonic,
 				variant: parsed.variant,
 				name: inputValue,
 			});
 		} else {
-			// If the input cannot be parsed, save it as a custom name
 			updateChordBinItem(item.id, {
 				name: inputValue,
 			});
