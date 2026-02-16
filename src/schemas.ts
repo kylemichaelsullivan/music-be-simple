@@ -108,17 +108,36 @@ export const ChordBinItemDataSchema = z.object({
 	variant: ChordVariantSchema,
 	name: z.string().optional(),
 });
+const NotepadLineSupportsSchema = z
+	.object({
+		chords: z.boolean().optional(),
+		lyrics: z.boolean().optional(),
+	})
+	.optional();
 
 export const NotepadLineDataSchema = z
 	.object({
 		id: z.number(),
 		text: z.string(),
 		chords: z.array(z.number().nullable()).length(60).optional(),
+		supports: NotepadLineSupportsSchema,
 	})
-	.transform((data) => ({
-		...data,
-		chords: data.chords ?? Array(60).fill(null),
-	}));
+	.transform((data) => {
+		const chords = data.chords ?? Array(60).fill(null);
+
+		// Backwards compatibility: default to supporting both chords and lyrics
+		const rawSupports = data.supports ?? {};
+		const supports = {
+			chords: rawSupports.chords ?? true,
+			lyrics: rawSupports.lyrics ?? true,
+		};
+
+		return {
+			...data,
+			chords,
+			supports,
+		};
+	});
 
 export const NotepadLineTitleDataSchema = z.object({
 	type: z.literal('title'),

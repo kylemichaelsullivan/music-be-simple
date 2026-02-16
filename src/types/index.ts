@@ -60,6 +60,7 @@ export type {
 	ChordBinItemData,
 	NotepadItemData,
 	NotepadLineData,
+	NotepadLineSupports,
 	NotepadLineTitleData,
 	PlayContextType,
 	PlayContextProviderProps,

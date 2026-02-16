@@ -8,10 +8,16 @@ export type ChordBinItemData = {
 	name?: string;
 };
 
+export type NotepadLineSupports = {
+	chords: boolean;
+	lyrics: boolean;
+};
+
 export type NotepadLineData = {
 	text: string;
 	chords: (number | null)[];
 	id: number;
+	supports?: NotepadLineSupports;
 };
 
 export type NotepadLineTitleData = {
@@ -30,6 +36,8 @@ export type PlayContextType = {
 	activeInstrument: InstrumentType | null;
 	addChordBinItem: () => void;
 	addNotepadLine: () => void;
+	addNotepadLineChords: () => void;
+	addNotepadLineLyrics: () => void;
 	addNotepadTitle: () => void;
 	chordBinItems: ChordBinItemData[];
 	editingItemId: number | null;
@@ -56,6 +64,7 @@ export type PlayContextType = {
 	updateNotepadLine: (id: number, text: string) => void;
 	updateNotepadTitle: (id: number, title: string) => void;
 	updateNotepadLineChord: (lineId: number, slotIndex: number, chordId: number | null) => void;
+	reorderNotepadLineChords: (lineId: number, fromFilledIndex: number, toFilledIndex: number) => void;
 };
 
 export type ReferenceMode = 'Chords' | 'Scales';
