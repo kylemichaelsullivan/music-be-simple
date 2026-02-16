@@ -81,6 +81,8 @@ describe('usePlay', () => {
 		expect(result.current).toHaveProperty('addChordBinItem');
 		expect(result.current).toHaveProperty('removeChordBinItem');
 		expect(result.current).toHaveProperty('addNotepadLine');
+		expect(result.current).toHaveProperty('addNotepadLineChords');
+		expect(result.current).toHaveProperty('addNotepadLineLyrics');
 		expect(result.current).toHaveProperty('addNotepadTitle');
 		expect(result.current).toHaveProperty('removeNotepadItem');
 		expect(result.current).toHaveProperty('importChordBin');
@@ -96,6 +98,8 @@ describe('usePlay', () => {
 		expect(typeof result.current.addChordBinItem).toBe('function');
 		expect(typeof result.current.removeChordBinItem).toBe('function');
 		expect(typeof result.current.addNotepadLine).toBe('function');
+		expect(typeof result.current.addNotepadLineChords).toBe('function');
+		expect(typeof result.current.addNotepadLineLyrics).toBe('function');
 		expect(typeof result.current.addNotepadTitle).toBe('function');
 		expect(typeof result.current.removeNotepadItem).toBe('function');
 	});
@@ -260,6 +264,7 @@ describe('usePlay', () => {
 			const expectedLines = lines.map((line) => ({
 				...line,
 				chords: Array(60).fill(null),
+				supports: { chords: true, lyrics: true },
 			}));
 			expect(result.current.notepadItems).toEqual(expectedLines);
 		});
@@ -288,6 +293,7 @@ describe('usePlay', () => {
 			const expectedNotepad = data.notepad.map((line) => ({
 				...line,
 				chords: Array(60).fill(null),
+				supports: { chords: true, lyrics: true },
 			}));
 			expect(result.current.notepadItems).toEqual(expectedNotepad);
 		});
@@ -335,7 +341,7 @@ describe('usePlay', () => {
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.length).toBeGreaterThan(0);
+			expect(result.current.notepadItems.length).toBeGreaterThan(0);
 		});
 
 		// Clear previous calls
