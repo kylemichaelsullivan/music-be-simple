@@ -50,7 +50,7 @@ export type ScaleType = keyof typeof INTERVALS;
 
 // Re-export types from utils
 export type { Chord_Variant, ChordData, ChordGroup, ChordInfo, border } from '@/utils/chords';
-export type { Notes_Flats, Notes_Sharps } from '@/utils/notes';
+export type { Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from '@/utils/notes';
 
 // Re-export types from type files
 export type { ChordsContextType, ChordsContextProviderProps } from './chords';

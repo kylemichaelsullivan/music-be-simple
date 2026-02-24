@@ -13,6 +13,7 @@ export {
 	FLATS,
 	FREQUENCIES,
 	INTERVALS,
+	SCALES,
 	SCALE_TYPES,
 	SHARPS,
 	getIntervals,
@@ -24,4 +25,4 @@ export {
 } from './notes';
 export { generateNotesFromIntervals } from './scales';
 export type { ChordData, ChordGroup, ChordInfo, Chord_Variant, border } from './chords';
-export type { IntervalKey, Notes_Flats, Notes_Sharps } from './notes';
+export type { IntervalKey, Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from './notes';
