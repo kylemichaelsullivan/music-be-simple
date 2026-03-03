@@ -1,26 +1,29 @@
 import { useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
-import { isValidNoteIndex, rangeOfLength } from '@/utils';
+import { rangeOfLength } from '@/utils';
 import { Key } from '.';
 
-export function Piano() {
-	const keys = 12;
-	const blackKeys: NoteIndex[] = [1, 3, 6, 8, 10];
+const KEYS_PER_OCTAVE = 12;
+const OCTAVES = 2;
+const TOTAL_KEYS = KEYS_PER_OCTAVE * OCTAVES;
+const BLACK_KEYS: NoteIndex[] = [1, 3, 6, 8, 10];
 
+export function Piano() {
 	const { notes } = useInstrumentNotes();
 
 	return (
-		<div className={'Piano relative flex min-h-24 w-full justify-center'}>
-			{rangeOfLength(keys)
-				.filter(isValidNoteIndex)
-				.map((note) => (
+		<div className={'Piano relative flex justify-center w-full min-h-24'}>
+			{rangeOfLength(TOTAL_KEYS).map((i) => {
+				const note = (i % KEYS_PER_OCTAVE) as NoteIndex;
+				return (
 					<Key
-						isBlack={blackKeys.includes(note)}
+						isBlack={BLACK_KEYS.includes(note)}
 						note={note}
 						isAllowed={notes.includes(note)}
-						key={`note-${note}`}
+						key={`note-${i}`}
 					/>
-				))}
+				);
+			})}
 		</div>
 	);
 }
