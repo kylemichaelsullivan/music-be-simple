@@ -6,17 +6,20 @@ import clsx from 'clsx';
 
 type KeyProps = {
 	note: NoteIndex;
+	keyIndex: number;
 	isBlack: boolean;
 	isAllowed: boolean;
 };
 
-export function Key({ note, isBlack, isAllowed }: KeyProps) {
+export function Key({ note, keyIndex, isBlack, isAllowed }: KeyProps) {
 	const { usingFlats, playNote } = useGlobals();
 	const { tonic, getBorderStyle } = useInstrumentNotes();
 	const noteName = getNote(note, usingFlats);
 	const { handleClick, handleKeyDown } = useButtonHandler(() => playNote(note));
 
-	const borderStyle = getBorderStyle ? getBorderStyle(note) : 'none';
+	const borderStyle = getBorderStyle
+		? getBorderStyle(note, keyIndex)
+		: 'none';
 
 	return (
 		<button

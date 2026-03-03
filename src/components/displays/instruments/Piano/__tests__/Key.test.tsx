@@ -14,20 +14,20 @@ function wrap(ui: React.ReactElement) {
 
 describe('Key', () => {
 	it('should render with note name as title', () => {
-		render(wrap(<Key note={0} isBlack={false} isAllowed={true} />));
+		render(wrap(<Key note={0} keyIndex={0} isBlack={false} isAllowed={true} />));
 		expect(screen.getByRole('button', { name: 'C' })).toBeInTheDocument();
 	});
 
 	it('should apply black or white class', () => {
-		render(wrap(<Key note={0} isBlack={true} isAllowed={false} />));
+		render(wrap(<Key note={0} keyIndex={0} isBlack={true} isAllowed={false} />));
 		expect(screen.getByRole('button', { name: 'C' })).toHaveClass('black');
-		render(wrap(<Key note={2} isBlack={false} isAllowed={false} />));
+		render(wrap(<Key note={2} keyIndex={2} isBlack={false} isAllowed={false} />));
 		expect(screen.getByRole('button', { name: 'D' })).toHaveClass('white');
 	});
 
 	it('should be clickable without throwing', async () => {
 		const user = userEvent.setup();
-		render(wrap(<Key note={4} isBlack={false} isAllowed={true} />));
+		render(wrap(<Key note={4} keyIndex={4} isBlack={false} isAllowed={true} />));
 		await user.click(screen.getByRole('button', { name: 'E' }));
 	});
 });

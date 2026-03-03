@@ -9,7 +9,9 @@ const TOTAL_KEYS = KEYS_PER_OCTAVE * OCTAVES;
 const BLACK_KEYS: NoteIndex[] = [1, 3, 6, 8, 10];
 
 export function Piano() {
-	const { notes } = useInstrumentNotes();
+	const { notes, getNotesForInstrument } = useInstrumentNotes();
+	const displayNotes =
+		getNotesForInstrument ? getNotesForInstrument('Piano') : notes;
 
 	return (
 		<div className={'Piano relative flex justify-center w-full min-h-24'}>
@@ -19,7 +21,8 @@ export function Piano() {
 					<Key
 						isBlack={BLACK_KEYS.includes(note)}
 						note={note}
-						isAllowed={notes.includes(note)}
+						keyIndex={i}
+						isAllowed={displayNotes.includes(note)}
 						key={`note-${i}`}
 					/>
 				);
