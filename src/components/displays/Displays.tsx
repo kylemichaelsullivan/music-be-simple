@@ -18,6 +18,7 @@ function DisplaysComponent({
 	notes,
 	tonic,
 	getBorderStyle,
+	pianoNotes,
 	showModes = false,
 	showNerdMode,
 	showNoteLabels = true,
@@ -34,11 +35,21 @@ function DisplaysComponent({
 		[displays]
 	);
 
+	const getNotesForInstrument = useMemo(
+		() =>
+			pianoNotes
+				? (instrument: InstrumentType) =>
+						instrument === 'Piano' ? pianoNotes : notes
+				: undefined,
+		[notes, pianoNotes]
+	);
+
 	const renderModes = showModes && displays.includes('stand');
 
 	return (
 		<InstrumentNotesProvider
 			getBorderStyle={getBorderStyle}
+			getNotesForInstrument={getNotesForInstrument}
 			notes={notes}
 			showNerdMode={showNerdMode}
 			showNoteLabels={showNoteLabels}
