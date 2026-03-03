@@ -80,7 +80,7 @@ describe('useChordState', () => {
 			useChordState({ initialTonic: 0, initialVariant: 'major' })
 		);
 		expect(result.current.getBorderStyle(0, false)).toBe('none'); // tonic
-		// E (4) is the 3 in C major -> 'solid'
-		expect(result.current.getBorderStyle(4, false)).toBe('solid');
+		// E (4) is the 3 in C major -> 'double'
+		expect(result.current.getBorderStyle(4, false)).toBe('double');
 	});
 });
