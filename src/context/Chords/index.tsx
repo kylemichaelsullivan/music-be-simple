@@ -70,7 +70,7 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 				}
 			}
 
-			return 'solid';
+			return 'double';
 		},
 		[tonic, variant]
 	);

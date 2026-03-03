@@ -21,11 +21,11 @@ export function AllowedNote({ note, isTonic, borderStyle, isPiano = false }: All
 	return (
 		<span
 			className={clsx(
-				'AllowedNote absolute flex items-center justify-center rounded-full ring-1 ring-slate-300 text-white w-4 h-4 text-center font-bold leading-none left-1/2 translate-x-[-50%] sm:w-6 sm:h-6',
+				'AllowedNote absolute flex items-center justify-center rounded-full font-bold leading-none text-center text-white w-4 h-4 left-1/2 translate-x-[-50%] sm:w-6 sm:h-6',
 				bgColor,
 				fontSize,
 				verticalPosition,
-				getBorderClass(borderStyle, 'all'),
+				getBorderClass(borderStyle, 'all', 'outline'),
 				hasFlat && 'hasFlat',
 				hasSharp && 'hasSharp'
 			)}

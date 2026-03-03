@@ -66,7 +66,7 @@ export function useChordState({
 				}
 			}
 
-			return 'solid';
+			return 'double';
 		},
 		[tonic, variant]
 	);

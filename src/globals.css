@@ -10,8 +10,8 @@
 	--blue: #74d4ff;
 	--white: #ffffff;
 
+	--allowed-note: var(--white);
 	--background: var(--white);
-	--border: var(--black);
 	--chords: var(--orange);
 	--play: var(--green);
 	--scales: var(--blue);
@@ -50,6 +50,26 @@ select {
 .Scale,
 .Notes {
 	font-size: min(1rem, 4vw);
+}
+
+.border-dotted {
+	--border: hsl(from var(--color-red-500) h s l / 0.5);
+}
+
+.border-dashed {
+	--border: hsl(from var(--color-orange-500) h s l / 0.75);
+}
+
+.border-solid {
+	--border: hsl(from var(--color-blue-500) h s l);
+}
+
+.border-double {
+	--border: hsl(from var(--color-violet-500) h s l);
+}
+
+.ChordNote {
+	border-bottom-color: var(--border);
 }
 
 .DisplaySelector {
@@ -120,7 +140,10 @@ select {
 }
 
 .AllowedNote {
-	border-color: var(--border);
+	border: 1px solid var(--allowed-note);
+	box-shadow: 0 0 0 2px var(--border);
+	outline-offset: 0;
+	outline-color: var(--border);
 	z-index: 4;
 }
 
@@ -147,6 +170,7 @@ select {
 }
 
 .Piano .white {
+	--border: white;
 	background-color: white;
 }
 
@@ -228,47 +252,6 @@ select {
 
 .Mode .ModeNote {
 	font-size: clamp(min(2.5vw, 1.25rem), 0.675rem, 0.675rem);
-}
-
-/* Jazz Mode Note Border Classes */
-.Piano .AllowedNote {
-	--border: var(--cyan);
-}
-
-.AllowedNote.border-dotted {
-	border-color: hsl(from var(--border) h s l / 0.375);
-}
-
-.AllowedNote.border-dashed {
-	border-color: hsl(from var(--border) h s l / 0.5);
-}
-
-.AllowedNote.border-solid {
-	border-color: hsl(from var(--border) h s l / 0.75);
-}
-
-.AllowedNote.border-double {
-	border-color: hsl(from var(--border) h s l / 1.0);
-}
-
-.ChordNote {
-	--border: var(--black);
-}
-
-.ChordNote.border-dotted {
-	border-color: hsl(from var(--border) h s l / 0.2);
-}
-
-.ChordNote.border-dashed {
-	border-color: hsl(from var(--border) h s l / 0.25);
-}
-
-.ChordNote.border-solid {
-	border-color: hsl(from var(--border) h s l / 0.5);
-}
-
-.ChordNote.border-double {
-	border-color: hsl(from var(--border) h s l / 1.0);
 }
 
 .NotepadLineText {
