@@ -1,13 +1,7 @@
-import { useChords, useGlobals, useScales } from '@/hooks';
+import { useChords, useScales } from '@/hooks';
 import { ChordVariantSchema, ScaleTypeSchema } from '@/schemas';
 import type { ChordData, ChordGroup, ScaleData, ScaleGroup } from '@/types';
-import {
-	CHORDS,
-	SCALES,
-	getChordSymbol,
-	isValidChordVariant,
-	isValidScaleType,
-} from '@/utils';
+import { CHORDS, SCALES, getChordSymbol, isValidChordVariant, isValidScaleType } from '@/utils';
 import type { ChangeEvent } from 'react';
 
 function ScaleVariant() {

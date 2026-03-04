@@ -15,4 +15,17 @@ export default defineConfig({
 			'@': path.resolve(__dirname, './src'),
 		},
 	},
+	build: {
+		rollupOptions: {
+			output: {
+				// Keep barrel files and their re-exported modules in the same chunk
+				// so Rollup doesn't warn about circular dependencies between chunks.
+				manualChunks(id) {
+					if (id.includes('/src/hooks/')) return 'hooks';
+					if (id.includes('/src/components/icons/')) return 'icons';
+					if (id.includes('/src/components/buttons/')) return 'buttons';
+				},
+			},
+		},
+	},
 });
