@@ -141,10 +141,14 @@ select {
 
 .AllowedNote {
 	border: 1px solid var(--allowed-note);
-	box-shadow: 0 0 0 2px var(--border);
+	box-shadow: 0 0 0 2px var(--border), 0 0 0 4px var(--allowed-note);
 	outline-offset: 0;
 	outline-color: var(--border);
 	z-index: 4;
+}
+
+.Scales .AllowedNote {
+	box-shadow: 0 0 0 2px var(--border);
 }
 
 .Fret:last-child {
@@ -170,11 +174,13 @@ select {
 }
 
 .Piano .white {
+	--allowed-note: black;
 	--border: white;
 	background-color: white;
 }
 
 .Piano .black {
+	--allowed-note: white;
 	--margin: calc(var(--width-black) / -2);
 	background-color: black;
 	width: var(--width-black);
