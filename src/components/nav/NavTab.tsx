@@ -1,4 +1,4 @@
-import { NavIcon } from '@/components/icons';
+import { NavIcon } from '@/components';
 import { useButtonHandler } from '@/hooks';
 import type { TabType } from '@/types';
 import { memo } from 'react';

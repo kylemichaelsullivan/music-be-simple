@@ -1,4 +1,4 @@
-import { InstrumentIcon } from '@/components/icons';
+import { InstrumentIcon } from '@/components';
 import { useButtonHandler } from '@/hooks';
 import type { IconName } from '@/types';
 import { memo, useCallback } from 'react';

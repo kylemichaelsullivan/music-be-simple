@@ -1,4 +1,4 @@
-import { LabelContent } from '@/components/displays/instruments';
+import { LabelContent } from '@/components';
 import { render, screen } from '@/test';
 import { describe, expect, it } from 'vitest';
 

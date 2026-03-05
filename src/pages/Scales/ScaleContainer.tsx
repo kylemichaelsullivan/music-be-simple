@@ -1,4 +1,4 @@
-import { TransposeButton } from '@/components/buttons';
+import { TransposeButton } from '@/components';
 import { Scale } from '.';
 
 export function ScaleContainer() {

@@ -1,4 +1,4 @@
-import { SkipLink } from '@/components/SkipLink';
+import { SkipLink } from '@/components';
 import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';

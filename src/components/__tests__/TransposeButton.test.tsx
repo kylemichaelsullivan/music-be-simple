@@ -1,4 +1,4 @@
-import { TransposeButton } from '@/components/buttons';
+import { TransposeButton } from '@/components';
 import { GlobalsContextProvider, ScalesContextProvider } from '@/context';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

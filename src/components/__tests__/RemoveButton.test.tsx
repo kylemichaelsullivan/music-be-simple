@@ -1,4 +1,4 @@
-import { RemoveButton } from '@/components/buttons';
+import { RemoveButton } from '@/components';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';

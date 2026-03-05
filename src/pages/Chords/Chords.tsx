@@ -1,4 +1,4 @@
-import { PageLayout } from '@/components/PageLayout';
+import { PageLayout } from '@/components';
 import { useChords } from '@/hooks';
 import { Chord, Notes } from '.';
 

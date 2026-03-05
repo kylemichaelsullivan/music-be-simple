@@ -1,4 +1,4 @@
-import { ActionIcon } from '@/components/icons';
+import { ActionIcon } from '@/components';
 import { IconButton } from '.';
 
 type EditButtonProps = {

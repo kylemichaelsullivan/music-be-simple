@@ -1,5 +1,4 @@
-import { Modal } from '@/components/Modal';
-import { InstrumentIcon } from '@/components/icons';
+import { InstrumentIcon, Modal } from '@/components';
 import { useGlobals, useTunings } from '@/hooks';
 import type { NoteIndex, TunableInstrument } from '@/types';
 import { getNote, isValidNoteIndex } from '@/utils';

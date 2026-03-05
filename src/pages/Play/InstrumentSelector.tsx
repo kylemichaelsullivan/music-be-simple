@@ -1,4 +1,4 @@
-import { InstrumentButton } from '@/components/buttons';
+import { InstrumentButton } from '@/components';
 import { useGlobals, usePlay } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { InstrumentType } from '@/types';

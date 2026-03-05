@@ -1,5 +1,4 @@
-import { AddButton } from '@/components/buttons';
-import { Modal } from '@/components/Modal';
+import { AddButton, Modal } from '@/components';
 import { useState } from 'react';
 
 type AddNotepadLineProps = {

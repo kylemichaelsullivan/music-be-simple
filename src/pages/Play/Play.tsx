@@ -1,5 +1,4 @@
-import { Main } from '@/components/Main';
-import { Title } from '@/components/Title';
+import { Main, Title } from '@/components';
 
 export function Play() {
 	return (

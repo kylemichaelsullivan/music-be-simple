@@ -1,4 +1,4 @@
-import { ToggleSaveSectionButton } from '@/components/buttons';
+import { ToggleSaveSectionButton } from '@/components';
 import { useState } from 'react';
 import { SaveSectionContent } from '.';
 

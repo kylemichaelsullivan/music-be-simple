@@ -21,6 +21,6 @@ export {
 	TransposeButton,
 	UseFlatsButton,
 } from './buttons';
-export { Displays, DisplaySelector, DisplaysSelector } from './displays';
+export { Displays, DisplaySelector, DisplaysSelector, LabelContent } from './displays';
 export { ActionIcon, Icon, InstrumentIcon, NavIcon } from './icons';
 export { Navbar, NavTab } from './nav';

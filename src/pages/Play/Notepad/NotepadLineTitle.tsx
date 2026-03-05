@@ -1,4 +1,4 @@
-import { RemoveButton } from '@/components/buttons';
+import { RemoveButton } from '@/components';
 import { useDragDropClassName, useDraggableItem, usePlay } from '@/hooks';
 import type { NotepadLineTitleData } from '@/types';
 

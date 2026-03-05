@@ -1,8 +1,4 @@
-import { Main } from '@/components/Main';
-import { SkipLink } from '@/components/SkipLink';
-import { Title } from '@/components/Title';
-import { TopButton, UseFlatsButton } from '@/components/buttons';
-import { Displays, DisplaysSelector } from '@/components/displays';
+import { Displays, DisplaysSelector, Main, SkipLink, Title, TopButton, UseFlatsButton } from '@/components';
 import { useGlobals } from '@/hooks';
 import type { PageLayoutProps } from '@/types';
 

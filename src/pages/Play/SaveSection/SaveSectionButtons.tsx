@@ -1,4 +1,4 @@
-import { SaveSectionButton } from '@/components/buttons';
+import { SaveSectionButton } from '@/components';
 import type { SaveActionType } from '@/types';
 
 type SaveSectionButtonsProps = {

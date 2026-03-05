@@ -1,4 +1,4 @@
-import { NavTab } from '@/components/nav';
+import { NavTab } from '@/components';
 import { render, screen, waitFor } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';

@@ -1,5 +1,4 @@
-import { Tonic } from '@/components/Tonic';
-import { Variant } from '@/components/Variant';
+import { Tonic, Variant } from '@/components';
 import { useChords } from '@/hooks';
 
 export function Chord() {

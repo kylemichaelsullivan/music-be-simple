@@ -1,4 +1,4 @@
-import { ActionIcon } from '@/components/icons';
+import { ActionIcon } from '@/components';
 import { useButtonHandler, useScales } from '@/hooks';
 import type { YDirectionType } from '@/types';
 import { isValidNoteIndex } from '@/utils';
