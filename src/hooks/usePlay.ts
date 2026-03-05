@@ -1,4 +1,4 @@
-import { PlayContext } from '@/context';
+import { PlayContext } from '@/context/Play/PlayContext';
 import type { PlayContextType } from '@/types';
 import { useContext } from 'react';
 
