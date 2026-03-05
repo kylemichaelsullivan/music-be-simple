@@ -158,7 +158,7 @@ select {
 
 @supports (width: 100dvw) {
 	.Piano {
-		--width-white: min(calc((100dvw - 2rem) / 7), 6.25rem);
+		--width-white: min(calc((100dvw - 8rem) / 7), 6.25rem);
 	}
 }
 
@@ -182,6 +182,11 @@ select {
 	margin-right: var(--margin);
 	margin-left: var(--margin);
 	z-index: 2;
+}
+
+.Piano .AllowedNote {
+	max-width: max(0.75rem, 2dvw);
+	max-height: max(0.75rem, 2dvw);
 }
 
 .Piano .black .AllowedNote:not([class*="border-"]) {
