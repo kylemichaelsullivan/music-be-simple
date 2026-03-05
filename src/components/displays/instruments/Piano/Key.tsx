@@ -1,4 +1,4 @@
-import { AllowedNote } from '@/components/AllowedNote';
+import { AllowedNote } from '@/components';
 import { useButtonHandler, useGlobals, useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getNote } from '@/utils';

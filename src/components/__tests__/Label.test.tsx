@@ -1,4 +1,4 @@
-import { Label } from '@/components/displays/instruments';
+import { Label } from '@/components';
 import { render, screen } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';

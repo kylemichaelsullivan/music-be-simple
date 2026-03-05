@@ -1,5 +1,4 @@
-import { CloseButton } from '@/components/buttons';
-import { InstrumentIcon } from '@/components/icons';
+import { CloseButton, InstrumentIcon } from '@/components';
 import { useChords, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData, InstrumentType } from '@/types';
 import { getChordSymbol, getNote, isValidNoteIndex, parseChordName } from '@/utils';

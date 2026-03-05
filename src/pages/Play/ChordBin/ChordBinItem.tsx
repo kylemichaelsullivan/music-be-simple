@@ -1,4 +1,4 @@
-import { EditButton, RemoveButton } from '@/components/buttons';
+import { EditButton, RemoveButton } from '@/components';
 import { useChords, useDragDropClassName, useDraggableItem, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData } from '@/types';
 import { getChordSymbol, getNote } from '@/utils';

@@ -6,7 +6,7 @@ export {
 	ChordBinItem,
 	ChordBinItems,
 } from './ChordBin';
-export { InstrumentButton } from '@/components/buttons';
+export { InstrumentButton } from '@/components';
 export { InstrumentSelector } from './InstrumentSelector';
 export {
 	AddNotepadLine,

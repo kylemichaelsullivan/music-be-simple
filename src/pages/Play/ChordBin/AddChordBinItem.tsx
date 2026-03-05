@@ -1,4 +1,4 @@
-import { AddButton } from '@/components/buttons';
+import { AddButton } from '@/components';
 
 type AddChordBinItemProps = {
 	onAdd: () => void;

@@ -1,18 +1,11 @@
-import { useChords, useGlobals, useScales } from '@/hooks';
+import { useChords, useScales } from '@/hooks';
 import { ChordVariantSchema, ScaleTypeSchema } from '@/schemas';
-import type { ChordData, ChordGroup } from '@/types';
-import {
-	CHORDS,
-	SCALE_TYPES,
-	getChordSymbol,
-	isValidChordVariant,
-	isValidScaleType,
-} from '@/utils';
+import type { ChordData, ChordGroup, ScaleData, ScaleGroup } from '@/types';
+import { CHORDS, SCALES, getChordSymbol, isValidChordVariant, isValidScaleType } from '@/utils';
 import type { ChangeEvent } from 'react';
 
 function ScaleVariant() {
 	const { variant, handleVariantChange } = useScales();
-	const { capitalizeFirstLetter } = useGlobals();
 
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const result = ScaleTypeSchema.safeParse(e.target.value);
@@ -29,10 +22,20 @@ function ScaleVariant() {
 			aria-label='Scale Variant'
 			onChange={handleChange}
 		>
-			{SCALE_TYPES.map((variantOption) => (
-				<option value={variantOption} key={variantOption}>
-					{capitalizeFirstLetter(variantOption)}
-				</option>
+			{Object.entries(SCALES).map(([groupName, group]: [string, ScaleGroup]) => (
+				<optgroup label={groupName} key={groupName}>
+					{Object.entries(group).map(([variantKey, info]: [string, ScaleData]) => {
+						const result = ScaleTypeSchema.safeParse(variantKey);
+						if (result.success && isValidScaleType(result.data)) {
+							return (
+								<option value={variantKey} key={variantKey}>
+									{info.display}
+								</option>
+							);
+						}
+						return null;
+					})}
+				</optgroup>
 			))}
 		</select>
 	);

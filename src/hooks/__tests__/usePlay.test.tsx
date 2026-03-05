@@ -335,7 +335,7 @@ describe('usePlay', () => {
 		});
 
 		await waitFor(() => {
-			expect(result.current.notepadLines.length).toBeGreaterThan(0);
+			expect(result.current.notepadItems.length).toBeGreaterThan(0);
 		});
 
 		// Clear previous calls

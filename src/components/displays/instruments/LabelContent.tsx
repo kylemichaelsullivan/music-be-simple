@@ -1,4 +1,4 @@
-import { InstrumentIcon } from '@/components/icons';
+import { InstrumentIcon } from '@/components';
 import type { IconName } from '@/types';
 
 type LabelContentProps = {

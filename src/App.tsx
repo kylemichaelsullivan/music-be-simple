@@ -1,5 +1,4 @@
-import { Footer } from '@/components/Footer';
-import { Navbar } from '@/components/nav';
+import { Footer, Navbar } from '@/components';
 import { AppProviders } from '@/context';
 import { TABS } from '@/navigation';
 import type { TabType } from '@/types';

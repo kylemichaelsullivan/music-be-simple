@@ -1,4 +1,4 @@
-import { ScalesContext } from '@/context';
+import { ScalesContext } from '@/context/Scales/ScalesContext';
 import type { ScalesContextType } from '@/types';
 import { useContext } from 'react';
 

@@ -1,4 +1,4 @@
-import { TuningModal } from '@/components/TuningModal';
+import { TuningModal } from '@/components';
 import { TuningsStorageSchema } from '@/schemas';
 import type { NoteIndex, TunableInstrument, TuningsContextProviderProps } from '@/types';
 import { useCallback, useContext, useMemo, useState } from 'react';

@@ -1,4 +1,4 @@
-import { UseFlatsButton } from '@/components/buttons';
+import { UseFlatsButton } from '@/components';
 import { GlobalsContextProvider } from '@/context';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

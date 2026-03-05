@@ -1,4 +1,4 @@
-import { ChordsContext } from '@/context';
+import { ChordsContext } from '@/context/Chords/ChordsContext';
 import type { ChordsContextType } from '@/types';
 import { useContext } from 'react';
 

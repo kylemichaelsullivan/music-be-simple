@@ -1,4 +1,4 @@
-import { CloseButton } from '@/components/buttons';
+import { CloseButton } from '@/components';
 import { type ReactNode, useEffect, useRef } from 'react';
 
 type ModalProps = {

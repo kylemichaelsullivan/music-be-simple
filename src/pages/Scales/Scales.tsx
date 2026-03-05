@@ -1,4 +1,4 @@
-import { PageLayout } from '@/components/PageLayout';
+import { PageLayout } from '@/components';
 import { useScales } from '@/hooks';
 import { Notes, ScaleContainer } from '.';
 
