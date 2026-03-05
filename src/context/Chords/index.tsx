@@ -10,7 +10,14 @@ import type {
 	NoteIndex,
 	border,
 } from '@/types';
-import { generateChordNotes, getChordInfo, getChordSymbol, getNote } from '@/utils';
+import {
+	generateChordNotes,
+	getChordInfo,
+	getChordSymbol,
+	getPianoBorderStyle,
+	getPianoVoicing,
+	getNote,
+} from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { ChordsContext } from './ChordsContext';
@@ -97,11 +104,27 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 		}
 	}, [tonic, variant, showNerdMode]);
 
+	const pianoVoicing = useMemo(
+		() => (!showNerdMode ? getPianoVoicing(tonic, variant) : null),
+		[tonic, variant, showNerdMode]
+	);
+
 	const getBorderStyle = useMemo(
 		() =>
-			(note: NoteIndex): border =>
-				getBorderStyleFromState(note, showNerdMode),
-		[getBorderStyleFromState, showNerdMode]
+			(note: NoteIndex, keyIndex?: number): border => {
+				if (keyIndex !== undefined && pianoVoicing && !showNerdMode) {
+					const result = getPianoBorderStyle(
+						pianoVoicing.voicingByKeyIndex,
+						keyIndex,
+						tonic,
+						note,
+						pianoVoicing.degreeToBorderStyle
+					);
+					if (result !== null) return result;
+				}
+				return getBorderStyleFromState(note, showNerdMode);
+			},
+		[getBorderStyleFromState, pianoVoicing, showNerdMode, tonic]
 	);
 
 	const chordName = useMemo(() => {
@@ -136,6 +159,7 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 			tonic,
 			variant,
 			notes,
+			pianoNotes: pianoVoicing?.notes,
 			chordName,
 			noteCount,
 			showNerdMode,
@@ -152,6 +176,7 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 			tonic,
 			variant,
 			notes,
+			pianoVoicing?.notes,
 			chordName,
 			noteCount,
 			showNerdMode,

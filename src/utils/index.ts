@@ -6,6 +6,8 @@ export {
 	getChordInfo,
 	getChordSymbol,
 	getChordVariants,
+	getPianoBorderStyle,
+	getPianoVoicing,
 	isValidChordVariant,
 	parseChordName,
 } from './chords';
@@ -24,5 +26,13 @@ export {
 	rangeOfLength,
 } from './notes';
 export { generateNotesFromIntervals } from './scales';
-export type { ChordData, ChordGroup, ChordInfo, Chord_Variant, border } from './chords';
+export type {
+	ChordData,
+	ChordGroup,
+	ChordInfo,
+	Chord_Variant,
+	PianoVoicingOverride,
+	PianoVoicingResult,
+	border,
+} from './chords';
 export type { IntervalKey, Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from './notes';

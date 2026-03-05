@@ -9,6 +9,7 @@ export function Chords() {
 		getBorderStyle,
 		nerdModeButtonIcon,
 		nerdModeButtonTitle,
+		pianoNotes,
 		showNerdMode,
 		toggleNerdMode,
 	} = useChords();
@@ -23,7 +24,7 @@ export function Chords() {
 			}}
 			tonicVariantSlot={<Chord />}
 			notesSlot={<Notes />}
-			displaysProps={{ notes, tonic, getBorderStyle, showNerdMode }}
+			displaysProps={{ notes, tonic, getBorderStyle, showNerdMode, pianoNotes }}
 		/>
 	);
 }

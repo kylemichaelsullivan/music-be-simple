@@ -14,7 +14,7 @@ export type ChordsContextProviderProps = {
 
 export type ChordsContextType = {
 	chordName: string;
-	getBorderStyle: (note: NoteIndex) => border;
+	getBorderStyle: (note: NoteIndex, keyIndex?: number) => border;
 	handleTonicChange: (tonic: Chord_Tonic) => void;
 	handleVariantChange: (variant: Chord_Variant) => void;
 	makeScale: (tonic: Chord_Tonic, variant: Chord_Variant) => void;
@@ -22,6 +22,7 @@ export type ChordsContextType = {
 	nerdModeButtonTitle: string;
 	noteCount: Chord_NoteCount;
 	notes: NoteIndex[];
+	pianoNotes?: NoteIndex[];
 	reset: () => void;
 	showNerdMode: boolean;
 	tonic: Chord_Tonic;

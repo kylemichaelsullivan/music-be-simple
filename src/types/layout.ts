@@ -4,8 +4,9 @@ import type { ReactNode } from 'react';
 export type DisplaysProps = {
 	notes: NoteIndex[];
 	tonic: NoteIndex;
-	getBorderStyle?: (note: NoteIndex) => border;
+	getBorderStyle?: (note: NoteIndex, keyIndex?: number) => border;
 	isPlayPage?: boolean;
+	pianoNotes?: NoteIndex[];
 	showModes?: boolean;
 	showNerdMode?: boolean;
 	showNoteLabels?: boolean;

@@ -766,6 +766,148 @@ export const getChordGroups = () => Object.keys(CHORDS);
 
 export const getChordVariants = (group: string) => Object.keys(CHORDS[group]);
 
+/** Scale degree for border logic: 1–6 = lower octave borders, 7+ = upper octave borders */
+const LABEL_TO_DEGREE: Record<string, number> = {
+	'2': 2,
+	'3': 3,
+	'♭3': 3,
+	'4': 4,
+	'♯4': 4,
+	'5': 5,
+	'♯5': 5,
+	'♭5': 5,
+	'6': 6,
+	'7': 7,
+	'♭7': 7,
+	'♭♭7': 7,
+	'9': 9,
+	'♭9': 9,
+	'♯9': 9,
+	'11': 11,
+	'♭11': 11,
+	'♯11': 11,
+	'13': 13,
+	'♭13': 13,
+	'♯13': 13,
+};
+
+function parseLabelToDegree(label: string): number {
+	const degree = LABEL_TO_DEGREE[label];
+	if (degree !== undefined) return degree;
+	const match = label.match(/\d+/);
+	return match ? Number.parseInt(match[0], 10) : 1;
+}
+
+/**
+ * Optional piano voicing overrides for Jazz mode (e.g. 6/9 with b9).
+ * Maps variant -> semitone offsets per scale degree (overrides chord intervals for piano).
+ */
+export type PianoVoicingOverride = {
+	/** Order of (semitones from root, degree). Default is built from chord intervals. */
+	voicing: { semitones: number; degree: number }[];
+};
+
+const PIANO_VOICING_OVERRIDES: Partial<Record<Chord_Variant, PianoVoicingOverride>> = {
+	'major-6-9': {
+		voicing: [
+			{ semitones: 0, degree: 1 },
+			{ semitones: 1, degree: 9 },
+			{ semitones: 4, degree: 3 },
+			{ semitones: 7, degree: 5 },
+			{ semitones: 9, degree: 6 },
+		],
+	},
+};
+
+const PIANO_KEYS = 24;
+const LOWER_OCTAVE_KEYS = 12;
+
+export type PianoVoicingResult = {
+	/** For each key index 0–23, scale degree (1–13) or undefined if not a chord tone */
+	voicingByKeyIndex: (number | undefined)[];
+	/** Border style per scale degree (from chord intervals: double, dotted, dashed, solid) */
+	degreeToBorderStyle: Record<number, border>;
+	/** Unique note indices in the voicing (for which keys to highlight on piano) */
+	notes: NoteIndex[];
+};
+
+/**
+ * Build two-octave piano voicing for Jazz mode. Assigns (noteIndex, degree) to each key.
+ * Border rule: lower octave (keyIndex < 12) border only degree ≤ 6; upper octave border only degree ≥ 7.
+ */
+export function getPianoVoicing(tonic: NoteIndex, variant: Chord_Variant): PianoVoicingResult {
+	const chordInfo = getChordInfo(variant);
+	const degreeToBorderStyle: Record<number, border> = {};
+	for (const [, label, style] of chordInfo.intervals) {
+		const degree = parseLabelToDegree(label);
+		degreeToBorderStyle[degree] = style;
+	}
+
+	const override = PIANO_VOICING_OVERRIDES[variant];
+	const voicingOrder: { semitones: number; degree: number }[] = override
+		? override.voicing
+		: (() => {
+				const result: { semitones: number; degree: number }[] = [
+					{ semitones: 0, degree: 1 },
+				];
+				let currentSemitones = 0;
+				for (const [interval, label] of chordInfo.intervals) {
+					currentSemitones += interval * 2;
+					const semitones = Math.round(currentSemitones) % 12;
+					const degree = parseLabelToDegree(label);
+					result.push({ semitones, degree });
+				}
+				return result;
+			})();
+
+	const noteSet = new Set<NoteIndex>();
+	const voicingWithNoteIndex = voicingOrder.map(({ semitones, degree }) => {
+		const noteIndex = ((tonic + semitones) % 12 + 12) % 12;
+		if (isValidNoteIndex(noteIndex as NoteIndex)) noteSet.add(noteIndex as NoteIndex);
+		return { noteIndex, degree };
+	});
+
+	const voicingByKeyIndex: (number | undefined)[] = Array(PIANO_KEYS).fill(undefined);
+	const twoOctaves = [...voicingWithNoteIndex, ...voicingWithNoteIndex];
+	const nextKeyForNote = new Map<number, number>();
+
+	for (const { noteIndex, degree } of twoOctaves) {
+		const n = ((noteIndex % 12) + 12) % 12;
+		if (!isValidNoteIndex(n as NoteIndex)) continue;
+		const keyIndex = nextKeyForNote.get(n) ?? n;
+		if (keyIndex < PIANO_KEYS) {
+			voicingByKeyIndex[keyIndex] = degree;
+			nextKeyForNote.set(n, keyIndex + LOWER_OCTAVE_KEYS);
+		}
+	}
+
+	return {
+		voicingByKeyIndex,
+		degreeToBorderStyle,
+		notes: Array.from(noteSet) as NoteIndex[],
+	};
+}
+
+/**
+ * Jazz border rule: no border on 7th+ in lower octave, no border on below-7th in upper octave.
+ * Uses the chord's interval border style (double, dotted, dashed, solid) for the degree.
+ */
+export function getPianoBorderStyle(
+	voicingByKeyIndex: (number | undefined)[],
+	keyIndex: number,
+	tonic: NoteIndex,
+	note: NoteIndex,
+	degreeToBorderStyle: Record<number, border>
+): border | null {
+	if (note === tonic) return 'none';
+	const degree = voicingByKeyIndex[keyIndex];
+	if (degree === undefined) return null;
+	const isLowerOctave = keyIndex < LOWER_OCTAVE_KEYS;
+	if (isLowerOctave && degree > 8) return 'none';
+	if (!isLowerOctave && degree <= 8) return 'none';
+	return degreeToBorderStyle[degree] ?? 'double';
+}
+
 export const generateChordNotes = (tonic: NoteIndex, variant: Chord_Variant): NoteIndex[] => {
 	const chordInfo = getChordInfo(variant);
 	const chordNotes: NoteIndex[] = [tonic];

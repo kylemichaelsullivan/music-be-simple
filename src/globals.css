@@ -53,19 +53,19 @@ select {
 }
 
 .border-dotted {
-	--border: hsl(from var(--color-red-500) h s l / 0.5);
+	--border: hsl(from var(--color-red-400) h s l / 0.675);
 }
 
 .border-dashed {
-	--border: hsl(from var(--color-orange-500) h s l / 0.75);
+	--border: hsl(from var(--color-yellow-800) h s l / 0.875);
 }
 
 .border-solid {
-	--border: hsl(from var(--color-blue-500) h s l);
+	--border: hsl(from var(--color-blue-300) h s l);
 }
 
 .border-double {
-	--border: hsl(from var(--color-violet-500) h s l);
+	--border: hsl(from var(--color-violet-900) h s l);
 }
 
 .ChordNote {
@@ -158,7 +158,7 @@ select {
 
 @supports (width: 100dvw) {
 	.Piano {
-		--width-white: min(calc((100dvw - 2rem) / 7), 6.25rem);
+		--width-white: min(calc((100dvw - 8rem) / 7), 6.25rem);
 	}
 }
 
@@ -182,6 +182,15 @@ select {
 	margin-right: var(--margin);
 	margin-left: var(--margin);
 	z-index: 2;
+}
+
+.Piano .AllowedNote {
+	max-width: max(0.75rem, 2dvw);
+	max-height: max(0.75rem, 2dvw);
+}
+
+.Piano .black .AllowedNote:not([class*="border-"]) {
+	border-color: transparent;
 }
 
 .Piano .allowed::after {

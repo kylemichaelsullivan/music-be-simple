@@ -5,6 +5,8 @@ import {
 	getChordInfo,
 	getChordSymbol,
 	getChordVariants,
+	getPianoBorderStyle,
+	getPianoVoicing,
 	isValidChordVariant,
 	parseChordName,
 } from '@/utils';
@@ -113,6 +115,69 @@ describe('chords utilities', () => {
 			expect(notes).toContain(11); // B
 			expect(notes).toContain(3); // D#
 			expect(notes).toContain(6); // F#
+		});
+	});
+
+	describe('getPianoVoicing', () => {
+		it('should return voicing, degreeToBorderStyle, and notes for C major-6-9 with b9 override', () => {
+			const { voicingByKeyIndex, degreeToBorderStyle, notes } = getPianoVoicing(0, 'major-6-9');
+			// Override: C(1), Db(9), E(3), G(5), A(6) → note indices 0, 1, 4, 7, 9
+			expect(notes).toEqual(expect.arrayContaining([0, 1, 4, 7, 9]));
+			expect(notes).toHaveLength(5);
+			// Chord intervals: 3=double, 5=dotted, 6=double, 9=double
+			expect(degreeToBorderStyle[3]).toBe('double');
+			expect(degreeToBorderStyle[5]).toBe('dotted');
+			expect(degreeToBorderStyle[6]).toBe('double');
+			expect(degreeToBorderStyle[9]).toBe('double');
+			// Lower octave: key 0=C degree 1, key 1=Db degree 9, key 4=E degree 3, key 7=G degree 5, key 9=A degree 6
+			expect(voicingByKeyIndex[0]).toBe(1);
+			expect(voicingByKeyIndex[1]).toBe(9);
+			expect(voicingByKeyIndex[4]).toBe(3);
+			expect(voicingByKeyIndex[7]).toBe(5);
+			expect(voicingByKeyIndex[9]).toBe(6);
+			// Upper octave same degrees
+			expect(voicingByKeyIndex[12]).toBe(1);
+			expect(voicingByKeyIndex[13]).toBe(9);
+		});
+	});
+
+	describe('getPianoBorderStyle', () => {
+		it('should apply jazz rule and use chord interval styles (double, dotted, dashed)', () => {
+			const { voicingByKeyIndex, degreeToBorderStyle } = getPianoVoicing(0, 'major-6-9');
+			// Tonic (C) always none
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 0, 0, 0, degreeToBorderStyle)
+			).toBe('none'); // C tonic
+			// Lower: E(3), G(5), A(6) get border; Db(9) no border (7th+). 5 uses dotted from chord.
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 1, 0, 1, degreeToBorderStyle)
+			).toBe('none'); // Db degree 9
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 4, 0, 4, degreeToBorderStyle)
+			).toBe('double'); // E degree 3
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 7, 0, 7, degreeToBorderStyle)
+			).toBe('dotted'); // G degree 5
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 9, 0, 9, degreeToBorderStyle)
+			).toBe('double'); // A degree 6
+			// Upper: only Db(9) gets border (7th+)
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 12, 0, 0, degreeToBorderStyle)
+			).toBe('none'); // C degree 1
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 13, 0, 1, degreeToBorderStyle)
+			).toBe('double'); // Db degree 9
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 16, 0, 4, degreeToBorderStyle)
+			).toBe('none'); // E degree 3
+		});
+
+		it('should return none for tonic', () => {
+			const { voicingByKeyIndex, degreeToBorderStyle } = getPianoVoicing(0, 'major');
+			expect(
+				getPianoBorderStyle(voicingByKeyIndex, 0, 0, 0, degreeToBorderStyle)
+			).toBe('none');
 		});
 	});
 
