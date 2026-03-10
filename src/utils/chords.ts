@@ -105,7 +105,7 @@ export const CHORDS: Record<string, ChordGroup> = {
 				[2, '3', 'double'],
 				[1.5, '5', 'dotted'],
 				[1, '6', 'double'],
-				[2, '9', 'double'],
+				[2.5, '9', 'double'],
 			],
 			symbols: ['6/9', '6/9'],
 		},
@@ -115,7 +115,7 @@ export const CHORDS: Record<string, ChordGroup> = {
 				[1.5, '♭3', 'double'],
 				[2, '5', 'dotted'],
 				[1, '6', 'double'],
-				[2, '9', 'double'],
+				[2.5, '9', 'double'],
 			],
 			symbols: ['m6/9', '–6/9'],
 		},
@@ -847,9 +847,7 @@ export function getPianoVoicing(tonic: NoteIndex, variant: Chord_Variant): Piano
 	const voicingOrder: { semitones: number; degree: number }[] = override
 		? override.voicing
 		: (() => {
-				const result: { semitones: number; degree: number }[] = [
-					{ semitones: 0, degree: 1 },
-				];
+				const result: { semitones: number; degree: number }[] = [{ semitones: 0, degree: 1 }];
 				let currentSemitones = 0;
 				for (const [interval, label] of chordInfo.intervals) {
 					currentSemitones += interval * 2;
@@ -862,7 +860,7 @@ export function getPianoVoicing(tonic: NoteIndex, variant: Chord_Variant): Piano
 
 	const noteSet = new Set<NoteIndex>();
 	const voicingWithNoteIndex = voicingOrder.map(({ semitones, degree }) => {
-		const noteIndex = ((tonic + semitones) % 12 + 12) % 12;
+		const noteIndex = (((tonic + semitones) % 12) + 12) % 12;
 		if (isValidNoteIndex(noteIndex as NoteIndex)) noteSet.add(noteIndex as NoteIndex);
 		return { noteIndex, degree };
 	});
