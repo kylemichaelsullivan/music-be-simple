@@ -55,7 +55,7 @@ function DisplaysComponent({
 			showNoteLabels={showNoteLabels}
 			tonic={tonic}
 		>
-			<div className='Displays flex flex-col gap-8 w-full min-w-0 max-w-screen-2xl'>
+			<div className='Displays flex flex-col gap-8 self-center w-full min-w-0 max-w-screen-2xl'>
 				{orderedDisplays.map((display, index) => {
 					const nextDisplay = orderedDisplays[index + 1];
 					const isLastInstrument = !nextDisplay;
