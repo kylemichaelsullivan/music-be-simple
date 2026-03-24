@@ -29,6 +29,7 @@ export { generateNotesFromIntervals, getScaleTypeDisplay, intervalShortNameFromT
 export {
 	CIRCLE_OF_FIFTHS_ORDER,
 	circleInnerKeySignatureLabel,
+	keySignatureMajorTonicForVariant,
 	majorKeyAccidentalSigned,
 	majorKeySignatureLabel,
 	relativeMinorTonic,

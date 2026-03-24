@@ -1,3 +1,4 @@
+import { useScales } from '@/hooks';
 import { memo, useMemo } from 'react';
 import { circleOfFifthsEnharmonicHintText } from './circleOfFifthsEnharmonicHint';
 
@@ -6,7 +7,8 @@ type CircleOfFifthsEnharmonicNoteProps = {
 };
 
 function CircleOfFifthsEnharmonicNoteComponent({ usingFlats }: CircleOfFifthsEnharmonicNoteProps) {
-	const text = useMemo(() => circleOfFifthsEnharmonicHintText(usingFlats), [usingFlats]);
+	const { variant } = useScales();
+	const text = useMemo(() => circleOfFifthsEnharmonicHintText(usingFlats, variant), [usingFlats, variant]);
 
 	return (
 		<p

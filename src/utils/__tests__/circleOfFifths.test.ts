@@ -1,6 +1,7 @@
 import {
 	CIRCLE_OF_FIFTHS_ORDER,
 	circleInnerKeySignatureLabel,
+	keySignatureMajorTonicForVariant,
 	majorKeyAccidentalSigned,
 	majorKeySignatureLabel,
 	relativeMinorTonic,
@@ -24,6 +25,15 @@ describe('circleOfFifths utilities', () => {
 	it('should pair major and relative minor tonics', () => {
 		expect(relativeMinorTonic(0)).toBe(9);
 		expect(relativeMinorTonic(7)).toBe(4);
+	});
+
+	it('should map scale variants to their major-signature tonic', () => {
+		expect(keySignatureMajorTonicForVariant(9, 'minor')).toBe(0);
+		expect(keySignatureMajorTonicForVariant(2, 'dorian')).toBe(0);
+		expect(keySignatureMajorTonicForVariant(7, 'mixolydian')).toBe(0);
+		expect(keySignatureMajorTonicForVariant(5, 'lydian')).toBe(0);
+		expect(keySignatureMajorTonicForVariant(11, 'locrian')).toBe(0);
+		expect(keySignatureMajorTonicForVariant(4, 'major')).toBe(4);
 	});
 
 	it('should label key signatures from pitch class and spelling preference', () => {

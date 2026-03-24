@@ -1,6 +1,12 @@
 import { useGlobals, useScales } from '@/hooks';
 import type { NoteIndex } from '@/types';
-import { CIRCLE_OF_FIFTHS_ORDER, circleInnerKeySignatureLabel, getNote, intervalShortNameFromTonic } from '@/utils';
+import {
+	CIRCLE_OF_FIFTHS_ORDER,
+	circleInnerKeySignatureLabel,
+	getNote,
+	intervalShortNameFromTonic,
+	keySignatureMajorTonicForVariant,
+} from '@/utils';
 import { useMemo } from 'react';
 import {
 	R_INTERVAL_INNER,
@@ -18,7 +24,7 @@ import type { CircleOfFifthsSegment } from './circleOfFifthsTypes';
 
 export function useCircleOfFifthsSegments(): CircleOfFifthsSegment[] {
 	const { usingFlats } = useGlobals();
-	const { tonic, notes } = useScales();
+	const { tonic, notes, variant } = useScales();
 
 	const diatonicSet = useMemo(() => new Set(notes), [notes]);
 
@@ -27,7 +33,8 @@ export function useCircleOfFifthsSegments(): CircleOfFifthsSegment[] {
 			CIRCLE_OF_FIFTHS_ORDER.map((majorIndex: NoteIndex, i: number) => {
 				const { centerRad, startRad, endRad } = segmentAnglesRad(i);
 				const majorLabel = getNote(majorIndex, usingFlats);
-				const sigLabel = circleInnerKeySignatureLabel(majorIndex, usingFlats);
+				const signatureMajorTonic = keySignatureMajorTonicForVariant(majorIndex, variant);
+				const sigLabel = circleInnerKeySignatureLabel(signatureMajorTonic, usingFlats);
 				const intervalLabel = intervalShortNameFromTonic(tonic, majorIndex);
 
 				const majorWedgePath = annularWedgePath(
@@ -75,6 +82,6 @@ export function useCircleOfFifthsSegments(): CircleOfFifthsSegment[] {
 					wedgeStartRad: startRad,
 				};
 			}),
-		[tonic, usingFlats, diatonicSet]
+		[tonic, usingFlats, diatonicSet, variant]
 	);
 }

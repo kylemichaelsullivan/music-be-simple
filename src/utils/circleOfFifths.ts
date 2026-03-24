@@ -1,4 +1,4 @@
-import type { NoteIndex } from '@/types';
+import type { NoteIndex, ScaleType } from '@/types';
 
 /** Pitch class at the top of the circle (clockwise = ascending fifths). */
 const CIRCLE_TOP_PITCH_CLASS = 0 satisfies NoteIndex;
@@ -91,6 +91,36 @@ export function circleInnerKeySignatureLabel(pitchClass: NoteIndex, usingFlats: 
 		return `${12 + nSharpPref}♯`;
 	}
 	return '—';
+}
+
+/**
+ * Maps a scale tonic/variant to the major-key tonic that shares the same key signature.
+ * This lets signature counts follow modal/relative relationships (e.g. A minor -> C major).
+ */
+export function keySignatureMajorTonicForVariant(tonic: NoteIndex, variant: ScaleType): NoteIndex {
+	const offsetByVariant: Partial<Record<ScaleType, number>> = {
+		// Major-family and relatives
+		major: 0,
+		ionian: 0,
+		lydian: 7,
+		mixolydian: 5,
+		dorian: 10,
+		aeolian: 3,
+		minor: 3,
+		phrygian: 8,
+		locrian: 1,
+		// Common extensions mapped to their closest modal/key-signature family
+		pentatonic: 0,
+		'major-blues': 0,
+		'dominant-pentatonic': 5,
+		'minor-pentatonic': 3,
+		'minor-blues': 3,
+		'melodic-minor': 3,
+		'harmonic-minor': 3,
+	};
+
+	const offset = offsetByVariant[variant] ?? 0;
+	return ((tonic + offset) % 12) as NoteIndex;
 }
 
 /** Relative minor tonic (natural minor) for a major tonic sharing the same key signature. */
