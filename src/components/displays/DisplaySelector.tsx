@@ -20,7 +20,7 @@ function DisplaySelectorComponent({ icon, text, isActive, onFxn }: DisplaySelect
 	return (
 		<button
 			type='button'
-			className={`DisplaySelector flex min-w-4 flex-col items-center justify-center rounded-lg grayscale transition-all sm:p-2 ${
+			className={`DisplaySelector flex flex-col justify-center shrink-0 items-center rounded-lg grayscale w-24 min-w-4 transition-all sm:p-2 ${
 				!isActive ? 'opacity-30 hover:opacity-50' : 'opacity-65 hover:opacity-100'
 			}`}
 			title={text}
@@ -28,7 +28,7 @@ function DisplaySelectorComponent({ icon, text, isActive, onFxn }: DisplaySelect
 			onKeyDown={handleKeyDown}
 		>
 			<InstrumentIcon name={icon} />
-			<span className='font-bold'>{text}</span>
+			<span className='text-xs font-bold whitespace-nowrap'>{text}</span>
 		</button>
 	);
 }

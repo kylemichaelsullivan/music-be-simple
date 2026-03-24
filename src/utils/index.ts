@@ -25,7 +25,14 @@ export {
 	isValidScaleType,
 	rangeOfLength,
 } from './notes';
-export { generateNotesFromIntervals } from './scales';
+export { generateNotesFromIntervals, getScaleTypeDisplay, intervalShortNameFromTonic } from './scales';
+export {
+	CIRCLE_OF_FIFTHS_ORDER,
+	circleInnerKeySignatureLabel,
+	majorKeyAccidentalSigned,
+	majorKeySignatureLabel,
+	relativeMinorTonic,
+} from './circleOfFifths';
 export type {
 	ChordData,
 	ChordGroup,

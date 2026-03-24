@@ -1,7 +1,18 @@
-import { generateNotesFromIntervals } from '@/utils';
+import { generateNotesFromIntervals, getScaleTypeDisplay, intervalShortNameFromTonic } from '@/utils';
 import { describe, expect, it } from 'vitest';
 
 describe('scales utilities', () => {
+	it('should resolve scale type display labels', () => {
+		expect(getScaleTypeDisplay('major')).toBe('Major');
+		expect(getScaleTypeDisplay('dorian')).toBe('Dorian');
+	});
+
+	it('should name chromatic intervals from a tonic', () => {
+		expect(intervalShortNameFromTonic(0, 0)).toBe('1');
+		expect(intervalShortNameFromTonic(0, 4)).toBe('M3');
+		expect(intervalShortNameFromTonic(9, 0)).toBe('m3');
+	});
+
 	describe('generateNotesFromIntervals', () => {
 		it('should generate C major scale correctly', () => {
 			// C major: C, D, E, F, G, A, B, C

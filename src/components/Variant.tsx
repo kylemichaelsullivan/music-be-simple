@@ -2,25 +2,45 @@ import { useChords, useScales } from '@/hooks';
 import { ChordVariantSchema, ScaleTypeSchema } from '@/schemas';
 import type { ChordData, ChordGroup, ScaleData, ScaleGroup } from '@/types';
 import { CHORDS, SCALES, getChordSymbol, isValidChordVariant, isValidScaleType } from '@/utils';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, FocusEvent, ForwardedRef, KeyboardEvent } from 'react';
+import { forwardRef } from 'react';
 
-function ScaleVariant() {
+const defaultScaleVariantSelectClassName =
+	'Variant flex-auto border border-slate-500 rounded-none min-w-0 min-h-12 px-1 hover:ring-1';
+
+type ScaleVariantSelectProps = {
+	className?: string;
+	onAfterVariantChange?: () => void;
+	onBlur?: (e: FocusEvent<HTMLSelectElement>) => void;
+	onFocus?: (e: FocusEvent<HTMLSelectElement>) => void;
+	onKeyDown?: (e: KeyboardEvent<HTMLSelectElement>) => void;
+};
+
+export const ScaleVariantSelect = forwardRef(function ScaleVariantSelect(
+	{ className, onAfterVariantChange, onBlur, onFocus, onKeyDown }: ScaleVariantSelectProps,
+	ref: ForwardedRef<HTMLSelectElement>
+) {
 	const { variant, handleVariantChange } = useScales();
 
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const result = ScaleTypeSchema.safeParse(e.target.value);
 		if (result.success && isValidScaleType(result.data)) {
 			handleVariantChange(result.data);
+			onAfterVariantChange?.();
 		}
 	};
 
 	return (
 		<select
-			className='Variant flex-auto border border-slate-500 rounded-none min-w-0 min-h-12 px-1 hover:ring-1'
+			className={className ?? defaultScaleVariantSelectClassName}
 			value={variant}
 			name='Scale Variant'
 			aria-label='Scale Variant'
+			onBlur={onBlur}
 			onChange={handleChange}
+			onFocus={onFocus}
+			onKeyDown={onKeyDown}
+			ref={ref}
 		>
 			{Object.entries(SCALES).map(([groupName, group]: [string, ScaleGroup]) => (
 				<optgroup label={groupName} key={groupName}>
@@ -39,6 +59,10 @@ function ScaleVariant() {
 			))}
 		</select>
 	);
+});
+
+function ScaleVariant() {
+	return <ScaleVariantSelect />;
 }
 
 function ChordVariant() {
