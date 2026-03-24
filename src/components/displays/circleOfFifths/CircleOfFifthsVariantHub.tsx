@@ -26,7 +26,11 @@ function CircleOfFifthsVariantHubComponent() {
 		}
 	}, [pinnedOpen]);
 
-	const openPinned = () => setPinnedOpen(true);
+	const openPinned = () => {
+		// Click/keyboard activation should always force the select visible.
+		setHideSelectAfterPick(false);
+		setPinnedOpen(true);
+	};
 
 	return (
 		<div
