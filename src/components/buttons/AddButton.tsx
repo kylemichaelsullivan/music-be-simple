@@ -8,7 +8,7 @@ type AddButtonProps = {
 
 export function AddButton({ title = 'Add', onFxn }: AddButtonProps) {
 	return (
-		<IconButton className='AddButton border rounded-full p-2 mx-auto' title={title} onFxn={onFxn}>
+		<IconButton className='AddButton border rounded-full p-2' title={title} onFxn={onFxn}>
 			<ActionIcon name='add' size='xs' />
 		</IconButton>
 	);

@@ -5,7 +5,7 @@ export function Chord() {
 	const { tonic, handleTonicChange } = useChords();
 
 	return (
-		<div className='Chord flex justify-center align-center gap-1 w-full mx-auto'>
+		<div className='Chord flex justify-center align-center gap-1 w-full'>
 			<Tonic tonic={tonic} handleTonicChange={handleTonicChange} />
 			<Variant type='chord' />
 		</div>
