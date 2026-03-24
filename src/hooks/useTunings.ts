@@ -1,4 +1,4 @@
-import { TuningsContext } from '@/context/Tunings/TuningsContext';
+import { TuningsContext } from '@/context';
 import type { TuningsContextType } from '@/types';
 import { useContext } from 'react';
 

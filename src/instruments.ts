@@ -1,7 +1,15 @@
 import type { IconName, IconType, InstrumentType } from '@/types';
 
 export const INSTRUMENTS = ['Banjo', 'Guitar', 'Mandolin', 'Piano', 'Ukulele'] as const;
-export const ICONS = ['banjo', 'guitar', 'keyboard', 'mandolin', 'stand', 'ukulele'] as const;
+export const ICONS = [
+	'banjo',
+	'circle',
+	'guitar',
+	'keyboard',
+	'mandolin',
+	'stand',
+	'ukulele',
+] as const;
 
 export const INSTRUMENT_ORDER: InstrumentType[] = [
 	'Piano',
@@ -13,6 +21,7 @@ export const INSTRUMENT_ORDER: InstrumentType[] = [
 
 export const ICON_MAP: Record<IconName, IconType> = {
 	Banjo: 'banjo',
+	Circle: 'circle',
 	Guitar: 'guitar',
 	Mandolin: 'mandolin',
 	Modes: 'stand',

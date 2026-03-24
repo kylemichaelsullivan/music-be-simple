@@ -1,6 +1,6 @@
 import type { ICONS, INSTRUMENTS } from '@/instruments';
 import type { TABS } from '@/navigation';
-import type { INTERVALS } from '@/utils/notes';
+import type { INTERVALS } from '@/utils';
 
 // Helper types
 type ReplaceSpaceWithDash<T extends string> = T extends `${infer Head} ${infer Tail}`
@@ -19,8 +19,8 @@ export type Chord_UsingFlats = boolean;
 
 // Instrument & Icon types
 export type ActionIconName = 'add' | 'pen' | 'save' | 'trash' | YDirectionType;
-export type IconName = InstrumentType | 'Modes';
-export type IconSize = 'lg' | 'md' | 'sm' | 'xs';
+export type IconName = InstrumentType | 'Modes' | 'Circle';
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg';
 export type IconType = (typeof ICONS)[number];
 export type InstrumentType = (typeof INSTRUMENTS)[number];
 export type NerdModeButtonIcon = '🤓' | '💃🏾';
@@ -49,8 +49,8 @@ export type ScaleMode =
 export type ScaleType = keyof typeof INTERVALS;
 
 // Re-export types from utils
-export type { Chord_Variant, ChordData, ChordGroup, ChordInfo, border } from '@/utils/chords';
-export type { Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from '@/utils/notes';
+export type { Chord_Variant, ChordData, ChordGroup, ChordInfo, border } from '@/utils';
+export type { Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from '@/utils';
 
 // Re-export types from type files
 export type { ChordsContextType, ChordsContextProviderProps } from './chords';

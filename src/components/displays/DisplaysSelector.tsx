@@ -6,6 +6,7 @@ import { DisplaySelector } from '.';
 export function DisplaysSelector({
 	onFxn,
 	hasModes = false,
+	hasCircleOfFifths = false,
 	displays = [],
 }: DisplaysSelectorProps) {
 	const instrumentSelectors = useMemo(
@@ -31,6 +32,10 @@ export function DisplaysSelector({
 		onFxn('stand');
 	}, [onFxn]);
 
+	const handleCircleOfFifthsClick = useCallback(() => {
+		onFxn('circle');
+	}, [onFxn]);
+
 	return (
 		<div className='DisplaysSelector relative border border-slate-500 min-w-0'>
 			<div className='flex gap-8 justify-center px-4 py-1 overflow-x-auto'>
@@ -43,6 +48,16 @@ export function DisplaysSelector({
 						isActive={displays.includes('stand')}
 						onFxn={handleModesClick}
 						key='Modes'
+					/>
+				)}
+
+				{hasCircleOfFifths && (
+					<DisplaySelector
+						icon='Circle'
+						text='Circle'
+						isActive={displays.includes('circle')}
+						onFxn={handleCircleOfFifthsClick}
+						key='CircleOfFifths'
 					/>
 				)}
 			</div>

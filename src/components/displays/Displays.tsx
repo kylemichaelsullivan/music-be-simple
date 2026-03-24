@@ -4,7 +4,7 @@ import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { DisplaysProps, InstrumentType } from '@/types';
 import { type ReactElement, memo, useMemo } from 'react';
-import { Banjo, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from '.';
+import { Banjo, CircleOfFifths, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from '.';
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
 	Banjo: () => <Banjo />,
@@ -38,13 +38,13 @@ function DisplaysComponent({
 	const getNotesForInstrument = useMemo(
 		() =>
 			pianoNotes
-				? (instrument: InstrumentType) =>
-						instrument === 'Piano' ? pianoNotes : notes
+				? (instrument: InstrumentType) => (instrument === 'Piano' ? pianoNotes : notes)
 				: undefined,
 		[notes, pianoNotes]
 	);
 
 	const renderModes = showModes && displays.includes('stand');
+	const renderCircle = showModes && displays.includes('circle');
 
 	return (
 		<InstrumentNotesProvider
@@ -55,7 +55,7 @@ function DisplaysComponent({
 			showNoteLabels={showNoteLabels}
 			tonic={tonic}
 		>
-			<div className='Displays flex flex-col gap-8 w-full min-w-0 max-w-screen-2xl mx-auto'>
+			<div className='Displays flex flex-col gap-8 w-full min-w-0 max-w-screen-2xl'>
 				{orderedDisplays.map((display, index) => {
 					const nextDisplay = orderedDisplays[index + 1];
 					const isLastInstrument = !nextDisplay;
@@ -76,6 +76,7 @@ function DisplaysComponent({
 				})}
 
 				{renderModes && <Modes />}
+				{renderCircle && <CircleOfFifths />}
 			</div>
 		</InstrumentNotesProvider>
 	);

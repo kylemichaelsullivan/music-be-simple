@@ -24,6 +24,7 @@ export function Scales() {
 			tonicVariantSlot={<ScaleContainer />}
 			notesSlot={<Notes />}
 			hasModes
+			hasCircleOfFifths
 			displaysProps={{ notes, tonic, showModes, showNoteLabels }}
 		/>
 	);

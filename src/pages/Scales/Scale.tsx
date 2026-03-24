@@ -5,7 +5,7 @@ export function Scale() {
 	const { tonic, handleTonicChange } = useScales();
 
 	return (
-		<div className='Scale flex justify-center items-center gap-1 w-full min-w-0 max-w-full mx-auto'>
+		<div className='Scale flex justify-center items-center gap-1 w-full min-w-0 max-w-full'>
 			<Tonic tonic={tonic} handleTonicChange={handleTonicChange} />
 			<Variant type='scale' />
 		</div>

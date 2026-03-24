@@ -1,5 +1,6 @@
 import type { IconName, IconSize } from '@/types';
 import banjoIcon from '/icons/banjo.svg';
+import circleIcon from '/icons/circle.svg';
 import guitarIcon from '/icons/guitar.svg';
 import pianoIcon from '/icons/keyboard.svg';
 import mandolinIcon from '/icons/mandolin.svg';
@@ -9,6 +10,7 @@ import { Icon } from '.';
 
 const iconMap: Record<IconName, string> = {
 	Banjo: banjoIcon,
+	Circle: circleIcon,
 	Guitar: guitarIcon,
 	Mandolin: mandolinIcon,
 	Modes: modesIcon,
