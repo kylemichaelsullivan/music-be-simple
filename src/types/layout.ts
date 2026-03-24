@@ -16,6 +16,7 @@ export type DisplaysSelectorProps = {
 	onFxn: (icon: IconType) => void;
 	displays?: IconType[];
 	hasModes?: boolean;
+	hasCircleOfFifths?: boolean;
 };
 
 export type PageTopButtonProps = {
@@ -31,5 +32,6 @@ export type PageLayoutProps = {
 	topButton: PageTopButtonProps;
 	afterDisplaysSlot?: ReactNode;
 	hasModes?: boolean;
+	hasCircleOfFifths?: boolean;
 	notesSlot?: ReactNode;
 };
