@@ -12,7 +12,7 @@ function CircleOfFifthsEnharmonicNoteComponent({ usingFlats }: CircleOfFifthsEnh
 
 	return (
 		<p
-			className='CircleOfFifthsEnharmonicNote text-slate-600 text-sm leading-snug text-center max-w-[min(95vw,95vh)] px-3'
+			className='CircleOfFifthsEnharmonicNote text-slate-600 text-sm leading-snug text-center px-3 max-w-[min(95cqw,95vh)] min-w-0'
 			role='note'
 		>
 			{text}

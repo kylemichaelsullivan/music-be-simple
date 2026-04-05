@@ -18,6 +18,7 @@ function DisplaysComponent({
 	notes,
 	tonic,
 	getBorderStyle,
+	hideModesAndCircle,
 	pianoNotes,
 	showModes = false,
 	showNerdMode,
@@ -43,8 +44,9 @@ function DisplaysComponent({
 		[notes, pianoNotes]
 	);
 
-	const renderModes = showModes && displays.includes('stand');
-	const renderCircle = showModes && displays.includes('circle');
+	const renderModes = showModes && !hideModesAndCircle && displays.includes('stand');
+	const renderCircle = showModes && !hideModesAndCircle && displays.includes('circle');
+	const hasNoSelection = displays.length === 0;
 
 	return (
 		<InstrumentNotesProvider
@@ -55,28 +57,36 @@ function DisplaysComponent({
 			showNoteLabels={showNoteLabels}
 			tonic={tonic}
 		>
-			<div className='Displays flex flex-col gap-8 self-center w-full min-w-0 max-w-screen-2xl'>
-				{orderedDisplays.map((display, index) => {
-					const nextDisplay = orderedDisplays[index + 1];
-					const isLastInstrument = !nextDisplay;
+			<div className='Displays flex flex-col justify-start gap-8 self-center w-full min-w-0 max-w-screen-2xl h-full max-h-fit'>
+				{hasNoSelection ? (
+					<p className='text-slate-600 text-sm italic text-center'>
+						Please pick something to display.
+					</p>
+				) : (
+					<>
+						{orderedDisplays.map((display, index) => {
+							const nextDisplay = orderedDisplays[index + 1];
+							const isLastInstrument = !nextDisplay;
 
-					let skipTarget: string | null = null;
-					if (nextDisplay) {
-						skipTarget = `.${nextDisplay}`;
-					} else if (isLastInstrument && isPlayPage) {
-						skipTarget = '.ChordBin .InstrumentSelector';
-					}
+							let skipTarget: string | null = null;
+							if (nextDisplay) {
+								skipTarget = `.${nextDisplay}`;
+							} else if (isLastInstrument && isPlayPage) {
+								skipTarget = '.ChordBin .InstrumentSelector';
+							}
 
-					return (
-						<Instrument instrument={display} key={display}>
-							{skipTarget && <SkipLink text={`Skip ${display}`} targetSelector={skipTarget} />}
-							{INSTRUMENTS[display]()}
-						</Instrument>
-					);
-				})}
+							return (
+								<Instrument instrument={display} key={display}>
+									{skipTarget && <SkipLink text={`Skip ${display}`} targetSelector={skipTarget} />}
+									{INSTRUMENTS[display]()}
+								</Instrument>
+							);
+						})}
 
-				{renderModes && <Modes />}
-				{renderCircle && <CircleOfFifths />}
+						{renderModes && <Modes />}
+						{renderCircle && <CircleOfFifths />}
+					</>
+				)}
 			</div>
 		</InstrumentNotesProvider>
 	);

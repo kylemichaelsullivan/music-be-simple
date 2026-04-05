@@ -1,6 +1,8 @@
 export { AllowedNote } from './AllowedNote';
 export { Footer } from './Footer';
 export { Main } from './Main';
+export { MainBody } from './MainBody';
+export { MainHead } from './MainHead';
 export { Modal } from './Modal';
 export { PageLayout } from './PageLayout';
 export { SkipLink } from './SkipLink';

@@ -1,13 +1,5 @@
-import {
-	Displays,
-	DisplaysSelector,
-	Main,
-	SkipLink,
-	Title,
-	TopButton,
-	UseFlatsButton,
-} from '@/components';
-import { useGlobals } from '@/hooks';
+import { Main, MainBody } from '@/components';
+import { MainHead } from '@/components/MainHead';
 import type { PageLayoutProps } from '@/types';
 
 export function PageLayout({
@@ -16,38 +8,18 @@ export function PageLayout({
 	tonicVariantSlot,
 	topButton,
 	afterDisplaysSlot,
-	hasModes = false,
-	hasCircleOfFifths = false,
 	notesSlot,
 }: PageLayoutProps) {
-	const { displays, handleDisplaysClick } = useGlobals();
-
 	const content = (
 		<Main componentName={title}>
-			<Title title={title} />
-			<TopButton
-				icon={topButton.icon}
-				title={topButton.title}
-				position='left'
-				onFxn={topButton.onFxn}
+			<MainHead
+				title={title}
+				topButton={topButton}
+				tonicVariantSlot={tonicVariantSlot}
+				notesSlot={notesSlot}
 			/>
-			<UseFlatsButton />
 
-			<SkipLink text='Skip tonic/variant' targetSelector='.DisplaysSelector' />
-			{tonicVariantSlot}
-
-			{notesSlot}
-
-			<SkipLink text='Skip displays selector' targetSelector='.Displays' />
-			<DisplaysSelector
-				displays={displays}
-				onFxn={handleDisplaysClick}
-				hasModes={hasModes}
-				hasCircleOfFifths={hasCircleOfFifths}
-			/>
-			<Displays {...displaysProps} />
-
-			{afterDisplaysSlot}
+			<MainBody displaysProps={displaysProps} afterDisplaysSlot={afterDisplaysSlot} />
 		</Main>
 	);
 
