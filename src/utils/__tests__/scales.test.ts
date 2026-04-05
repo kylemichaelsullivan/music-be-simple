@@ -5,6 +5,7 @@ describe('scales utilities', () => {
 	it('should resolve scale type display labels', () => {
 		expect(getScaleTypeDisplay('major')).toBe('Major');
 		expect(getScaleTypeDisplay('dorian')).toBe('Dorian');
+		expect(getScaleTypeDisplay('bebop-dominant')).toBe('Bebop Dominant');
 	});
 
 	it('should name chromatic intervals from a tonic', () => {
@@ -42,6 +43,12 @@ describe('scales utilities', () => {
 			const result = generateNotesFromIntervals(0, 'pentatonic');
 			// C=0, D=2, E=4, G=7, A=9
 			expect(result).toEqual([0, 2, 4, 7, 9]);
+		});
+
+		it('should generate C bebop dominant (1 2 3 4 5 6 ♭7 7)', () => {
+			const result = generateNotesFromIntervals(0, 'bebop-dominant');
+			// C, D, E, F, G, A, B♭, B
+			expect(result).toEqual([0, 2, 4, 5, 7, 9, 10, 11]);
 		});
 
 		it('should wrap around correctly for scales starting near the end', () => {

@@ -43,6 +43,7 @@ export const INTERVALS = {
 	'major-blues': [1, 0.5, 0.5, 1.5, 1],
 	'minor-pentatonic': [1.5, 1, 1, 1.5],
 	'dominant-pentatonic': [2, 0.5, 1, 1.5],
+	'bebop-dominant': [1, 1, 0.5, 1, 1, 0.5, 0.5],
 	// Others
 	'harmonic-major': [1, 1, 0.5, 1, 0.5, 1.5],
 	'double-harmonic-minor': [0.5, 1.5, 0.5, 1, 0.5, 1.5],
@@ -99,6 +100,7 @@ export const SCALES: Record<string, ScaleGroup> = {
 		'major-blues': { display: 'Major Blues' },
 		'minor-blues': { display: 'Minor Blues' },
 		'dominant-pentatonic': { display: 'Dominant Pentatonic' },
+		'bebop-dominant': { display: 'Bebop Dominant' },
 	},
 	'Symmetric & Exotic Scales': {
 		'harmonic-major': { display: 'Harmonic Major' },

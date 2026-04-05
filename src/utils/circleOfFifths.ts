@@ -115,6 +115,7 @@ export function keySignatureMajorTonicForVariant(tonic: NoteIndex, variant: Scal
 		'dominant-pentatonic': 5,
 		'minor-pentatonic': 3,
 		'minor-blues': 3,
+		'bebop-dominant': 5,
 		'melodic-minor': 3,
 		'harmonic-minor': 3,
 	};
