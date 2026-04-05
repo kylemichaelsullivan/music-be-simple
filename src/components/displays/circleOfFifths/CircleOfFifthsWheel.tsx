@@ -18,7 +18,7 @@ function CircleOfFifthsWheelComponent({
 	children,
 }: CircleOfFifthsWheelProps) {
 	return (
-		<div className='CircleOfFifthsWheel relative aspect-square border border-slate-900/15 bg-slate-100/80 rounded-full shadow-sm w-[min(95vw,95vh)] h-[min(95vw,95vh)]'>
+		<div className='CircleOfFifthsWheel relative aspect-square border border-slate-900/15 bg-slate-100/80 rounded-full shadow-sm w-[min(95cqw,95vh)] h-[min(95cqw,95vh)]'>
 			<svg
 				className='absolute text-slate-900 w-full h-full inset-0'
 				role='img'
