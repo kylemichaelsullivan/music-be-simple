@@ -3,12 +3,7 @@ import type { DisplaysSelectorProps } from '@/types';
 import { useCallback, useMemo } from 'react';
 import { DisplaySelector } from '.';
 
-export function DisplaysSelector({
-	onFxn,
-	hasModes = false,
-	hasCircleOfFifths = false,
-	displays = [],
-}: DisplaysSelectorProps) {
+export function DisplaysSelector({ hideModesAndCircle, onFxn, displays = [] }: DisplaysSelectorProps) {
 	const instrumentSelectors = useMemo(
 		() =>
 			INSTRUMENT_ORDER.map((iconName) => {
@@ -37,28 +32,28 @@ export function DisplaysSelector({
 	}, [onFxn]);
 
 	return (
-		<div className='DisplaysSelector relative border border-slate-500 min-w-0'>
-			<div className='flex gap-8 justify-center px-4 py-1 overflow-x-auto'>
+		<div className='DisplaysSelector relative border border-slate-500 min-w-0 max-h-fit'>
+			<div className='flex flex-row md:flex-col gap-8 justify-start md:justify-center md:items-center px-4 py-1 overflow-x-auto md:overflow-x-visible'>
 				{instrumentSelectors}
 
-				{hasModes && (
-					<DisplaySelector
-						icon='Modes'
-						text='Modes'
-						isActive={displays.includes('stand')}
-						onFxn={handleModesClick}
-						key='Modes'
-					/>
-				)}
+				{!hideModesAndCircle && (
+					<>
+						<DisplaySelector
+							icon='Modes'
+							text='Modes'
+							isActive={displays.includes('stand')}
+							onFxn={handleModesClick}
+							key='Modes'
+						/>
 
-				{hasCircleOfFifths && (
-					<DisplaySelector
-						icon='Circle'
-						text='Circle'
-						isActive={displays.includes('circle')}
-						onFxn={handleCircleOfFifthsClick}
-						key='CircleOfFifths'
-					/>
+						<DisplaySelector
+							icon='Circle'
+							text='Circle'
+							isActive={displays.includes('circle')}
+							onFxn={handleCircleOfFifthsClick}
+							key='CircleOfFifths'
+						/>
+					</>
 				)}
 			</div>
 		</div>

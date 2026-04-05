@@ -156,10 +156,10 @@ export function App() {
 									const PageComponent = tabPageComponents[tab];
 									return (
 										<div
-											key={tab}
-											className='absolute inset-0 z-0 pointer-events-none opacity-0 overflow-hidden'
+											className='PageComponent absolute inset-0 z-0 pointer-events-none opacity-0 overflow-hidden'
 											style={{ contain: 'layout' }}
 											aria-hidden={true}
+											key={tab}
 										>
 											<PageComponent />
 										</div>

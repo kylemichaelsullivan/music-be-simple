@@ -69,6 +69,8 @@ export type {
 export type {
 	DisplaysProps,
 	DisplaysSelectorProps,
+	MainBodyProps,
+	MainHeadProps,
 	PageLayoutProps,
 	PageTopButtonProps,
 } from './layout';

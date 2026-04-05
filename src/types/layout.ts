@@ -2,21 +2,21 @@ import type { IconType, NoteIndex, TabType, border } from '@/types';
 import type { ReactNode } from 'react';
 
 export type DisplaysProps = {
+	getBorderStyle?: (note: NoteIndex, keyIndex?: number) => border;
 	notes: NoteIndex[];
 	tonic: NoteIndex;
-	getBorderStyle?: (note: NoteIndex, keyIndex?: number) => border;
-	isPlayPage?: boolean;
 	pianoNotes?: NoteIndex[];
+	hideModesAndCircle?: boolean;
+	isPlayPage?: boolean;
 	showModes?: boolean;
 	showNerdMode?: boolean;
 	showNoteLabels?: boolean;
 };
 
 export type DisplaysSelectorProps = {
+	hideModesAndCircle?: boolean;
 	onFxn: (icon: IconType) => void;
 	displays?: IconType[];
-	hasModes?: boolean;
-	hasCircleOfFifths?: boolean;
 };
 
 export type PageTopButtonProps = {
@@ -31,7 +31,12 @@ export type PageLayoutProps = {
 	tonicVariantSlot: ReactNode;
 	topButton: PageTopButtonProps;
 	afterDisplaysSlot?: ReactNode;
-	hasModes?: boolean;
-	hasCircleOfFifths?: boolean;
 	notesSlot?: ReactNode;
 };
+
+export type MainBodyProps = Pick<PageLayoutProps, 'displaysProps' | 'afterDisplaysSlot'>;
+
+export type MainHeadProps = Pick<
+	PageLayoutProps,
+	'title' | 'topButton' | 'tonicVariantSlot' | 'notesSlot'
+>;
