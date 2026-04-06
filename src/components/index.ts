@@ -1,15 +1,4 @@
 export { AllowedNote } from './AllowedNote';
-export { Footer } from './Footer';
-export { Main } from './Main';
-export { MainBody } from './MainBody';
-export { MainHead } from './MainHead';
-export { Modal } from './Modal';
-export { PageLayout } from './PageLayout';
-export { SkipLink } from './SkipLink';
-export { Title } from './Title';
-export { Tonic } from './Tonic';
-export { TuningModal } from './TuningModal';
-export { Variant } from './Variant';
 export {
 	AddButton,
 	CloseButton,
@@ -23,6 +12,24 @@ export {
 	TransposeButton,
 	UseFlatsButton,
 } from './buttons';
-export { Displays, DisplaySelector, DisplaysSelector, Label, LabelContent } from './displays';
+export { DisplaysRegion } from './DisplaysRegion';
+export {
+	DisplaySelector,
+	Displays,
+	DisplaysSelectorContainer,
+	Label,
+	LabelContent,
+} from './displays';
+export { Footer } from './Footer';
 export { ActionIcon, Icon, InstrumentIcon, NavIcon } from './icons';
+export { Main } from './Main';
+export { MainBody } from './MainBody';
+export { MainHead } from './MainHead';
+export { Modal } from './Modal';
 export { Navbar, NavTab } from './nav';
+export { PageLayout } from './PageLayout';
+export { SkipLink } from './SkipLink';
+export { Title } from './Title';
+export { Tonic } from './Tonic';
+export { TuningModal } from './TuningModal';
+export { Variant } from './Variant';

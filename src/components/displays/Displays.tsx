@@ -1,9 +1,9 @@
+import { memo, type ReactElement, useMemo } from 'react';
 import { SkipLink } from '@/components';
 import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { DisplaysProps, InstrumentType } from '@/types';
-import { type ReactElement, memo, useMemo } from 'react';
 import { Banjo, CircleOfFifths, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from '.';
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
@@ -18,8 +18,8 @@ function DisplaysComponent({
 	notes,
 	tonic,
 	getBorderStyle,
-	hideModesAndCircle,
 	pianoNotes,
+	hideModesAndCircle,
 	showModes = false,
 	showNerdMode,
 	showNoteLabels = true,
@@ -53,11 +53,11 @@ function DisplaysComponent({
 			getBorderStyle={getBorderStyle}
 			getNotesForInstrument={getNotesForInstrument}
 			notes={notes}
+			tonic={tonic}
 			showNerdMode={showNerdMode}
 			showNoteLabels={showNoteLabels}
-			tonic={tonic}
 		>
-			<div className='Displays flex flex-col justify-start gap-8 self-center w-full min-w-0 max-w-screen-2xl h-full max-h-fit'>
+			<div className='Displays flex flex-col justify-start gap-8 w-full min-w-0 max-w-screen-2xl h-full mx-auto'>
 				{hasNoSelection ? (
 					<p className='text-slate-600 text-sm italic text-center'>
 						Please pick something to display.

@@ -1,9 +1,9 @@
-import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
-import { GlobalsStorageSchema, IconTypeSchema } from '@/schemas';
-import type { GlobalsContextProviderProps, IconType } from '@/types';
-import { FREQUENCIES } from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
+import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
+import { GlobalsStorageSchema, IconTypeSchema, PositionTypeSchema } from '@/schemas';
+import type { GlobalsContextProviderProps, IconType, PositionType } from '@/types';
+import { FREQUENCIES } from '@/utils';
 import { useLocalStorage } from '../shared';
 import { GlobalsContext } from './GlobalsContext';
 
@@ -18,6 +18,12 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		'selectedDisplays',
 		z.array(IconTypeSchema),
 		initialDisplays
+	);
+	const initialDisplaysSelectorPosition: PositionType = 'top';
+	const [displaysSelectorPosition, setDisplaysSelectorPosition] = useLocalStorage(
+		'displaysSelectorPosition',
+		PositionTypeSchema,
+		initialDisplaysSelectorPosition
 	);
 
 	const [notePlaying, setNotePlaying] = useState<boolean>(false);
@@ -58,6 +64,13 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		[setDisplays]
 	);
 
+	const handleDisplaysSelectorMove = useCallback(
+		(direction: PositionType) => {
+			setDisplaysSelectorPosition(direction);
+		},
+		[setDisplaysSelectorPosition]
+	);
+
 	const toggleUsingFlats = useCallback(() => {
 		setUsingFlats((prev) => !prev);
 	}, [setUsingFlats]);
@@ -91,12 +104,23 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 		() => ({
 			usingFlats,
 			displays,
+			displaysSelectorPosition,
 			toggleUsingFlats,
 			handleDisplaysClick,
+			handleDisplaysSelectorMove,
 			capitalizeFirstLetter,
 			playNote,
 		}),
-		[usingFlats, displays, toggleUsingFlats, handleDisplaysClick, capitalizeFirstLetter, playNote]
+		[
+			usingFlats,
+			displays,
+			displaysSelectorPosition,
+			toggleUsingFlats,
+			handleDisplaysClick,
+			handleDisplaysSelectorMove,
+			capitalizeFirstLetter,
+			playNote,
+		]
 	);
 
 	return <GlobalsContext.Provider value={contextValue}>{children}</GlobalsContext.Provider>;

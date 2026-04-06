@@ -15,6 +15,7 @@ _https://www.svgrepo.com/collection/music-instrument/_
 _https://thenounproject.com/icon/_
 
 - add.svg (add-8232455/)
+- arrow.svg (arrow-8339386/)
 - chords.svg (chord-1688937/)
 - down.svg (up-7929044/) [inverted]
 - mandolin.svg (mandolin-147442/)

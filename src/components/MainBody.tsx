@@ -1,24 +1,37 @@
+import clsx from 'clsx';
 import { useGlobals } from '@/hooks';
-import type { MainBodyProps } from '@/types';
+import type { MainBodyProps, PositionType } from '@/types';
+import { DisplaysRegion } from './DisplaysRegion';
+import { DisplaysSelectorContainer } from './displays';
 import { SkipLink } from './SkipLink';
-import { Displays, DisplaysSelector } from './displays';
+
+const MAIN_BODY_MD_FLEX: Record<PositionType, string> = {
+	left: 'md:flex-row',
+	right: 'md:flex-row-reverse',
+	top: 'md:flex-col',
+	bottom: 'md:flex-col-reverse',
+};
 
 export function MainBody({ displaysProps, afterDisplaysSlot }: MainBodyProps) {
-	const { displays, handleDisplaysClick } = useGlobals();
-	const { hideModesAndCircle, ...displaysPassthrough } = displaysProps;
+	const { displays, handleDisplaysClick, displaysSelectorPosition } = useGlobals();
+	const { hideModesAndCircle } = displaysProps;
 
 	return (
 		<>
 			<SkipLink text='Skip displays selector' targetSelector='.Displays' />
-			<div className='MainBody flex flex-col gap-4 md:flex-row'>
-				<DisplaysSelector
-					hideModesAndCircle={hideModesAndCircle}
+			<div
+				className={clsx(
+					'MainBody flex flex-col gap-4',
+					MAIN_BODY_MD_FLEX[displaysSelectorPosition]
+				)}
+			>
+				<DisplaysSelectorContainer
 					displays={displays}
+					hideModesAndCircle={hideModesAndCircle}
 					onFxn={handleDisplaysClick}
 				/>
-				<div className='DisplaysRegion @container min-w-0 flex-1'>
-					<Displays {...displaysPassthrough} hideModesAndCircle={hideModesAndCircle} />
-				</div>
+
+				<DisplaysRegion displaysProps={displaysProps} />
 
 				{afterDisplaysSlot}
 			</div>
