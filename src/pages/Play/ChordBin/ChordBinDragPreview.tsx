@@ -1,7 +1,7 @@
+import { useDragLayer } from 'react-dnd';
 import { useChords, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData } from '@/types';
 import { getChordSymbol, getNote } from '@/utils';
-import { useDragLayer } from 'react-dnd';
 
 type DragItem = { id: number; index: number };
 
@@ -37,13 +37,13 @@ export function ChordBinDragPreview() {
 
 	return (
 		<div
-			className="ChordBinDragPreview pointer-events-none fixed left-0 top-0 z-50"
+			className='ChordBinDragPreview pointer-events-none fixed left-0 top-0 z-50'
 			style={{
 				transform: `translate(${clientOffset.x}px, ${clientOffset.y}px) translate(-50%, -50%)`,
 			}}
 		>
-			<div className="flex justify-center bg-white rounded border border-lg border-gray-300 shadow-lg max-w-24 px-2 py-1">
-				<span className="truncate text-sm">{chordName}</span>
+			<div className='flex justify-center bg-white rounded border border-lg border-gray-300 shadow-lg max-w-24 px-2 py-1'>
+				<span className='truncate text-sm'>{chordName}</span>
 			</div>
 		</div>
 	);

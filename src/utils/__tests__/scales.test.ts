@@ -1,5 +1,9 @@
-import { generateNotesFromIntervals, getScaleTypeDisplay, intervalShortNameFromTonic } from '@/utils';
 import { describe, expect, it } from 'vitest';
+import {
+	generateNotesFromIntervals,
+	getScaleTypeDisplay,
+	intervalShortNameFromTonic,
+} from '@/utils';
 
 describe('scales utilities', () => {
 	it('should resolve scale type display labels', () => {

@@ -1,6 +1,6 @@
-import { useScalesStore } from '@/stores';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
+import { useScalesStore } from '@/stores';
 
 describe('scalesStore', () => {
 	afterEach(() => {

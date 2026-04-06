@@ -1,7 +1,7 @@
-import { TuningModal } from '@/components';
-import { render, screen } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { TuningModal } from '@/components';
+import { render, screen } from '@/test';
 
 describe('TuningModal', () => {
 	it('should render Edit Tuning heading', () => {

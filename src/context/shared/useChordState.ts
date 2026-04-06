@@ -1,6 +1,6 @@
-import type { Chord_Tonic, Chord_Variant, NoteIndex, border } from '@/types';
-import { generateChordNotes, getChordInfo } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
+import type { border, Chord_Tonic, Chord_Variant, NoteIndex } from '@/types';
+import { generateChordNotes, getChordInfo } from '@/utils';
 
 export type UseChordStateOptions = {
 	initialTonic: Chord_Tonic;

@@ -1,6 +1,6 @@
-import type { ScaleMode, ScaleType } from '@/types';
 import clsx from 'clsx';
 import { memo, useMemo } from 'react';
+import type { ScaleMode, ScaleType } from '@/types';
 import { ModeHeading, ModeNote } from '.';
 
 type ModeProps = {
@@ -12,10 +12,16 @@ type ModeProps = {
 	relativeMinor: string;
 };
 
-const ModeComponent = ({ mode, background, isCurrent, notes, relativeMajor, relativeMinor }: ModeProps) => {
+const ModeComponent = ({
+	mode,
+	background,
+	isCurrent,
+	notes,
+	relativeMajor,
+	relativeMinor,
+}: ModeProps) => {
 	const noteElements = useMemo(
-		() =>
-			notes.map((note: string) => <ModeNote note={note} key={note} />),
+		() => notes.map((note: string) => <ModeNote note={note} key={note} />),
 		[notes]
 	);
 
@@ -26,7 +32,12 @@ const ModeComponent = ({ mode, background, isCurrent, notes, relativeMajor, rela
 
 	return (
 		<div className={containerClassName}>
-			<ModeHeading mode={mode} isCurrent={isCurrent} relativeMajor={relativeMajor} relativeMinor={relativeMinor} />
+			<ModeHeading
+				mode={mode}
+				isCurrent={isCurrent}
+				relativeMajor={relativeMajor}
+				relativeMinor={relativeMinor}
+			/>
 			{noteElements}
 		</div>
 	);

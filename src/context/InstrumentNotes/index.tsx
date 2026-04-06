@@ -1,11 +1,6 @@
-import type {
-	InstrumentNotesContextType,
-	InstrumentType,
-	NoteIndex,
-	border,
-} from '@/types';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
+import type { border, InstrumentNotesContextType, InstrumentType, NoteIndex } from '@/types';
 import { InstrumentNotesContext } from '.';
 
 type InstrumentNotesProviderProps = {

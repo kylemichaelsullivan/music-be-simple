@@ -1,7 +1,7 @@
-import { DisplaySelector } from '@/components';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { DisplaySelector } from '@/components';
 
 describe('DisplaySelector', () => {
 	afterEach(() => {

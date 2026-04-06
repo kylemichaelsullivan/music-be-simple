@@ -1,6 +1,6 @@
-import { ScaleVariantSelect } from '@/components/Variant';
 import type { KeyboardEvent, RefObject } from 'react';
 import { memo } from 'react';
+import { ScaleVariantSelect } from '@/components/Variant';
 import { CIRCLE_OF_FIFTHS_VARIANT_HUB_SELECT_CLASS_NAME } from './CircleOfFifthsVariantHub.constants';
 
 type CircleOfFifthsVariantHubSelectProps = {

@@ -1,5 +1,5 @@
-import { FREQUENCIES } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
+import { FREQUENCIES } from '@/utils';
 
 export const usePlayNote = () => {
 	const [notePlaying, setNotePlaying] = useState<boolean>(false);

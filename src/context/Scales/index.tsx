@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { z } from 'zod';
 import { useEscapeReset, useLocalStorage } from '@/context/shared';
 import { useGlobals } from '@/hooks';
 import { ScalesStorageSchema } from '@/schemas';
@@ -6,12 +8,10 @@ import type {
 	NoteIndex,
 	NoteLabelsButtonIcon,
 	ScaleMode,
-	ScaleType,
 	ScalesContextProviderProps,
+	ScaleType,
 } from '@/types';
 import { generateNotesFromIntervals, getNote, isValidNoteIndex } from '@/utils';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { z } from 'zod';
 import { ScalesContext } from './ScalesContext';
 
 export { ScalesContext };

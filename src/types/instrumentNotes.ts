@@ -1,4 +1,4 @@
-import type { InstrumentType, NoteIndex, border } from '@/types';
+import type { border, InstrumentType, NoteIndex } from '@/types';
 
 export type InstrumentNotesContextType = {
 	tonic: NoteIndex;

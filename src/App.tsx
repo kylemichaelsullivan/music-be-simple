@@ -1,11 +1,7 @@
-import { Footer, Navbar } from '@/components';
-import { AppProviders } from '@/context';
-import { TABS } from '@/navigation';
-import type { TabType } from '@/types';
 import type { ComponentType, LazyExoticComponent, ReactElement } from 'react';
 import {
-	Suspense,
 	lazy,
+	Suspense,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -13,6 +9,10 @@ import {
 	useState,
 	useTransition,
 } from 'react';
+import { Footer, Navbar } from '@/components';
+import { AppProviders } from '@/context';
+import { TABS } from '@/navigation';
+import type { TabType } from '@/types';
 
 const ChordsPage = lazy(() => import('@/pages/Chords').then((m) => ({ default: m.Chords })));
 const PlayPage = lazy(() => import('@/pages/Play').then((m) => ({ default: m.Play })));
@@ -57,13 +57,7 @@ function updateUrlForTab(tab: TabType, replace = false) {
 	window.dispatchEvent(new PopStateEvent('popstate'));
 }
 
-function ActiveTabWrapper({
-	children,
-	onLoad,
-}: {
-	children: ReactElement;
-	onLoad: () => void;
-}) {
+function ActiveTabWrapper({ children, onLoad }: { children: ReactElement; onLoad: () => void }) {
 	useEffect(() => {
 		onLoad();
 	}, [onLoad]);

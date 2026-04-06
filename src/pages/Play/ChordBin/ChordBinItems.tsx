@@ -1,5 +1,5 @@
-import { useDropZone, usePlay } from '@/hooks';
 import clsx from 'clsx';
+import { useDropZone, usePlay } from '@/hooks';
 import { ChordBinItem } from '.';
 
 export function ChordBinItems() {

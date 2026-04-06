@@ -1,8 +1,8 @@
+import clsx from 'clsx';
 import { AllowedNote } from '@/components';
 import { useButtonHandler, useGlobals, useInstrumentNotes } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getNote } from '@/utils';
-import clsx from 'clsx';
 
 type KeyProps = {
 	note: NoteIndex;
@@ -17,9 +17,7 @@ export function Key({ note, keyIndex, isBlack, isAllowed }: KeyProps) {
 	const noteName = getNote(note, usingFlats);
 	const { handleClick, handleKeyDown } = useButtonHandler(() => playNote(note));
 
-	const borderStyle = getBorderStyle
-		? getBorderStyle(note, keyIndex)
-		: 'none';
+	const borderStyle = getBorderStyle ? getBorderStyle(note, keyIndex) : 'none';
 
 	return (
 		<button

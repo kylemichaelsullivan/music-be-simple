@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import {
+	polar,
 	R_HUB,
 	R_MAJOR_INNER,
 	R_MID_INNER,
 	R_OUTER,
 	VIEW_CENTER,
-	polar,
 } from './circleOfFifthsGeometry';
 import type { CircleOfFifthsSegment } from './circleOfFifthsTypes';
 

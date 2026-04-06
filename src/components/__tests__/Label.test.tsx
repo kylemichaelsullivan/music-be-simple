@@ -1,7 +1,7 @@
-import { Label } from '@/components';
-import { render, screen } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { Label } from '@/components';
+import { render, screen } from '@/test';
 
 describe('Label', () => {
 	it('should render as div when onTuningClick is not provided', () => {

@@ -1,6 +1,6 @@
+import type { ReactNode } from 'react';
 import { useButtonHandler } from '@/hooks';
 import type { XPositionType } from '@/types';
-import type { ReactNode } from 'react';
 
 type TopButtonProps = {
 	title: string;

@@ -1,4 +1,13 @@
 export { getBorderClass } from './borders';
+export type {
+	border,
+	Chord_Variant,
+	ChordData,
+	ChordGroup,
+	ChordInfo,
+	PianoVoicingOverride,
+	PianoVoicingResult,
+} from './chords';
 export {
 	CHORDS,
 	generateChordNotes,
@@ -12,21 +21,6 @@ export {
 	parseChordName,
 } from './chords';
 export {
-	FLATS,
-	FREQUENCIES,
-	INTERVALS,
-	SCALES,
-	SCALE_TYPES,
-	SHARPS,
-	getIntervals,
-	getIntervalsForVariant,
-	getNote,
-	isValidNoteIndex,
-	isValidScaleType,
-	rangeOfLength,
-} from './notes';
-export { generateNotesFromIntervals, getScaleTypeDisplay, intervalShortNameFromTonic } from './scales';
-export {
 	CIRCLE_OF_FIFTHS_ORDER,
 	circleInnerKeySignatureLabel,
 	keySignatureMajorTonicForVariant,
@@ -34,13 +28,23 @@ export {
 	majorKeySignatureLabel,
 	relativeMinorTonic,
 } from './circleOfFifths';
-export type {
-	ChordData,
-	ChordGroup,
-	ChordInfo,
-	Chord_Variant,
-	PianoVoicingOverride,
-	PianoVoicingResult,
-	border,
-} from './chords';
 export type { IntervalKey, Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from './notes';
+export {
+	FLATS,
+	FREQUENCIES,
+	getIntervals,
+	getIntervalsForVariant,
+	getNote,
+	INTERVALS,
+	isValidNoteIndex,
+	isValidScaleType,
+	rangeOfLength,
+	SCALE_TYPES,
+	SCALES,
+	SHARPS,
+} from './notes';
+export {
+	generateNotesFromIntervals,
+	getScaleTypeDisplay,
+	intervalShortNameFromTonic,
+} from './scales';

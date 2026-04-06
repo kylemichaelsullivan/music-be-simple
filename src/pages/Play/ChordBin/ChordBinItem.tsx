@@ -41,7 +41,11 @@ export function ChordBinItem({ item, index, onRemove, onReorder }: ChordBinItemP
 	});
 
 	return (
-		<div className={`${className} w-full min-w-0 overflow-hidden`} ref={dragRef} id={`chord-bin-item-${ID}`}>
+		<div
+			className={`${className} w-full min-w-0 overflow-hidden`}
+			ref={dragRef}
+			id={`chord-bin-item-${ID}`}
+		>
 			{activeInstrument !== null && <EditButton title={`Edit ${chordName}`} onFxn={onEdit} />}
 
 			<span className='truncate text-sm'>{chordName}</span>

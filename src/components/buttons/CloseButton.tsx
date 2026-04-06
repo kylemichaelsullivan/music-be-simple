@@ -1,5 +1,5 @@
-import { useButtonHandler } from '@/hooks';
 import { type RefObject, useEffect } from 'react';
+import { useButtonHandler } from '@/hooks';
 import xIcon from '/icons/x.svg';
 
 type CloseButtonProps<T extends HTMLElement = HTMLElement> = {

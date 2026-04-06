@@ -1,7 +1,7 @@
-import { CloseButton } from '@/components';
-import { render, screen } from '@/test';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { CloseButton } from '@/components';
+import { render, screen } from '@/test';
 
 describe('CloseButton', () => {
 	it('should render with Close title and aria-label', () => {

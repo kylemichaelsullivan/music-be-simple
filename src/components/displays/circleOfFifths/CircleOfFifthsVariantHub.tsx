@@ -1,6 +1,6 @@
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useScales } from '@/hooks';
 import { getScaleTypeDisplay } from '@/utils';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { CircleOfFifthsVariantHubSelect } from './CircleOfFifthsVariantHubSelect';
 import { CircleOfFifthsVariantHubTrigger } from './CircleOfFifthsVariantHubTrigger';
 

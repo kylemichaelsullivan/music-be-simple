@@ -1,5 +1,5 @@
-import type { IconType, NoteIndex, TabType, border } from '@/types';
 import type { ReactNode } from 'react';
+import type { border, IconType, NoteIndex, TabType } from '@/types';
 
 export type DisplaysProps = {
 	getBorderStyle?: (note: NoteIndex, keyIndex?: number) => border;

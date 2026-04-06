@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useGlobals, useScales } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import {
@@ -7,18 +8,17 @@ import {
 	intervalShortNameFromTonic,
 	keySignatureMajorTonicForVariant,
 } from '@/utils';
-import { useMemo } from 'react';
 import {
+	annularWedgePath,
+	polar,
 	R_INTERVAL_INNER,
 	R_INTERVAL_OUTER,
 	R_MAJOR_INNER,
 	R_MAJOR_OUTER,
 	R_MID_INNER,
 	R_MID_OUTER,
-	VIEW_CENTER,
-	annularWedgePath,
-	polar,
 	segmentAnglesRad,
+	VIEW_CENTER,
 } from './circleOfFifthsGeometry';
 import type { CircleOfFifthsSegment } from './circleOfFifthsTypes';
 

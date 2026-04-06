@@ -1,6 +1,6 @@
+import { useContext } from 'react';
 import { TuningsContext } from '@/context';
 import type { TuningsContextType } from '@/types';
-import { useContext } from 'react';
 
 export const useTunings = (): TuningsContextType => {
 	const context = useContext(TuningsContext);

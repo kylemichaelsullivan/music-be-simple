@@ -1,3 +1,5 @@
+import { useCallback, useMemo, useState } from 'react';
+import type { z } from 'zod';
 import { useChords } from '@/hooks';
 import {
 	ChordBinStorageSchema,
@@ -13,8 +15,6 @@ import type {
 	PlayContextProviderProps,
 	ReferenceMode,
 } from '@/types';
-import { useCallback, useMemo, useState } from 'react';
-import type { z } from 'zod';
 import { useLocalStorage, useRequireGlobals } from '../shared';
 import { PlayContext } from './PlayContext';
 

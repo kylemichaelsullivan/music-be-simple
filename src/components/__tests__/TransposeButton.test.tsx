@@ -1,8 +1,8 @@
-import { TransposeButton } from '@/components';
-import { GlobalsContextProvider, ScalesContextProvider } from '@/context';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
+import { TransposeButton } from '@/components';
+import { GlobalsContextProvider, ScalesContextProvider } from '@/context';
 
 describe('TransposeButton', () => {
 	afterEach(() => {

@@ -1,5 +1,5 @@
-import type { NoteIndex, TunableInstrument } from '@/types';
 import type { ReactNode } from 'react';
+import type { NoteIndex, TunableInstrument } from '@/types';
 
 export type TuningsContextProviderProps = {
 	children: ReactNode;

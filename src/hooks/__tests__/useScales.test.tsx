@@ -1,8 +1,8 @@
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { GlobalsContextProvider, ScalesContextProvider } from '@/context';
 import { useScales } from '@/hooks';
 import { useScalesStore } from '@/stores';
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 
 describe('useScales', () => {
 	afterEach(() => {

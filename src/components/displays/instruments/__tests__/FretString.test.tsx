@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import { InstrumentNotesProvider } from '@/context';
 import { render, screen } from '@/test';
-import { describe, expect, it } from 'vitest';
 import { FretString } from '..';
 
 function wrap(ui: React.ReactElement) {

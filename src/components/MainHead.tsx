@@ -1,6 +1,6 @@
+import { TopButton, UseFlatsButton } from '@/components/buttons';
 import { SkipLink } from '@/components/SkipLink';
 import { Title } from '@/components/Title';
-import { TopButton, UseFlatsButton } from '@/components/buttons';
 import type { MainHeadProps } from '@/types';
 
 export function MainHead({ title, topButton, tonicVariantSlot, notesSlot }: MainHeadProps) {

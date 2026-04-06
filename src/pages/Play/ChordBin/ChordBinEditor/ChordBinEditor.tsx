@@ -1,14 +1,14 @@
+import type { ChangeEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CloseButton, InstrumentIcon } from '@/components';
 import { useChords, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData, InstrumentType } from '@/types';
 import { getChordSymbol, getNote, isValidNoteIndex, parseChordName } from '@/utils';
-import type { ChangeEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { StartFret } from '.';
 import { BanjoEditor } from './BanjoEditor';
 import { GuitarEditor } from './GuitarEditor';
 import { MandolinEditor } from './MandolinEditor';
 import { PianoEditor } from './PianoEditor';
-import { StartFret } from '.';
 import { UkuleleEditor } from './UkuleleEditor';
 
 type ChordBinEditorProps = {

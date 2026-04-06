@@ -1,6 +1,6 @@
+import { useContext } from 'react';
 import { ScalesContext } from '@/context';
 import type { ScalesContextType } from '@/types';
-import { useContext } from 'react';
 
 export const useScales = (): ScalesContextType => {
 	const context = useContext(ScalesContext);

@@ -1,8 +1,8 @@
+import { useCallback, useContext, useMemo, useState } from 'react';
+import type { z } from 'zod';
 import { TuningModal } from '@/components';
 import { TuningsStorageSchema } from '@/schemas';
 import type { NoteIndex, TunableInstrument, TuningsContextProviderProps } from '@/types';
-import { useCallback, useContext, useMemo, useState } from 'react';
-import type { z } from 'zod';
 import { useLocalStorage } from '../shared';
 import { TuningsContext } from './TuningsContext';
 

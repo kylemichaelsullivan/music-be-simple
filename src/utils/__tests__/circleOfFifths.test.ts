@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import {
 	CIRCLE_OF_FIFTHS_ORDER,
 	circleInnerKeySignatureLabel,
@@ -6,7 +7,6 @@ import {
 	majorKeySignatureLabel,
 	relativeMinorTonic,
 } from '@/utils';
-import { describe, expect, it } from 'vitest';
 
 describe('circleOfFifths utilities', () => {
 	it('should have 12 unique pitch-class indices', () => {

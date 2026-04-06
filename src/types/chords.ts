@@ -1,12 +1,12 @@
+import type { ReactNode } from 'react';
 import type {
+	border,
 	Chord_NoteCount,
 	Chord_Tonic,
 	Chord_Variant,
 	NerdModeButtonIcon,
 	NoteIndex,
-	border,
 } from '@/types';
-import type { ReactNode } from 'react';
 
 export type ChordsContextProviderProps = {
 	children: ReactNode;

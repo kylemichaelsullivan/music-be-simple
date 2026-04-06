@@ -1,9 +1,9 @@
+import clsx from 'clsx';
+import type { ChangeEvent } from 'react';
 import { useGlobals } from '@/hooks';
 import { NoteIndexSchema } from '@/schemas';
 import type { NoteIndex } from '@/types';
 import { getNote, isValidNoteIndex, rangeOfLength } from '@/utils';
-import clsx from 'clsx';
-import type { ChangeEvent } from 'react';
 
 type TonicProps = {
 	tonic: NoteIndex;

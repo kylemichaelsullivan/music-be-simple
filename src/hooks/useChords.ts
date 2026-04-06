@@ -1,6 +1,6 @@
+import { useContext } from 'react';
 import { ChordsContext } from '@/context';
 import type { ChordsContextType } from '@/types';
-import { useContext } from 'react';
 
 export const useChords = (): ChordsContextType => {
 	const context = useContext(ChordsContext);

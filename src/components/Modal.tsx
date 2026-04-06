@@ -1,5 +1,5 @@
-import { CloseButton } from '@/components';
 import { type ReactNode, useEffect, useRef } from 'react';
+import { CloseButton } from '@/components';
 
 type ModalProps = {
 	'aria-labelledby'?: string;

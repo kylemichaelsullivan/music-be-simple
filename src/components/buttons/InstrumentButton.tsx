@@ -1,7 +1,7 @@
+import { memo, useCallback } from 'react';
 import { InstrumentIcon } from '@/components';
 import { useButtonHandler } from '@/hooks';
 import type { InstrumentType } from '@/types';
-import { memo, useCallback } from 'react';
 
 type InstrumentButtonProps = {
 	instrument: InstrumentType;

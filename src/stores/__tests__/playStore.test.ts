@@ -1,6 +1,6 @@
-import { usePlayStore } from '@/stores';
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { usePlayStore } from '@/stores';
 
 describe('playStore', () => {
 	it('should have reset and it should not throw when called', () => {

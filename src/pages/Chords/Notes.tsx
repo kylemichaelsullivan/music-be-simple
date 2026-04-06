@@ -1,5 +1,5 @@
-import { useChords } from '@/hooks';
 import { memo } from 'react';
+import { useChords } from '@/hooks';
 import { ChordName, ChordNotes } from '.';
 
 const Notes = memo(function Notes() {

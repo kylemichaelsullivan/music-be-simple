@@ -1,7 +1,7 @@
+import clsx from 'clsx';
 import { useInstrumentNotes } from '@/hooks';
 import type { border } from '@/types';
 import { getBorderClass } from '@/utils';
-import clsx from 'clsx';
 
 type AllowedNoteProps = {
 	note: string;

@@ -1,7 +1,7 @@
-import { NoteIndexSchema, ScaleTypeSchema } from '@/schemas';
-import type { NoteIndex, ScaleType } from '@/types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { NoteIndexSchema, ScaleTypeSchema } from '@/schemas';
+import type { NoteIndex, ScaleType } from '@/types';
 
 type ScalesStore = {
 	tonic: NoteIndex;

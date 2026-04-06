@@ -1,8 +1,8 @@
+import clsx from 'clsx';
+import { memo } from 'react';
 import { useChords, useGlobals } from '@/hooks';
 import type { NoteIndex } from '@/types';
 import { getBorderClass, getNote } from '@/utils';
-import clsx from 'clsx';
-import { memo } from 'react';
 
 type ChordNoteProps = {
 	note: NoteIndex;

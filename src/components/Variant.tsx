@@ -1,9 +1,9 @@
+import type { ChangeEvent, FocusEvent, ForwardedRef, KeyboardEvent } from 'react';
+import { forwardRef } from 'react';
 import { useChords, useScales } from '@/hooks';
 import { ChordVariantSchema, ScaleTypeSchema } from '@/schemas';
 import type { ChordData, ChordGroup, ScaleData, ScaleGroup } from '@/types';
-import { CHORDS, SCALES, getChordSymbol, isValidChordVariant, isValidScaleType } from '@/utils';
-import type { ChangeEvent, FocusEvent, ForwardedRef, KeyboardEvent } from 'react';
-import { forwardRef } from 'react';
+import { CHORDS, getChordSymbol, isValidChordVariant, isValidScaleType, SCALES } from '@/utils';
 
 const defaultScaleVariantSelectClassName =
 	'Variant flex-auto border border-slate-500 rounded-none min-w-0 min-h-12 px-1 hover:ring-1';

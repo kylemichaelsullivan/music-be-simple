@@ -1,7 +1,7 @@
+import { z } from 'zod';
 import { ICONS, INSTRUMENTS } from '@/instruments';
 import { TABS } from '@/navigation';
 import { CHORDS, SCALE_TYPES } from '@/utils';
-import { z } from 'zod';
 
 const chordVariantKeys = new Set<string>();
 for (const group of Object.values(CHORDS)) {

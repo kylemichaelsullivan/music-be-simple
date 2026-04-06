@@ -1,5 +1,5 @@
 import type { NoteIndex } from '@/types';
-import { FLATS, SHARPS, isValidNoteIndex } from './notes';
+import { FLATS, isValidNoteIndex, SHARPS } from './notes';
 
 export type ChordInfo = {
 	symbol: string;

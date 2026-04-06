@@ -1,7 +1,7 @@
+import type { ChangeEvent } from 'react';
+import { useRef } from 'react';
 import { usePlay } from '@/hooks';
 import type { SaveActionType } from '@/types';
-import { useRef } from 'react';
-import type { ChangeEvent } from 'react';
 import { SaveSectionButtons } from '..';
 
 export function Imports() {

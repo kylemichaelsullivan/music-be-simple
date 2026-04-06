@@ -1,5 +1,5 @@
-import { InstrumentNotesContext } from '@/context';
 import { useContext } from 'react';
+import { InstrumentNotesContext } from '@/context';
 
 export function useInstrumentNotes() {
 	const context = useContext(InstrumentNotesContext);

@@ -1,5 +1,5 @@
-import { getBorderClass } from '@/utils';
 import { describe, expect, it } from 'vitest';
+import { getBorderClass } from '@/utils';
 
 describe('borders utilities', () => {
 	describe('getBorderClass', () => {

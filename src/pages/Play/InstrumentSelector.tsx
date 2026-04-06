@@ -1,8 +1,8 @@
+import { useCallback } from 'react';
 import { InstrumentButton } from '@/components';
 import { useGlobals, usePlay } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { InstrumentType } from '@/types';
-import { useCallback } from 'react';
 
 export function InstrumentSelector() {
 	const { displays } = useGlobals();

@@ -1,25 +1,25 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { z } from 'zod';
 import { useEscapeReset, useLocalStorage } from '@/context/shared';
 import { useGlobals } from '@/hooks';
 import { ChordsStorageSchema } from '@/schemas';
 import { useChordsStore } from '@/stores';
 import type {
+	border,
 	Chord_Tonic,
 	Chord_Variant,
 	ChordsContextProviderProps,
 	NerdModeButtonIcon,
 	NoteIndex,
-	border,
 } from '@/types';
 import {
 	generateChordNotes,
 	getChordInfo,
 	getChordSymbol,
+	getNote,
 	getPianoBorderStyle,
 	getPianoVoicing,
-	getNote,
 } from '@/utils';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { z } from 'zod';
 import { ChordsContext } from './ChordsContext';
 
 export { ChordsContext };

@@ -9,9 +9,7 @@ describe('circleOfFifthsEnharmonicHintText', () => {
 
 	it('when sharps are selected for major, keeps ascending flat-order regardless of tonic', () => {
 		const t = circleOfFifthsEnharmonicHintText(false, 'major');
-		expect(t).toBe(
-			'Try using flats for fewer sharps: F (1♭), A♯ (2♭), D♯ (3♭), G♯ (4♭), C♯ (5♭).'
-		);
+		expect(t).toBe('Try using flats for fewer sharps: F (1♭), A♯ (2♭), D♯ (3♭), G♯ (4♭), C♯ (5♭).');
 	});
 
 	it('when flats are selected for major, suggests sharp spellings over 6 accidentals', () => {

@@ -1,5 +1,5 @@
-import type { InstrumentType } from '@/types';
 import type { ReactNode } from 'react';
+import type { InstrumentType } from '@/types';
 
 type InstrumentProps = {
 	instrument: InstrumentType;

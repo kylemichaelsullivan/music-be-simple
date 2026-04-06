@@ -1,5 +1,5 @@
-import type { Chord_Tonic, Chord_Variant, InstrumentType } from '@/types';
 import type { ReactNode } from 'react';
+import type { Chord_Tonic, Chord_Variant, InstrumentType } from '@/types';
 
 export type ChordBinItemData = {
 	tonic: Chord_Tonic;

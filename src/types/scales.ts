@@ -1,5 +1,5 @@
-import type { NoteIndex, NoteLabelsButtonIcon, ScaleMode, ScaleType } from '@/types';
 import type { ReactNode } from 'react';
+import type { NoteIndex, NoteLabelsButtonIcon, ScaleMode, ScaleType } from '@/types';
 
 export type ScalesContextProviderProps = {
 	children: ReactNode;

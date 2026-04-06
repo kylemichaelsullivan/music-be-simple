@@ -1,8 +1,8 @@
+import type { ChangeEvent } from 'react';
 import { InstrumentIcon, Modal } from '@/components';
 import { useGlobals, useTunings } from '@/hooks';
 import type { NoteIndex, TunableInstrument } from '@/types';
 import { getNote, isValidNoteIndex } from '@/utils';
-import type { ChangeEvent } from 'react';
 
 const NOTE_OPTIONS: readonly NoteIndex[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 

@@ -1,3 +1,5 @@
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	ChordsContextProvider,
 	GlobalsContextProvider,
@@ -6,8 +8,6 @@ import {
 } from '@/context';
 import { usePlay } from '@/hooks';
 import type { NoteIndex } from '@/types';
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock URL.createObjectURL and URL.revokeObjectURL
 const createObjectURLMock = vi.fn(() => 'blob:mock-url');

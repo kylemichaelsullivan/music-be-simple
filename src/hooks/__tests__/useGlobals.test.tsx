@@ -1,7 +1,7 @@
-import { GlobalsContextProvider } from '@/context';
-import { useGlobals } from '@/hooks';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { GlobalsContextProvider } from '@/context';
+import { useGlobals } from '@/hooks';
 
 describe('useGlobals', () => {
 	it('should throw error when used outside provider', () => {
@@ -25,11 +25,14 @@ describe('useGlobals', () => {
 		await waitFor(() => {
 			expect(result.current).toHaveProperty('usingFlats');
 			expect(result.current).toHaveProperty('displays');
+			expect(result.current).toHaveProperty('displaysSelectorPosition');
 			expect(result.current).toHaveProperty('toggleUsingFlats');
 			expect(result.current).toHaveProperty('handleDisplaysClick');
+			expect(result.current).toHaveProperty('handleDisplaysSelectorMove');
 			expect(result.current).toHaveProperty('playNote');
 			expect(typeof result.current.toggleUsingFlats).toBe('function');
 			expect(typeof result.current.handleDisplaysClick).toBe('function');
+			expect(typeof result.current.handleDisplaysSelectorMove).toBe('function');
 			expect(typeof result.current.playNote).toBe('function');
 		});
 	});

@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import { LabelContent } from '@/components';
 import { render, screen } from '@/test';
-import { describe, expect, it } from 'vitest';
 
 describe('LabelContent', () => {
 	it('should render title in a span with sm:block', () => {

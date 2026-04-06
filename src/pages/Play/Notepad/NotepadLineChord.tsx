@@ -1,8 +1,8 @@
+import type { RefObject } from 'react';
+import { useDrop } from 'react-dnd';
 import { useChords, useDragDropClassName, useGlobals, usePlay } from '@/hooks';
 import type { ChordBinItemData } from '@/types';
 import { getChordSymbol, getNote } from '@/utils';
-import type { RefObject } from 'react';
-import { useDrop } from 'react-dnd';
 
 type NotepadLineChordProps = {
 	lineId: number;

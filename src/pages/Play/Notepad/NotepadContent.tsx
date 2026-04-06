@@ -1,5 +1,5 @@
-import type { NotepadItemData, NotepadLineData } from '@/types';
 import clsx from 'clsx';
+import type { NotepadItemData, NotepadLineData } from '@/types';
 import { AddNotepadLine, NotepadLine, NotepadLineTitle } from '.';
 
 type NotepadContentProps = {

@@ -1,6 +1,6 @@
-import type { NoteIndex } from '@/types';
-import { memo } from 'react';
 import type { ReactNode } from 'react';
+import { memo } from 'react';
+import type { NoteIndex } from '@/types';
 import { CircleOfFifthsLabels } from './CircleOfFifthsLabels';
 import { CircleOfFifthsRings } from './CircleOfFifthsRings';
 import { CircleOfFifthsTonicWedges } from './CircleOfFifthsTonicWedges';

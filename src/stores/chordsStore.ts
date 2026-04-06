@@ -1,7 +1,7 @@
-import { ChordVariantSchema, NoteIndexSchema } from '@/schemas';
-import type { Chord_Tonic, Chord_Variant } from '@/types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { ChordVariantSchema, NoteIndexSchema } from '@/schemas';
+import type { Chord_Tonic, Chord_Variant } from '@/types';
 
 type ChordsStore = {
 	tonic: Chord_Tonic;

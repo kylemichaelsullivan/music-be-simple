@@ -10,8 +10,7 @@ const BLACK_KEYS: NoteIndex[] = [1, 3, 6, 8, 10];
 
 export function Piano() {
 	const { notes, getNotesForInstrument } = useInstrumentNotes();
-	const displayNotes =
-		getNotesForInstrument ? getNotesForInstrument('Piano') : notes;
+	const displayNotes = getNotesForInstrument ? getNotesForInstrument('Piano') : notes;
 
 	return (
 		<div className={'Piano relative flex justify-center w-full min-h-24'}>

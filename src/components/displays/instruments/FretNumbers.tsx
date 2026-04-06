@@ -1,6 +1,6 @@
+import clsx from 'clsx';
 import type { NoteIndex } from '@/types';
 import { isValidNoteIndex, rangeOfLength } from '@/utils';
-import clsx from 'clsx';
 
 export function FretNumbers() {
 	const dottedFretIndexes: NoteIndex[] = [0, 2, 4, 6, 8];

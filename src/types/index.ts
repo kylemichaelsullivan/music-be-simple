@@ -49,23 +49,22 @@ export type ScaleMode =
 export type ScaleType = keyof typeof INTERVALS;
 
 // Re-export types from utils
-export type { Chord_Variant, ChordData, ChordGroup, ChordInfo, border } from '@/utils';
-export type { Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from '@/utils';
+export type {
+	border,
+	Chord_Variant,
+	ChordData,
+	ChordGroup,
+	ChordInfo,
+	Notes_Flats,
+	Notes_Sharps,
+	ScaleData,
+	ScaleGroup,
+} from '@/utils';
 
 // Re-export types from type files
-export type { ChordsContextType, ChordsContextProviderProps } from './chords';
-export type { GlobalsContextType, GlobalsContextProviderProps } from './globals';
+export type { ChordsContextProviderProps, ChordsContextType } from './chords';
+export type { GlobalsContextProviderProps, GlobalsContextType } from './globals';
 export type { InstrumentNotesContextType } from './instrumentNotes';
-export type {
-	ChordBinItemData,
-	NotepadItemData,
-	NotepadLineData,
-	NotepadLineTitleData,
-	PlayContextType,
-	PlayContextProviderProps,
-	ReferenceMode,
-	SaveActionType,
-} from './play';
 export type {
 	DisplaysProps,
 	DisplaysSelectorProps,
@@ -74,5 +73,15 @@ export type {
 	PageLayoutProps,
 	PageTopButtonProps,
 } from './layout';
-export type { ScalesContextType, ScalesContextProviderProps } from './scales';
-export type { TuningsContextType, TuningsContextProviderProps } from './tunings';
+export type {
+	ChordBinItemData,
+	NotepadItemData,
+	NotepadLineData,
+	NotepadLineTitleData,
+	PlayContextProviderProps,
+	PlayContextType,
+	ReferenceMode,
+	SaveActionType,
+} from './play';
+export type { ScalesContextProviderProps, ScalesContextType } from './scales';
+export type { TuningsContextProviderProps, TuningsContextType } from './tunings';

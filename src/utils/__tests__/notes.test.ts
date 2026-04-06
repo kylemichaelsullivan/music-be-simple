@@ -1,15 +1,15 @@
+import { describe, expect, it } from 'vitest';
 import type { IntervalKey } from '@/utils';
 import {
 	FLATS,
 	FREQUENCIES,
-	INTERVALS,
-	SHARPS,
 	getIntervals,
 	getIntervalsForVariant,
 	getNote,
+	INTERVALS,
 	isValidNoteIndex,
+	SHARPS,
 } from '@/utils';
-import { describe, expect, it } from 'vitest';
 
 describe('notes utilities', () => {
 	describe('FLATS and SHARPS', () => {

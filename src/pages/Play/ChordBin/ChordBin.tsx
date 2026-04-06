@@ -1,6 +1,6 @@
 import { usePlay } from '@/hooks';
-import { AddChordBinItem, ChordBinEditor, ChordBinItems } from '.';
 import { InstrumentSelector } from '../InstrumentSelector';
+import { AddChordBinItem, ChordBinEditor, ChordBinItems } from '.';
 
 export function ChordBin() {
 	const { addChordBinItem, chordBinItems, editingItemId, setEditingItemId } = usePlay();

@@ -1,6 +1,6 @@
-import { GlobalsContextProvider, useRequireGlobals } from '@/context';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { GlobalsContextProvider, useRequireGlobals } from '@/context';
 
 describe('useRequireGlobals', () => {
 	it('should throw when used outside GlobalsContextProvider', () => {
@@ -22,7 +22,9 @@ describe('useRequireGlobals', () => {
 
 		expect(result.current).toHaveProperty('usingFlats');
 		expect(result.current).toHaveProperty('displays');
+		expect(result.current).toHaveProperty('displaysSelectorPosition');
 		expect(result.current).toHaveProperty('toggleUsingFlats');
 		expect(result.current).toHaveProperty('handleDisplaysClick');
+		expect(result.current).toHaveProperty('handleDisplaysSelectorMove');
 	});
 });

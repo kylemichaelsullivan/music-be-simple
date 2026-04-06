@@ -1,6 +1,6 @@
-import type { NoteIndex } from '@/types';
 import type { KeyboardEvent } from 'react';
 import { memo, useCallback } from 'react';
+import type { NoteIndex } from '@/types';
 import type { CircleOfFifthsSegment } from './circleOfFifthsTypes';
 
 type CircleOfFifthsTonicWedgesProps = {

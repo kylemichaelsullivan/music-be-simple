@@ -1,7 +1,7 @@
+import { useCallback, useState } from 'react';
 import { ActionIcon } from '@/components';
 import { useButtonHandler } from '@/hooks';
 import type { YDirectionType } from '@/types';
-import { useCallback, useState } from 'react';
 
 export function StartFret() {
 	const [startFret, setStartFret] = useState(0);

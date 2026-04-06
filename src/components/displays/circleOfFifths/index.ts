@@ -13,6 +13,8 @@ export { CircleOfFifthsVariantHubTrigger } from './CircleOfFifthsVariantHubTrigg
 export { CircleOfFifthsWheel } from './CircleOfFifthsWheel';
 export { circleOfFifthsEnharmonicHintText } from './circleOfFifthsEnharmonicHint';
 export {
+	annularWedgePath,
+	polar,
 	R_HUB,
 	R_INTERVAL_INNER,
 	R_INTERVAL_OUTER,
@@ -22,10 +24,8 @@ export {
 	R_MID_OUTER,
 	R_OUTER,
 	SEGMENT_DEG,
-	VIEW_CENTER,
-	annularWedgePath,
-	polar,
 	segmentAnglesRad,
+	VIEW_CENTER,
 } from './circleOfFifthsGeometry';
 export type { CircleOfFifthsSegment } from './circleOfFifthsTypes';
 export { useCircleOfFifthsSegments } from './useCircleOfFifthsSegments';

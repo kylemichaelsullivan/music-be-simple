@@ -1,5 +1,5 @@
 import type { NoteIndex, ScaleType } from '@/types';
-import { SCALES, getIntervalsForVariant, isValidNoteIndex } from './notes';
+import { getIntervalsForVariant, isValidNoteIndex, SCALES } from './notes';
 
 /** Short chromatic interval from tonic up to each pitch class (12-edo, within octave). */
 const CHROMATIC_INTERVAL_SHORT: readonly string[] = [

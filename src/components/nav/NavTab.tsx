@@ -1,7 +1,7 @@
+import { memo } from 'react';
 import { NavIcon } from '@/components';
 import { useButtonHandler } from '@/hooks';
 import type { TabType } from '@/types';
-import { memo } from 'react';
 
 type NavTabProps = {
 	title: TabType;

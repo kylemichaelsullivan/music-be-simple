@@ -1,6 +1,6 @@
+import { useMemo } from 'react';
 import { TABS } from '@/navigation';
 import type { TabType } from '@/types';
-import { useMemo } from 'react';
 import { NavTab } from '.';
 
 type NavbarProps = {

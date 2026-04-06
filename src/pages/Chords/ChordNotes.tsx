@@ -1,5 +1,5 @@
-import type { NoteIndex } from '@/types';
 import { memo } from 'react';
+import type { NoteIndex } from '@/types';
 import { ChordNote } from '.';
 
 type ChordNotesProps = {

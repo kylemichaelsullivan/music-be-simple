@@ -1,6 +1,6 @@
+import { useContext } from 'react';
 import { GlobalsContext } from '@/context';
 import type { GlobalsContextType } from '@/types';
-import { useContext } from 'react';
 
 export const useGlobals = (): GlobalsContextType => {
 	const context = useContext(GlobalsContext);

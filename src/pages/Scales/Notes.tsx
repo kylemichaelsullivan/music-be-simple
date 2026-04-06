@@ -1,8 +1,8 @@
-import { useGlobals, useScales } from '@/hooks';
-import type { NoteIndex } from '@/types';
-import { INTERVALS, getNote, rangeOfLength } from '@/utils';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { useGlobals, useScales } from '@/hooks';
+import type { NoteIndex } from '@/types';
+import { getNote, INTERVALS, rangeOfLength } from '@/utils';
 
 export function Notes() {
 	const { usingFlats } = useGlobals();

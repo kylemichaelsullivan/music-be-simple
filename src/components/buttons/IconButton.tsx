@@ -1,6 +1,6 @@
-import { useButtonHandler } from '@/hooks';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
+import { useButtonHandler } from '@/hooks';
 
 type IconButtonProps = {
 	title: string;

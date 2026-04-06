@@ -1,5 +1,5 @@
-import { useGlobals, useScales } from '@/hooks';
 import { memo } from 'react';
+import { useGlobals, useScales } from '@/hooks';
 import {
 	CircleOfFifthsEnharmonicNote,
 	CircleOfFifthsVariantHub,

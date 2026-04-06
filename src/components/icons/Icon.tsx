@@ -1,5 +1,5 @@
-import type { IconSize } from '@/types';
 import clsx from 'clsx';
+import type { IconSize } from '@/types';
 
 const sizeClasses: Record<IconSize, string> = {
 	xs: 'w-3 h-3 sm:w-4 sm:h-4',
