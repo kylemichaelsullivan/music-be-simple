@@ -4,13 +4,13 @@ This document describes the architecture and structure of the Music Be Simple ap
 
 ## Overview
 
-Music Be Simple is a React-based single-page application built with modern web technologies. The application uses a component-based architecture with React Context API and Zustand for state management, and manual routing in `App.tsx`. `AppProviders` composes all context providers (Globals → Tunings → Scales → Chords → Play). The Play page includes Chord Bin (custom chord sequences with per-instrument editors), Notepad (reorderable lines via react-dnd), and SaveSection (Import/Export JSON). Custom instrument tunings are supported via `TuningsContext` and `TuningModal`.
+Music Be Simple is a React-based single-page application built with modern web technologies. The application uses a component-based architecture with React Context API and Zustand for state management, and manual routing in `App.tsx` (React state plus the History API; no client router in the render tree). `AppProviders` composes all context providers (Globals → Tunings → Scales → Chords → Play). The Play page includes Chord Bin (custom chord sequences with per-instrument editors), Notepad (reorderable lines via react-dnd), and SaveSection (Import/Export JSON). Custom instrument tunings are supported via `TuningsContext` and `TuningModal`. Scales and Chords pages use `MainBody` to lay out the displays selector (with reposition controls), modes and circle-of-fifths toggles, and `DisplaysRegion` for instrument visualizations.
 
 ## Project Structure
 
 ```
 src/
-├── components/         # buttons/, displays/ (modes/, instruments/), icons/, nav/; PageLayout, SkipLink, TuningModal, etc.
+├── components/         # buttons/, displays/ (circleOfFifths/, modes/, instruments/), icons/, nav/; MainBody, DisplaysRegion, PageLayout, SkipLink, TuningModal, etc.
 ├── context/            # AppProviders; Chords, Globals, InstrumentNotes, Play, Scales, Tunings; shared/
 ├── hooks/              # useChords, useGlobals, useTunings, useDragDropClassName, useDraggableItem, useDropZone, etc.
 ├── pages/              # Chords/, Play/ (ChordBin, Notepad, SaveSection), Scales/
@@ -60,9 +60,9 @@ React Context API provides additional state and computed values:
 
 1. **GlobalsContext** - Global application state
    - Note display preferences (flats/sharps) - persisted to localStorage
-   - Selected instrument displays - persisted to localStorage
-   - Audio context for note playback
-   - Global UI preferences
+   - Selected instrument displays (`displays`; storage key `selectedDisplays`) - persisted to localStorage
+   - Displays selector position (`displaysSelectorPosition`) - persisted to localStorage
+   - `playNote` for simple note playback via Web Audio API (context created inside the provider)
 
 2. **ScalesContext** - Scales-specific state
    - Uses `scalesStore` for tonic and variant
@@ -77,7 +77,7 @@ React Context API provides additional state and computed values:
    - Nerd mode toggle - persisted to localStorage
 
 4. **PlayContext** - Play functionality state
-   - Play-related state and functionality
+   - Chord Bin, Notepad, reference mode, active instrument, import/export; uses `useChords` for default tonic/variant when adding chord bin items
 
 5. **TuningsContext** - Custom instrument tunings
    - getTuning, setTuning, resetTuning, openTuningModal, closeTuningModal
@@ -97,7 +97,7 @@ State persistence uses two strategies:
 
 **localStorage (via useLocalStorage hook)**:
 - `useLocalStorage` - Generic localStorage hook with Zod validation
-- Persists: `usingFlats`, `selectedDisplays`, `showNoteLabels`, `showNerdMode`
+- Persists: `usingFlats`, `selectedDisplays`, `displaysSelectorPosition`, `showNoteLabels`, `showNerdMode`
 - Survives page refresh
 
 ## Routing
@@ -111,6 +111,8 @@ The application uses manual routing implemented in `App.tsx` with React state an
 
 Routing is managed via React state in `App.tsx`. URL synchronization is handled using `window.history.pushState` and `window.history.replaceState`. Browser back/forward navigation is handled with `popstate` event listeners.
 
+After the active tab’s page loads once, other tab routes are preloaded in hidden, non-interactive containers to make subsequent tab switches faster (see `shouldPreloadOtherTabs` in `App.tsx`).
+
 ## Component Architecture
 
 ### Component Hierarchy
@@ -120,9 +122,9 @@ App
 ├── AppProviders (Globals → Tunings → Scales → Chords → Play; InstrumentNotesProvider in Displays when rendering instruments)
 │   ├── Navbar, NavTab (Scales, Chords, Play)
 │   ├── Active Page (lazy-loaded, based on activeTab)
-│   │   ├── Scales: Tonic, Variant, Displays, Modes, Instrument displays
-│   │   ├── Chords: Tonic, Variant, Chord name, Chord notes, Instrument displays
-│   │   └── Play: Instrument selector, Chord Bin, Notepad, SaveSection (Import/Export), Instrument displays
+│   │   ├── Scales: Tonic, Variant, MainBody (DisplaysSelectorContainer, DisplaysRegion → Displays: Modes, CircleOfFifths, instruments)
+│   │   ├── Chords: Tonic, Variant, Chord name, Chord notes, MainBody (same display pipeline as Scales where applicable)
+│   │   └── Play: Instrument selector, Chord Bin, Notepad, SaveSection (Import/Export), Displays (instruments)
 │   └── Footer
 ```
 
@@ -143,6 +145,10 @@ The application supports multiple instruments with a shared component architectu
 - Banjo
 - Ukulele
 - Mandolin
+
+### Circle of Fifths and Modes
+
+On Scales and Chords, users can add **modes** (`stand` in `displays`) and the **circle of fifths** (`circle`) alongside instruments. Implementation lives under `src/components/displays/circleOfFifths/` and `modes/`. `hideModesAndCircle` (e.g. on Play) hides those selector entries and related UI.
 
 ### Instrument Components
 
@@ -305,7 +311,7 @@ if (result.success) {
 Context providers and Zustand stores use Zod schemas for persistence:
 
 **localStorage (via useLocalStorage hook)**:
-- `GlobalsContext`: `usingFlats` (`z.boolean()`), `selectedDisplays` (`z.array(IconTypeSchema)`)
+- `GlobalsContext`: `usingFlats` (`z.boolean()`), `selectedDisplays` (`z.array(IconTypeSchema)`), `displaysSelectorPosition` (`PositionTypeSchema`)
 - `ScalesContext`: `showNoteLabels` (`z.boolean()`)
 - `ChordsContext`: `showNerdMode` (`z.boolean()`)
 - `TuningsContext`: `instrumentTunings` (`TuningsStorageSchema`)

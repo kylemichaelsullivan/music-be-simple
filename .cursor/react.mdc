@@ -204,7 +204,7 @@ function ComponentWithState() {
 
 #### Context Providers
 
-- **GlobalsContext**: Global application state (note display preferences, selected displays, using flats/sharps, audio context, note playback) - uses localStorage
+- **GlobalsContext**: Global application state (`displays`, `displaysSelectorPosition`, flats/sharps, `playNote`) - uses localStorage for persisted fields
 - **ScalesContext**: Scales-specific state (uses scalesStore for tonic/variant, computed notes, showNoteLabels) - showNoteLabels in localStorage
 - **ChordsContext**: Chords-specific state (uses chordsStore for tonic/variant, computed notes, chordName, noteCount, showNerdMode) - showNerdMode in localStorage
 - **PlayContext**: Play functionality state
@@ -223,7 +223,7 @@ All context providers and Zustand stores use Zod schemas for runtime validation:
 - **Error handling**: Validation errors are logged and fall back to default values gracefully
 - **Persistence scope**: 
   - **sessionStorage** (Zustand): `tonic` and `variant` for scales and chords (persists during navigation, clears on refresh)
-  - **localStorage**: `usingFlats`, `selectedDisplays`, `showNoteLabels`, `showNerdMode`, `instrumentTunings` (Tunings), `chordBinItems`, `notepadLines` (Play) (persists across refreshes)
+  - **localStorage**: `usingFlats`, `selectedDisplays`, `displaysSelectorPosition`, `showNoteLabels`, `showNerdMode`, `instrumentTunings` (Tunings), `chordBinItems`, `notepadLines` (Play) (persists across refreshes)
 
 ```typescript
 // ✅ Schema validation in context providers (localStorage - individual fields)
@@ -415,7 +415,7 @@ Abbreviated; see `.cursor/rules.mdc` and `documentation/COMPONENTS.md` for full 
 ```
 src/components/
 ├── buttons/ (TopButton, AddButton, CloseButton, TransposeButton, UseFlatsButton, ...)
-├── displays/ (Displays, DisplaySelector, modes/, instruments/)
+├── displays/ (circleOfFifths/, Displays*, DisplaySelector, modes/, instruments/); MainBody, DisplaysRegion at components root
 ├── icons/, nav/
 ├── Main, PageLayout, SkipLink, TuningModal, Title, Tonic, Variant, ...
 ```

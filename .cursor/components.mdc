@@ -15,33 +15,21 @@ src/components/
 │   ├── SaveSectionButton, ToggleSaveSectionButton, TopButton, TransposeButton, UseFlatsButton
 │   └── index.ts
 ├── displays/
-│   ├── Displays.tsx
-│   ├── DisplaySelector.tsx
-│   ├── DisplaysSelector.tsx
+│   ├── Displays.tsx, DisplaySelector.tsx, DisplaysSelector.tsx
+│   ├── DisplaysSelectorContainer.tsx, DisplaysSelectorMove.tsx, DisplaysSelectorMoveButton.tsx
+│   ├── circleOfFifths/ (CircleOfFifths, rings, labels, variant hub, geometry helpers, etc.)
 │   ├── modes/
-│   │   ├── Mode.tsx
-│   │   ├── Modes.tsx
-│   │   └── ModesHeading.tsx
+│   │   ├── Mode.tsx, Modes.tsx, ModesHeading.tsx, ModeHeading.tsx
+│   │   ├── ModeNote.tsx, ModeRelatives.tsx
 │   └── instruments/
-│       ├── Banjo/
-│       │   ├── Banjo.tsx
-│       │   ├── DroneString.tsx
-│       │   └── SkippedFret.tsx
-│       ├── Guitar/
-│       │   └── Guitar.tsx
-│       ├── Mandolin/
-│       │   └── Mandolin.tsx
-│       ├── Piano/
-│       │   ├── Key.tsx
-│       │   └── Piano.tsx
-│       ├── Ukulele/
-│       │   └── Ukulele.tsx
+│       ├── Banjo/ (Banjo, DroneString, SkippedFret)
+│       ├── Guitar/, Mandolin/, Piano/ (Key, Piano), Ukulele/
 │       ├── Fret.tsx, FretNumbers.tsx, FretString.tsx, Instrument.tsx, Label.tsx, LabelContent.tsx, Nut.tsx
-│       └── index.tsx
+│       └── index.ts
 ├── nav/
 │   ├── Navbar.tsx
 │   └── NavTab.tsx
-├── AllowedNote.tsx, Footer.tsx, Main.tsx, PageLayout.tsx, SkipLink.tsx, Title.tsx, Tonic.tsx, TuningModal.tsx, Variant.tsx
+├── AllowedNote.tsx, DisplaysRegion.tsx, Footer.tsx, Main.tsx, MainBody.tsx, PageLayout.tsx, SkipLink.tsx, Title.tsx, Tonic.tsx, TuningModal.tsx, Variant.tsx
 └── icons/ (ActionIcon, Icon, InstrumentIcon, NavIcon)
 
 src/pages/
@@ -243,6 +231,8 @@ export const ComponentName = memo(ComponentName);
 ### Layout Components
 
 - **Main** (`@/components/Main`) - Main content wrapper with page-specific styling
+- **MainBody** (`@/components/MainBody`) - Scales/Chords body: selector container, `DisplaysRegion`, optional slot
+- **DisplaysRegion** (`@/components/DisplaysRegion`) - Container-query wrapper for `Displays`
 - **PageLayout** (`@/components/PageLayout`) - Page layout wrapper (e.g. for Play)
 - **Navbar**, **NavTab** - Navigation (Scales, Chords, Play)
 - **Footer**, **Title**
@@ -259,9 +249,14 @@ export const ComponentName = memo(ComponentName);
 
 ### Display Components
 
-- **Displays** (`@/components/displays/Displays`) - Container for instrument displays
-- **DisplaySelector** (`@/components/displays/DisplaySelector`) - Individual display selector
-- **DisplaysSelector** (`@/components/displays/DisplaysSelector`) - Selector for choosing displays
+- **MainBody** (`@/components/MainBody`) - Layout for scales/chords: `DisplaysSelectorContainer`, `DisplaysRegion`, optional slot
+- **DisplaysRegion** (`@/components/DisplaysRegion`) - `@container` wrapper around `Displays`
+- **Displays** (`@/components/displays/Displays`) - Instruments, modes, and circle of fifths from `useGlobals().displays`
+- **DisplaySelector** (`@/components/displays/DisplaySelector`) - One tile in the selector strip
+- **DisplaysSelector** (`@/components/displays/DisplaysSelector`) - Full strip (instruments; modes and circle when allowed)
+- **DisplaysSelectorContainer** (`@/components/displays/DisplaysSelectorContainer`) - Selector + `DisplaysSelectorMove`
+- **DisplaysSelectorMove** (`@/components/displays/DisplaysSelectorMove`) - Reposition selector (`handleDisplaysSelectorMove`)
+- **CircleOfFifths** (`@/components/displays/circleOfFifths`) - Circle-of-fifths UI
 - **Mode** (`@/components/displays/modes/Mode`) - Individual mode display component
 - **Modes** (`@/components/displays/modes/Modes`) - Modes display component
 - **ModesHeading** (`@/components/displays/modes/ModesHeading`) - Modes section heading component
@@ -289,7 +284,7 @@ The project uses a hybrid approach combining Zustand stores and React Context AP
 
 `AppProviders` (`@/context/AppProviders`) composes all providers in order: Globals → Tunings → Scales → Chords → Play. `InstrumentNotesProvider` is used in `Displays` when rendering instruments.
 
-- **GlobalsContext** (`@/context/Globals`) - Global state (displays, usingFlats, audio context, note playback) - localStorage
+- **GlobalsContext** (`@/context/Globals`) - Global state (`displays`, `displaysSelectorPosition`, `usingFlats`, `playNote`, selector handlers) - localStorage for persisted fields
 - **TuningsContext** (`@/context/Tunings`) - Custom instrument tunings, TuningModal (openTuningModal, closeTuningModal, getTuning, setTuning, resetTuning) - localStorage
 - **ScalesContext** (`@/context/Scales`) - Scales state (scalesStore, notes, showNoteLabels) - showNoteLabels in localStorage
 - **ChordsContext** (`@/context/Chords`) - Chords state (chordsStore, notes, chordName, noteCount, showNerdMode) - showNerdMode in localStorage

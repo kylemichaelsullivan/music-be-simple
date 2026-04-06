@@ -11,6 +11,7 @@ A simple and intuitive web application for learning and exploring music theory. 
 - **Custom Tunings**: Edit and persist instrument tunings via a tuning modal
 - **Transposition**: Transpose scales and chords up or down by fifths
 - **Note Display Options**: Toggle between flats and sharps, show/hide note labels
+- **Displays Layout**: Movable displays selector (top, bottom, left, or right) with instrument, modes, and circle-of-fifths toggles
 
 ## Tech Stack
 
@@ -59,6 +60,8 @@ bun dev
 - `bun run build` - Build for production
 - `bun lint` - Run Biome linter
 - `bun format` - Format code with Biome
+- `bun run style:check` - Check formatting (Biome, formatter only) on `src/`, `e2e/`, and config files
+- `bun run style:write` - Apply formatting (Biome, formatter only) to the same paths
 - `bun run test` - Run unit and component tests once (CI mode) (Vitest)
 - `bun run test:watch` - Run tests in watch mode (Vitest)
 - `bun run test:ui` - Run tests with Vitest UI
@@ -72,19 +75,23 @@ bun dev
 
 ```
 src/
-├── App.tsx          # Main app: AppProviders, manual routing, lazy-loaded pages
-├── components/      # buttons/, displays/ (modes/, instruments/), icons/, nav/; PageLayout, SkipLink, TuningModal, etc.
-├── context/         # AppProviders; Chords, Globals, InstrumentNotes, Play, Scales, Tunings; shared/
-├── hooks/           # useChords, useGlobals, useTunings, useDragDropClassName, useDraggableItem, useDropZone, etc.
-├── pages/           # Chords/, Play/ (ChordBin, Notepad, SaveSection), Scales/
-├── stores/          # Zustand: chordsStore, scalesStore, playStore
-├── schemas.ts       # Zod schemas
-├── test/            # setup.ts, test-utils.tsx
-├── types/           # Type definitions
-└── utils/           # borders, chords, notes, scales
+├── App.tsx            # AppProviders, History API tab routing, lazy-loaded pages, tab preloading
+├── main.tsx           # createRoot, StrictMode
+├── navigation.ts      # TABS and tab/route helpers
+├── instruments.ts     # Instrument definitions and icon maps
+├── components/        # buttons/, displays/ (circleOfFifths/, modes/, instruments/), icons/, nav/
+│                      # MainBody, DisplaysRegion, PageLayout, SkipLink, TuningModal, etc.
+├── context/           # AppProviders; Chords, Globals, InstrumentNotes, Play, Scales, Tunings; shared/
+├── hooks/             # useChords, useGlobals, useTunings, useDragDropClassName, useDraggableItem, useDropZone, etc.
+├── pages/             # Chords/, Play/ (ChordBin, Notepad, SaveSection), Scales/
+├── stores/            # Zustand: chordsStore, scalesStore, playStore
+├── schemas.ts         # Zod schemas
+├── test/              # setup.ts, test-utils.tsx
+├── types/             # Type definitions
+└── utils/             # borders, chords, notes, scales
 
-e2e/                 # scales, chords, play, navigation specs
-└── fixtures/        # e.g. import-all.json for Import E2E tests
+e2e/                   # scales, chords, play, navigation specs
+└── fixtures/          # e.g. import-all.json for Import E2E tests
 ```
 
 For detailed architecture information, see [ARCHITECTURE.md](./documentation/ARCHITECTURE.md).

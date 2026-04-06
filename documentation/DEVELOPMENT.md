@@ -559,6 +559,13 @@ bun lint
 bun format
 ```
 
+Formatter-only checks (no linter), scoped to application and config paths:
+
+```bash
+bun run style:check
+bun run style:write
+```
+
 ## Git Workflow
 
 ### Commit Messages
@@ -589,7 +596,7 @@ Valid types: `ADD`, `FIX`, `UPDATE`, `REFACTOR`, `REMOVE`, `REVERT`, `MERGE`, `B
 ### Formatting
 
 - Biome handles code formatting
-- Run `bun format` to auto-format code
+- Run `bun format` to auto-format code, or `bun run style:write` for formatter-only writes on the same paths as `style:check`
 - Format on save is recommended
 
 ### Type Checking

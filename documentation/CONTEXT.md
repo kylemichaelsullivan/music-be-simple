@@ -19,26 +19,31 @@ Global application state and preferences.
 **Hook**: `useGlobals()`
 
 **State**:
-- `selectedDisplays` - Array of selected instrument displays
+- `displays` - Array of selected instrument displays (stored under localStorage key `selectedDisplays`)
 - `usingFlats` - Boolean for flats vs sharps display
-- `audioContext` - Web Audio API context for note playback
-- Global UI preferences
+- `displaysSelectorPosition` - Where the displays selector sits relative to the instrument area (`PositionType`: `top` | `bottom` | `left` | `right`)
+- `handleDisplaysClick` - Toggle an instrument or special display (`stand` for modes hub, `circle` for circle of fifths) in `displays`
+- `handleDisplaysSelectorMove` - Move the selector to the next edge (used by `DisplaysSelectorMove`)
+- `playNote` - Play a short sine tone for a note index (uses an internal `AudioContext`)
+- `toggleUsingFlats` - Toggle flats vs sharps
+- `capitalizeFirstLetter` - String helper
 
 **Usage**:
 ```typescript
 import { useGlobals } from '@/hooks';
 
 function MyComponent() {
-  const { selectedDisplays, usingFlats, setUsingFlats } = useGlobals();
+  const { displays, usingFlats, toggleUsingFlats, displaysSelectorPosition } = useGlobals();
   // Component logic
 }
 ```
 
-**Persistence**: Selected displays and flats/sharps preference are persisted to localStorage with Zod schema validation.
+**Persistence**: `usingFlats`, `selectedDisplays` (as `displays`), and `displaysSelectorPosition` are persisted to localStorage with Zod schema validation.
 
 **Schema Validation**:
 - `usingFlats` is validated using `z.boolean()` (individual field validation)
 - `selectedDisplays` is validated using `z.array(IconTypeSchema)` (individual field validation)
+- `displaysSelectorPosition` is validated using `PositionTypeSchema` (individual field validation)
 - Combined data is validated using `GlobalsStorageSchema` in a `useEffect` hook for monitoring
 
 ### ScalesContext
@@ -161,7 +166,7 @@ function InstrumentHeader() {
 
 ### PlayContext
 
-Play functionality state (Chord Bin, Notepad, Save/Import/Export, note playback).
+Play functionality state: Chord Bin, Notepad (lines and titles), reference mode (Scales vs Chords), active instrument, import/export helpers, and editing affordances.
 
 **Location**: `@/context/Play`
 
@@ -169,16 +174,17 @@ Play functionality state (Chord Bin, Notepad, Save/Import/Export, note playback)
 
 **Hook**: `usePlay()`
 
-**State**:
-- Play-related state and functionality
-- Note playback controls
+**State** (see `PlayContextType` in `@/types/play`):
+- `chordBinItems`, `notepadItems`, `activeInstrument`, `editingItemId`, `referenceMode`
+- Mutators: `addChordBinItem`, `updateChordBinItem`, `removeChordBinItem`, `reorderChordBinItems`, notepad CRUD and reorder, `setActiveInstrument`, `toggleReferenceMode`, `reset`
+- Import/export: `importAll`, `importChordBin`, `importNotepad`, `exportAll`, `exportChordBin`, `exportNotepad`
 
 **Usage**:
 ```typescript
 import { usePlay } from '@/hooks';
 
 function PlayComponent() {
-  const { playNote, stopNote } = usePlay();
+  const { chordBinItems, addChordBinItem, referenceMode } = usePlay();
   // Component logic
 }
 ```
@@ -396,10 +402,15 @@ The application uses two persistence strategies:
 
 **Storage Keys**:
 - `usingFlats` - Global flats/sharps preference
-- `selectedDisplays` - Selected instrument displays
+- `selectedDisplays` - Selected instrument displays (exposed in context as `displays`)
+- `displaysSelectorPosition` - Position of the displays selector relative to the main display area
 - `showNoteLabels` - Scales note label visibility
 - `showNerdMode` - Chords nerd mode toggle
 - `instrumentTunings` - Custom instrument tunings (TuningsContext)
+- `chordBinItems` - Chord Bin rows (PlayContext)
+- `notepadLines` - Notepad lines and titles (PlayContext; `notepadItems` in context)
+- `referenceMode` - Scales vs Chords reference for Play (`ReferenceMode`)
+- `activeInstrument` - Selected instrument on Play (`InstrumentType | null`)
 
 **Persistence Behavior**:
 - Persists across page refreshes
@@ -410,6 +421,8 @@ The application uses two persistence strategies:
 - `selectedDisplays` - validated with `z.array(IconTypeSchema)` (individual field validation)
 - `showNoteLabels` - validated with `z.boolean()` (individual field validation)
 - `showNerdMode` - validated with `z.boolean()` (individual field validation)
+- `displaysSelectorPosition` - validated with `PositionTypeSchema` (individual field validation)
+- Play fields (`referenceMode`, `activeInstrument`, `chordBinItems`, `notepadLines`) - validated with their respective Zod schemas in `PlayContext`
 - Combined storage data is also validated using storage schemas (`GlobalsStorageSchema`, `ScalesStorageSchema`, `ChordsStorageSchema`) in context providers via `useEffect` hooks for monitoring and debugging
 
 ### Persistence Strategy

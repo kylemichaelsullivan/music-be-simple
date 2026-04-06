@@ -7,10 +7,10 @@ This document provides detailed documentation for the components in the Music Be
 Components are organized by functionality:
 
 - `components/buttons/` - Button components (AddButton, CloseButton, EditButton, IconButton, InstrumentButton, RemoveButton, SaveSectionButton, ToggleSaveSectionButton, TopButton, TransposeButton, UseFlatsButton)
-- `components/displays/` - Display components (Displays, DisplaySelector, DisplaysSelector; modes/; instruments/)
+- `components/displays/` - Display components (Displays, DisplaySelector, DisplaysSelectorContainer, DisplaysSelectorMove, `circleOfFifths/`, `modes/`, `instruments/`)
 - `components/icons/` - ActionIcon, Icon, InstrumentIcon, NavIcon
 - `components/nav/` - Navbar, NavTab
-- Root-level: AllowedNote, Footer, Main, PageLayout, SkipLink, Title, Tonic, TuningModal, Variant
+- Root-level: AllowedNote, DisplaysRegion, Footer, Main, MainBody, PageLayout, SkipLink, Title, Tonic, TuningModal, Variant
 
 ## Button Components
 
@@ -71,37 +71,70 @@ Button to toggle between flats and sharps for note display.
 
 ## Display Components
 
+### MainBody
+
+Layout row for the scales/chords display area: skip link, `DisplaysSelectorContainer`, `DisplaysRegion` (instruments and modes), and an optional slot after the region.
+
+**Location**: `@/components/MainBody`
+
+**Props**:
+- `displaysProps` - Props passed through to `Displays` (including `hideModesAndCircle` when appropriate)
+- `afterDisplaysSlot` - Optional content after the display region
+
+### DisplaysRegion
+
+Responsive wrapper (`@container`) around `Displays` so instrument content can participate in container-query layout.
+
+**Location**: `@/components/DisplaysRegion`
+
 ### Displays
 
-Container component for instrument displays.
+Orchestrates instrument displays, modes, and circle of fifths based on `useGlobals().displays` and page props. Wraps instrument trees with `InstrumentNotesProvider`.
 
 **Location**: `@/components/displays/Displays`
 
-**Props**:
-- `children` - Display components
+**Props** (see `DisplaysProps` in `@/types`): include `notes`, `tonic`, `showModes`, `hideModesAndCircle`, optional `pianoNotes`, `showNerdMode`, `showNoteLabels`, `isPlayPage`, and `getBorderStyle` for chords.
 
 ### DisplaySelector
 
-Individual display selector component.
+Individual instrument or special toggle (modes stand, circle of fifths) in the selector strip.
 
 **Location**: `@/components/displays/DisplaySelector`
 
 **Props**:
-- `icon` - Icon name (IconName)
+- `icon` - Icon name (`IconName` — maps to `InstrumentIcon`)
 - `text` - Display text (string)
 - `isActive` - Boolean indicating if selected
-- `onFxn` - Selection handler ((icon: IconName) => void)
+- `onFxn` - Selection handler (`(icon: IconName) => void`)
 
 ### DisplaysSelector
 
-Container for multiple display selectors.
+Renders the full selector strip: instruments, optional modes hub, and circle of fifths, driven by `displays` and `hideModesAndCircle`.
 
 **Location**: `@/components/displays/DisplaysSelector`
 
 **Props**:
-- `displays` - Array of display options
-- `selectedDisplays` - Array of selected displays
-- `onToggle` - Toggle handler
+- `displays` - Current selection (same values as `useGlobals().displays`)
+- `hideModesAndCircle` - When true, modes and circle entries are omitted (e.g. Play page)
+- `onFxn` - Called with an `IconType` (or `stand` / `circle`) when the user toggles a tile
+
+### DisplaysSelectorContainer
+
+Layouts `DisplaysSelector` and `DisplaysSelectorMove` according to `displaysSelectorPosition` from `useGlobals()`.
+
+**Location**: `@/components/displays/DisplaysSelectorContainer`
+
+### DisplaysSelectorMove
+
+Control to move the displays selector to another edge of the layout (uses `handleDisplaysSelectorMove` from `useGlobals()`).
+
+**Location**: `@/components/displays/DisplaysSelectorMove`
+
+### CircleOfFifths
+
+Interactive circle-of-fifths visualization (see `components/displays/circleOfFifths/`).
+
+**Location**: `@/components/displays/circleOfFifths` (barrel exports `CircleOfFifths` and related building blocks)
 
 ## Instrument Components
 
