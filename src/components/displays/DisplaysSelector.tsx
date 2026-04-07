@@ -42,33 +42,40 @@ export function DisplaysSelector({
 	return (
 		<div
 			className={clsx(
-				'DisplaysSelector flex flex-row flex-nowrap items-center justify-center gap-8 border border-slate-500 px-4 py-1 overflow-x-auto',
+				'DisplaysSelector border border-slate-500 w-full min-w-0 px-4 py-1 overflow-x-auto',
 				isTopOrBottom
 					? 'md:flex-1 md:min-w-0 md:overflow-x-auto'
-					: 'md:flex-col md:overflow-x-visible'
+					: 'md:overflow-x-visible md:overflow-y-auto md:min-h-0 md:max-h-full'
 			)}
 		>
-			{instrumentSelectors}
+			<div
+				className={clsx(
+					'flex flex-row flex-nowrap items-center justify-center gap-8 w-max mx-auto',
+					!isTopOrBottom && 'md:flex-col'
+				)}
+			>
+				{instrumentSelectors}
 
-			{!hideModesAndCircle && (
-				<>
-					<DisplaySelector
-						icon='Modes'
-						text='Modes'
-						isActive={displays.includes('stand')}
-						onFxn={handleModesClick}
-						key='Modes'
-					/>
+				{!hideModesAndCircle && (
+					<>
+						<DisplaySelector
+							icon='Modes'
+							text='Modes'
+							isActive={displays.includes('stand')}
+							onFxn={handleModesClick}
+							key='Modes'
+						/>
 
-					<DisplaySelector
-						icon='Circle'
-						text='Circle'
-						isActive={displays.includes('circle')}
-						onFxn={handleCircleOfFifthsClick}
-						key='CircleOfFifths'
-					/>
-				</>
-			)}
+						<DisplaySelector
+							icon='Circle'
+							text='Circle'
+							isActive={displays.includes('circle')}
+							onFxn={handleCircleOfFifthsClick}
+							key='CircleOfFifths'
+						/>
+					</>
+				)}
+			</div>
 		</div>
 	);
 }
