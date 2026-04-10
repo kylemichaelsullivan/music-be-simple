@@ -41,17 +41,17 @@ test.describe('Navigation', () => {
 		await page.waitForLoadState('networkidle');
 
 		const nav = page.locator('nav');
+		// Use .NavTab + tab order (TABS: Scales, Chords, Play). Avoid getByTitle('Scales'):
+		// preloaded off-screen tab trees can include other controls named similarly in a11y snapshots.
+		const tabs = nav.locator('.NavTab');
 
-		// Click on Chords tab (scope to nav to avoid matching TopButton "Show Chords?" on Play)
-		await nav.getByTitle('Chords').click();
+		await tabs.nth(1).click();
 		await expect(page).toHaveURL(/.*\/chords/);
 
-		// Click on Play tab (scope to nav to avoid matching SkipLink "Skip displays selector")
-		await nav.getByTitle('Play').click();
+		await tabs.nth(2).click();
 		await expect(page).toHaveURL(/.*\/play/);
 
-		// Click on Scales tab (scope to nav to avoid matching TopButton "Show Scales?" on Play)
-		await nav.getByTitle('Scales').click();
+		await tabs.nth(0).click();
 		await expect(page).toHaveURL(/.*\/scales/);
 	});
 });
