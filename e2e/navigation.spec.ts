@@ -41,17 +41,14 @@ test.describe('Navigation', () => {
 		await page.waitForLoadState('networkidle');
 
 		const nav = page.locator('nav');
-		// Use .NavTab + tab order (TABS: Scales, Chords, Play). Avoid getByTitle('Scales'):
-		// preloaded off-screen tab trees can include other controls named similarly in a11y snapshots.
-		const tabs = nav.locator('.NavTab');
-
-		await tabs.nth(1).click();
+		// Match navbar tabs by explicit title (NavTab sets title={tab}); avoids a11y name ambiguity.
+		await nav.locator('button.NavTab[title="Chords"]').click();
 		await expect(page).toHaveURL(/.*\/chords/);
 
-		await tabs.nth(2).click();
+		await nav.locator('button.NavTab[title="Play"]').click();
 		await expect(page).toHaveURL(/.*\/play/);
 
-		await tabs.nth(0).click();
+		await nav.locator('button.NavTab[title="Scales"]').click();
 		await expect(page).toHaveURL(/.*\/scales/);
 	});
 });
