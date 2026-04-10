@@ -9,6 +9,7 @@ export type {
 	PianoVoicingResult,
 } from './chords';
 export {
+	ALL_CHORD_VARIANTS,
 	CHORDS,
 	generateChordNotes,
 	getChordGroups,
@@ -38,6 +39,8 @@ export {
 	INTERVALS,
 	isValidNoteIndex,
 	isValidScaleType,
+	randomNoteIndex,
+	randomPick,
 	rangeOfLength,
 	SCALE_TYPES,
 	SCALES,

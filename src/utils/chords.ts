@@ -936,6 +936,8 @@ for (const group of Object.values(CHORDS)) {
 	}
 }
 
+export const ALL_CHORD_VARIANTS: readonly Chord_Variant[] = Array.from(chordVariantKeys) as Chord_Variant[];
+
 export function isValidChordVariant(value: string): value is Chord_Variant {
 	return chordVariantKeys.has(value);
 }

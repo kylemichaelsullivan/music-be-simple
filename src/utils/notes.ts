@@ -138,6 +138,20 @@ export function rangeOfLength(length: number): readonly number[] {
 	return Array.from({ length }, (_, i) => i);
 }
 
+export function randomNoteIndex(): NoteIndex {
+	const n = Math.floor(Math.random() * 12);
+	return (isValidNoteIndex(n) ? n : 0) as NoteIndex;
+}
+
+export function randomPick<T>(items: readonly T[]): T {
+	const i = Math.floor(Math.random() * items.length);
+	const item = items[i];
+	if (item === undefined) {
+		throw new Error('randomPick: empty array');
+	}
+	return item;
+}
+
 export type Notes_Flats = (typeof FLATS)[number];
 export type Notes_Sharps = (typeof SHARPS)[number];
 
