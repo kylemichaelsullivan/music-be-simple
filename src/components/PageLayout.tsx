@@ -5,8 +5,10 @@ import type { PageLayoutProps } from '@/types';
 export function PageLayout({
 	displaysProps,
 	title,
+	titleActionLabel,
 	tonicVariantSlot,
 	topButton,
+	onTitleClick,
 	afterDisplaysSlot,
 	notesSlot,
 }: PageLayoutProps) {
@@ -14,7 +16,9 @@ export function PageLayout({
 		<Main componentName={title}>
 			<MainHead
 				title={title}
+				titleActionLabel={titleActionLabel}
 				topButton={topButton}
+				onTitleClick={onTitleClick}
 				tonicVariantSlot={tonicVariantSlot}
 				notesSlot={notesSlot}
 			/>

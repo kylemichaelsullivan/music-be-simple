@@ -28,8 +28,10 @@ export type PageTopButtonProps = {
 export type PageLayoutProps = {
 	displaysProps: DisplaysProps;
 	title: TabType;
+	titleActionLabel?: string;
 	tonicVariantSlot: ReactNode;
 	topButton: PageTopButtonProps;
+	onTitleClick?: () => void;
 	afterDisplaysSlot?: ReactNode;
 	notesSlot?: ReactNode;
 };
@@ -38,5 +40,5 @@ export type MainBodyProps = Pick<PageLayoutProps, 'displaysProps' | 'afterDispla
 
 export type MainHeadProps = Pick<
 	PageLayoutProps,
-	'title' | 'topButton' | 'tonicVariantSlot' | 'notesSlot'
+	'onTitleClick' | 'title' | 'titleActionLabel' | 'topButton' | 'tonicVariantSlot' | 'notesSlot'
 >;
