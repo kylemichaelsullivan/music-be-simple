@@ -1,50 +1,37 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { useScalesStore } from '@/stores';
 
 describe('scalesStore', () => {
+	beforeEach(async () => {
+		sessionStorage.clear();
+		useScalesStore.getState().reset();
+		await useScalesStore.persist.rehydrate();
+	});
+
 	afterEach(() => {
 		useScalesStore.getState().reset();
 	});
 
-	it('should have initial tonic 0 and variant major', async () => {
-		const { result } = renderHook(() => useScalesStore());
-		await waitFor(() => {
-			expect(result.current.tonic).toBe(0);
-			expect(result.current.variant).toBe('major');
-		});
+	it('should have initial tonic 0 and variant major', () => {
+		expect(useScalesStore.getState().tonic).toBe(0);
+		expect(useScalesStore.getState().variant).toBe('major');
 	});
 
-	it('should update tonic via setTonic', async () => {
-		const { result } = renderHook(() => useScalesStore());
-		act(() => {
-			result.current.setTonic(7);
-		});
-		await waitFor(() => {
-			expect(result.current.tonic).toBe(7);
-		});
+	it('should update tonic via setTonic', () => {
+		useScalesStore.getState().setTonic(7);
+		expect(useScalesStore.getState().tonic).toBe(7);
 	});
 
-	it('should update variant via setVariant', async () => {
-		const { result } = renderHook(() => useScalesStore());
-		act(() => {
-			result.current.setVariant('dorian');
-		});
-		await waitFor(() => {
-			expect(result.current.variant).toBe('dorian');
-		});
+	it('should update variant via setVariant', () => {
+		useScalesStore.getState().setVariant('dorian');
+		expect(useScalesStore.getState().variant).toBe('dorian');
 	});
 
-	it('should reset to initial values', async () => {
-		const { result } = renderHook(() => useScalesStore());
-		act(() => {
-			result.current.setTonic(11);
-			result.current.setVariant('phrygian');
-			result.current.reset();
-		});
-		await waitFor(() => {
-			expect(result.current.tonic).toBe(0);
-			expect(result.current.variant).toBe('major');
-		});
+	it('should reset to initial values', () => {
+		useScalesStore.getState().setTonic(11);
+		useScalesStore.getState().setVariant('phrygian');
+		useScalesStore.getState().reset();
+		expect(useScalesStore.getState().tonic).toBe(0);
+		expect(useScalesStore.getState().variant).toBe('major');
 	});
 });
