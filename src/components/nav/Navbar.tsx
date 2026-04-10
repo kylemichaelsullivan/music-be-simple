@@ -23,7 +23,7 @@ export function Navbar({ currentTab, onTabChange }: NavbarProps) {
 	);
 
 	return (
-		<nav className='Navbar scroll-snap-align-start flex flex-col gap-4 border-b p-4 sm:flex-row sm:pb-0'>
+		<nav className='Navbar relative z-20 scroll-snap-align-start flex flex-col gap-4 border-b p-4 sm:flex-row sm:pb-0'>
 			{tabItems}
 		</nav>
 	);
