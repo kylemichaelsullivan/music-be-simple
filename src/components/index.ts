@@ -28,6 +28,7 @@ export { MainHead } from './MainHead';
 export { Modal } from './Modal';
 export { Navbar, NavTab } from './nav';
 export { PageLayout } from './PageLayout';
+export { RandomPickConfirmModal } from './RandomPickConfirmModal';
 export { SkipLink } from './SkipLink';
 export { Title } from './Title';
 export { Tonic } from './Tonic';
