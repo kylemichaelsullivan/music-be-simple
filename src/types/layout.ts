@@ -28,17 +28,24 @@ export type PageTopButtonProps = {
 export type PageLayoutProps = {
 	displaysProps: DisplaysProps;
 	title: TabType;
-	titleActionLabel?: string;
 	tonicVariantSlot: ReactNode;
 	topButton: PageTopButtonProps;
-	onTitleClick?: () => void;
+	titleActionLabel?: string;
 	afterDisplaysSlot?: ReactNode;
 	notesSlot?: ReactNode;
+	titleTooltip?: string /** Shown as the browser tooltip when the title is clickable */;
+	onTitleClick?: () => void;
 };
 
 export type MainBodyProps = Pick<PageLayoutProps, 'displaysProps' | 'afterDisplaysSlot'>;
 
 export type MainHeadProps = Pick<
 	PageLayoutProps,
-	'onTitleClick' | 'title' | 'titleActionLabel' | 'topButton' | 'tonicVariantSlot' | 'notesSlot'
+	| 'onTitleClick'
+	| 'title'
+	| 'titleActionLabel'
+	| 'titleTooltip'
+	| 'topButton'
+	| 'tonicVariantSlot'
+	| 'notesSlot'
 >;

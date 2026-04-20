@@ -6,14 +6,20 @@ import type { MainHeadProps } from '@/types';
 export function MainHead({
 	title,
 	titleActionLabel,
+	titleTooltip,
 	topButton,
-	onTitleClick,
 	tonicVariantSlot,
 	notesSlot,
+	onTitleClick,
 }: MainHeadProps) {
 	return (
 		<div className='MainHead flex flex-col gap-4'>
-			<Title title={title} actionLabel={titleActionLabel} onTitleClick={onTitleClick} />
+			<Title
+				actionLabel={titleActionLabel}
+				title={title}
+				tooltip={titleTooltip}
+				onTitleClick={onTitleClick}
+			/>
 			<TopButton
 				icon={topButton.icon}
 				title={topButton.title}

@@ -1,7 +1,14 @@
 import { useCallback, useState } from 'react';
 import { PageLayout, RandomPickConfirmModal } from '@/components';
+import { useLocalStorage } from '@/context/shared';
 import { useChords } from '@/hooks';
-import { ALL_CHORD_VARIANTS, randomNoteIndex, randomPick } from '@/utils';
+import { ChordRandomTierIdSchema } from '@/schemas';
+import type { ChordRandomTierId } from '@/utils';
+import {
+	applyChordRandomTier,
+	CHORD_RANDOM_TIER_OPTIONS,
+	DEFAULT_CHORD_RANDOM_TIER,
+} from '@/utils';
 import { Chord, Notes } from '.';
 
 export function Chords() {
@@ -9,6 +16,7 @@ export function Chords() {
 		makeScale,
 		notes,
 		tonic,
+		variant,
 		nerdModeButtonIcon,
 		nerdModeButtonTitle,
 		pianoNotes,
@@ -17,23 +25,36 @@ export function Chords() {
 		toggleNerdMode,
 	} = useChords();
 
-	const [randomModalOpen, setRandomModalOpen] = useState(false);
+	const [tierPreference, setTierPreference] = useLocalStorage(
+		'randomChordTier',
+		ChordRandomTierIdSchema,
+		DEFAULT_CHORD_RANDOM_TIER
+	);
 
-	const applyRandomChord = useCallback(() => {
-		makeScale(randomNoteIndex(), randomPick(ALL_CHORD_VARIANTS));
-	}, [makeScale]);
+	const [randomModalOpen, setRandomModalOpen] = useState(false);
+	const [draftTier, setDraftTier] = useState<ChordRandomTierId>(tierPreference);
+
+	const openRandomModal = useCallback(() => {
+		setDraftTier(tierPreference);
+		setRandomModalOpen(true);
+	}, [tierPreference]);
+
+	const confirmRandomChord = useCallback(() => {
+		applyChordRandomTier(draftTier, { makeScale, tonic, variant });
+		setTierPreference(draftTier);
+	}, [draftTier, makeScale, setTierPreference, tonic, variant]);
 
 	return (
 		<>
 			<PageLayout
 				title='Chords'
-				titleActionLabel='Pick a Random Chord'
+				titleActionLabel='Random Chord?'
+				titleTooltip='Random Chord? This device remembers your last randomness choice.'
 				topButton={{
 					icon: nerdModeButtonIcon,
 					title: nerdModeButtonTitle,
 					onFxn: toggleNerdMode,
 				}}
-				onTitleClick={() => setRandomModalOpen(true)}
 				tonicVariantSlot={<Chord />}
 				notesSlot={<Notes />}
 				displaysProps={{
@@ -44,14 +65,18 @@ export function Chords() {
 					hideModesAndCircle: true,
 					showNerdMode,
 				}}
+				onTitleClick={openRandomModal}
 			/>
 			{randomModalOpen ? (
 				<RandomPickConfirmModal
-					heading='Pick a Random Chord?'
-					description='Your current tonic and chord type will be replaced.'
 					aria-labelledby='random-pick-chords-title'
+					fieldsetLegend='How random?'
+					heading='Random Chord?'
+					options={CHORD_RANDOM_TIER_OPTIONS}
+					selectedTierId={draftTier}
 					onClose={() => setRandomModalOpen(false)}
-					onConfirm={applyRandomChord}
+					onConfirm={confirmRandomChord}
+					onTierChange={setDraftTier}
 				/>
 			) : null}
 		</>

@@ -34,9 +34,22 @@ describe('Title', () => {
 	it('should call onTitleClick when interactive heading is clicked', async () => {
 		const user = userEvent.setup();
 		const onTitleClick = vi.fn();
-		render(<Title actionLabel='Pick a Random Chord' onTitleClick={onTitleClick} title='Chords' />);
+		render(<Title actionLabel='Random Chord?' onTitleClick={onTitleClick} title='Chords' />);
 
-		await user.click(screen.getByRole('button', { name: /Pick a random chord/i }));
+		await user.click(screen.getByRole('button', { name: /Random Chord\?/ }));
 		expect(onTitleClick).toHaveBeenCalledTimes(1);
+	});
+
+	it('should use tooltip for native title when provided', () => {
+		render(
+			<Title
+				actionLabel='Random Chord?'
+				title='Chords'
+				tooltip='Custom hint'
+				onTitleClick={vi.fn()}
+			/>
+		);
+
+		expect(screen.getByTitle('Custom hint')).toBeInTheDocument();
 	});
 });

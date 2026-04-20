@@ -6,9 +6,10 @@ type TitleProps = {
 	actionLabel?: string;
 	onTitleClick?: () => void;
 	title: TabType;
+	tooltip?: string /** Native tooltip (`title` attribute) when the heading is clickable */;
 };
 
-export function Title({ actionLabel, onTitleClick, title }: TitleProps) {
+export function Title({ actionLabel, onTitleClick, title, tooltip }: TitleProps) {
 	const interactive = Boolean(onTitleClick);
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLHeadingElement>) => {
@@ -34,7 +35,7 @@ export function Title({ actionLabel, onTitleClick, title }: TitleProps) {
 					: 'Title flex justify-center items-center gap-2 text-2xl font-bold text-center'
 			}
 			role={interactive ? 'button' : undefined}
-			title={interactive ? actionLabel : undefined}
+			title={interactive ? (tooltip ?? actionLabel) : undefined}
 			tabIndex={interactive ? 0 : undefined}
 			onClick={handleClick}
 			onKeyDown={handleKeyDown}

@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
 	ChordBinItemDataSchema,
+	ChordRandomTierIdSchema,
 	ChordVariantSchema,
 	NoteIndexSchema,
 	NotepadLineDataSchema,
 	NotepadLineTitleDataSchema,
 	NotepadStorageSchema,
+	ScaleRandomTierIdSchema,
 	TuningsStorageSchema,
 } from '../schemas';
 
@@ -29,6 +31,26 @@ describe('schemas', () => {
 		});
 		it('rejects unknown variants', () => {
 			expect(ChordVariantSchema.safeParse('unknown').success).toBe(false);
+		});
+	});
+
+	describe('ScaleRandomTierIdSchema', () => {
+		it('accepts valid tier ids', () => {
+			expect(ScaleRandomTierIdSchema.safeParse('tonic_only').success).toBe(true);
+			expect(ScaleRandomTierIdSchema.safeParse('tonic_variant_modes').success).toBe(true);
+		});
+		it('rejects invalid ids', () => {
+			expect(ScaleRandomTierIdSchema.safeParse('nope').success).toBe(false);
+		});
+	});
+
+	describe('ChordRandomTierIdSchema', () => {
+		it('accepts valid tier ids', () => {
+			expect(ChordRandomTierIdSchema.safeParse('variant_basic').success).toBe(true);
+			expect(ChordRandomTierIdSchema.safeParse('tonic_variant_foundation').success).toBe(true);
+		});
+		it('rejects invalid ids', () => {
+			expect(ChordRandomTierIdSchema.safeParse('nope').success).toBe(false);
 		});
 	});
 

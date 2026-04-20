@@ -119,6 +119,21 @@ function getIntervalKeys(): IntervalKey[] {
 
 export const SCALE_TYPES: readonly IntervalKey[] = getIntervalKeys();
 
+export function getScaleTypesFromScaleGroups(
+	groupNames: readonly (keyof typeof SCALES)[]
+): ScaleType[] {
+	const unique = new Set<string>();
+	for (const name of groupNames) {
+		const group = SCALES[name];
+		for (const key of Object.keys(group)) {
+			if (key in INTERVALS) {
+				unique.add(key);
+			}
+		}
+	}
+	return Array.from(unique) as ScaleType[];
+}
+
 export function getIntervals(key: IntervalKey): readonly number[] {
 	return INTERVALS[key];
 }

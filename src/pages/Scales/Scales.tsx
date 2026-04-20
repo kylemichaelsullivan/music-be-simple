@@ -1,7 +1,14 @@
 import { useCallback, useState } from 'react';
 import { PageLayout, RandomPickConfirmModal } from '@/components';
+import { useLocalStorage } from '@/context/shared';
 import { useScales } from '@/hooks';
-import { randomNoteIndex, randomPick, SCALE_TYPES } from '@/utils';
+import { ScaleRandomTierIdSchema } from '@/schemas';
+import type { ScaleRandomTierId } from '@/utils';
+import {
+	applyScaleRandomTier,
+	DEFAULT_SCALE_RANDOM_TIER,
+	SCALE_RANDOM_TIER_OPTIONS,
+} from '@/utils';
 import { Notes, ScaleContainer } from '.';
 
 export function Scales() {
@@ -9,6 +16,7 @@ export function Scales() {
 		makeScale,
 		notes,
 		tonic,
+		variant,
 		showModes,
 		showNoteLabels,
 		noteLabelsButtonIcon,
@@ -16,18 +24,31 @@ export function Scales() {
 		toggleNoteLabels,
 	} = useScales();
 
-	const [randomModalOpen, setRandomModalOpen] = useState(false);
+	const [tierPreference, setTierPreference] = useLocalStorage(
+		'randomScaleTier',
+		ScaleRandomTierIdSchema,
+		DEFAULT_SCALE_RANDOM_TIER
+	);
 
-	const applyRandomScale = useCallback(() => {
-		makeScale(randomNoteIndex(), randomPick(SCALE_TYPES));
-	}, [makeScale]);
+	const [randomModalOpen, setRandomModalOpen] = useState(false);
+	const [draftTier, setDraftTier] = useState<ScaleRandomTierId>(tierPreference);
+
+	const openRandomModal = useCallback(() => {
+		setDraftTier(tierPreference);
+		setRandomModalOpen(true);
+	}, [tierPreference]);
+
+	const confirmRandomScale = useCallback(() => {
+		applyScaleRandomTier(draftTier, { makeScale, tonic, variant });
+		setTierPreference(draftTier);
+	}, [draftTier, makeScale, setTierPreference, tonic, variant]);
 
 	return (
 		<>
 			<PageLayout
-				onTitleClick={() => setRandomModalOpen(true)}
 				title='Scales'
-				titleActionLabel='Pick a Random Scale'
+				titleActionLabel='Random Scale?'
+				titleTooltip='Random Scale? This device remembers your last randomness choice.'
 				topButton={{
 					icon: noteLabelsButtonIcon,
 					title: noteLabelsButtonTitle,
@@ -36,14 +57,18 @@ export function Scales() {
 				tonicVariantSlot={<ScaleContainer />}
 				notesSlot={<Notes />}
 				displaysProps={{ notes, tonic, showModes, showNoteLabels }}
+				onTitleClick={openRandomModal}
 			/>
 			{randomModalOpen ? (
 				<RandomPickConfirmModal
 					aria-labelledby='random-pick-scales-title'
-					description='Your current tonic and scale type will be replaced.'
-					heading='Pick a Random Scale?'
+					fieldsetLegend='How random?'
+					heading='Random Scale?'
+					selectedTierId={draftTier}
+					options={SCALE_RANDOM_TIER_OPTIONS}
 					onClose={() => setRandomModalOpen(false)}
-					onConfirm={applyRandomScale}
+					onConfirm={confirmRandomScale}
+					onTierChange={setDraftTier}
 				/>
 			) : null}
 		</>

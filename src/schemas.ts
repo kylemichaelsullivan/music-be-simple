@@ -53,6 +53,20 @@ export const NoteLabelsButtonIconSchema = z.enum(['📖', '📕']);
 
 export const ReferenceModeSchema = z.enum(['Chords', 'Scales']);
 
+export const ScaleRandomTierIdSchema = z.enum([
+	'tonic_only',
+	'variant_basic',
+	'tonic_variant_modes',
+	'all',
+]);
+
+export const ChordRandomTierIdSchema = z.enum([
+	'tonic_only',
+	'variant_basic',
+	'tonic_variant_foundation',
+	'all',
+]);
+
 // Chord schemas
 export const ChordInfoSchema = z.object({
 	symbol: z.string(),

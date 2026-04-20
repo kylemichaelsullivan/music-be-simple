@@ -6,21 +6,23 @@ export function PageLayout({
 	displaysProps,
 	title,
 	titleActionLabel,
+	titleTooltip,
 	tonicVariantSlot,
 	topButton,
-	onTitleClick,
 	afterDisplaysSlot,
 	notesSlot,
+	onTitleClick,
 }: PageLayoutProps) {
 	const content = (
 		<Main componentName={title}>
 			<MainHead
 				title={title}
 				titleActionLabel={titleActionLabel}
+				titleTooltip={titleTooltip}
 				topButton={topButton}
-				onTitleClick={onTitleClick}
 				tonicVariantSlot={tonicVariantSlot}
 				notesSlot={notesSlot}
+				onTitleClick={onTitleClick}
 			/>
 
 			<MainBody displaysProps={displaysProps} afterDisplaysSlot={afterDisplaysSlot} />

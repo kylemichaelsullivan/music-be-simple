@@ -16,6 +16,7 @@ export {
 	getChordInfo,
 	getChordSymbol,
 	getChordVariants,
+	getChordVariantsForChordGroups,
 	getPianoBorderStyle,
 	getPianoVoicing,
 	isValidChordVariant,
@@ -36,6 +37,7 @@ export {
 	getIntervals,
 	getIntervalsForVariant,
 	getNote,
+	getScaleTypesFromScaleGroups,
 	INTERVALS,
 	isValidNoteIndex,
 	isValidScaleType,
@@ -51,3 +53,12 @@ export {
 	getScaleTypeDisplay,
 	intervalShortNameFromTonic,
 } from './scales';
+export type { ChordRandomTierId, RandomTierOption, ScaleRandomTierId } from './musicRandomPicker';
+export {
+	applyChordRandomTier,
+	applyScaleRandomTier,
+	CHORD_RANDOM_TIER_OPTIONS,
+	DEFAULT_CHORD_RANDOM_TIER,
+	DEFAULT_SCALE_RANDOM_TIER,
+	SCALE_RANDOM_TIER_OPTIONS,
+} from './musicRandomPicker';
