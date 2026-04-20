@@ -75,7 +75,7 @@ export function RandomPickConfirmModal<T extends string>({
 						))}
 					</div>
 				</fieldset>
-				<p className='text-sm text-center text-gray-700 min-h-24 px-1' id={descriptionId}>
+				<p className='text-gray-700 text-sm min-h-24 px-1' id={descriptionId}>
 					{selected?.description}
 				</p>
 				<div className='flex flex-wrap gap-2 justify-center mt-auto'>
