@@ -11,7 +11,7 @@ function tonicWedgeFill(hex: string, role: 'current' | 'inScale' | 'other'): str
 	if (role === 'inScale') {
 		return `color-mix(in srgb, ${hex} 58%, white)`;
 	}
-	return `color-mix(in srgb, ${hex} 22%, white)`;
+	return `color-mix(in srgb, ${hex} 6%, white)`;
 }
 
 type CircleOfFifthsTonicWedgesProps = {
