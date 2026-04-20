@@ -1,7 +1,18 @@
 import type { KeyboardEvent } from 'react';
 import { memo, useCallback } from 'react';
 import type { NoteIndex } from '@/types';
+import { circleOfFifthsTonicHex } from '@/utils';
 import type { CircleOfFifthsSegment } from './circleOfFifthsTypes';
+
+function tonicWedgeFill(hex: string, role: 'current' | 'inScale' | 'other'): string {
+	if (role === 'current') {
+		return hex;
+	}
+	if (role === 'inScale') {
+		return `color-mix(in srgb, ${hex} 58%, white)`;
+	}
+	return `color-mix(in srgb, ${hex} 22%, white)`;
+}
 
 type CircleOfFifthsTonicWedgesProps = {
 	segments: CircleOfFifthsSegment[];
@@ -25,17 +36,19 @@ function CircleOfFifthsTonicWedgesComponent({
 	return (
 		<>
 			{segments.map((s) => {
-				const wedgeFill = s.isCurrentTonic
-					? 'fill-sky-200/95 stroke-sky-900 stroke-[0.55] hover:fill-sky-300/90 focus-visible:fill-sky-300/85 focus-visible:stroke-[0.7] focus-visible:stroke-sky-950'
-					: s.inSelectedScale
-						? 'fill-slate-50/90 stroke-slate-800/80 stroke-[0.35] hover:fill-slate-200/95 focus-visible:stroke-[0.55] focus-visible:fill-slate-200'
-						: 'fill-slate-200/35 stroke-slate-400/45 stroke-[0.35] hover:fill-slate-200/95 focus-visible:stroke-[0.55] focus-visible:fill-slate-200';
+				const hex = circleOfFifthsTonicHex(s.majorIndex);
+				const role = s.isCurrentTonic ? 'current' : s.inSelectedScale ? 'inScale' : 'other';
+				const strokeClass = s.isCurrentTonic
+					? 'stroke-slate-900 stroke-[0.55] hover:brightness-110 focus-visible:brightness-110 focus-visible:stroke-[0.7]'
+					: 'stroke-slate-800/80 stroke-[0.35] hover:brightness-110 focus-visible:stroke-[0.55] focus-visible:brightness-105';
 				return (
+					// biome-ignore lint/a11y/useSemanticElements: wedge geometry must be an SVG path
 					<path
 						className={[
-							'CircleOfFifthsTonicWedges cursor-pointer transition-[fill,stroke-width] outline-none',
-							wedgeFill,
+							'CircleOfFifthsTonicWedges cursor-pointer transition-[fill,stroke-width,filter] outline-none',
+							strokeClass,
 						].join(' ')}
+						fill={tonicWedgeFill(hex, role)}
 						role='button'
 						d={s.majorWedgePath}
 						aria-label={`Set tonic to ${s.majorLabel}`}

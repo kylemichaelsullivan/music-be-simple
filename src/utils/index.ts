@@ -25,6 +25,7 @@ export {
 export {
 	CIRCLE_OF_FIFTHS_ORDER,
 	circleInnerKeySignatureLabel,
+	circleOfFifthsTonicHex,
 	keySignatureMajorTonicForVariant,
 	majorKeyAccidentalSigned,
 	majorKeySignatureLabel,

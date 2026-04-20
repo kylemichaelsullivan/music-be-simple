@@ -12,6 +12,27 @@ export const CIRCLE_OF_FIFTHS_ORDER: readonly NoteIndex[] = Array.from(
 	(_, i) => ((CIRCLE_TOP_PITCH_CLASS + i * 7) % 12) as NoteIndex
 );
 
+/** Tonic wedge color per pitch class (chromatic hue wheel). */
+const TONIC_HEX_BY_PITCH_CLASS = {
+	0: '#FF0000',
+	1: '#007FFF',
+	2: '#FFFF00',
+	3: '#7F00FF',
+	4: '#00FF00',
+	5: '#FF007F',
+	6: '#00FFFF',
+	7: '#FF7F00',
+	8: '#0000FF',
+	9: '#7FFF00',
+	10: '#FF00FF',
+	11: '#00FF7F',
+} as const satisfies Record<NoteIndex, string>;
+
+/** Hex fill for the major-tonic wedge at this pitch class on the circle of fifths. */
+export function circleOfFifthsTonicHex(pitchClass: NoteIndex): string {
+	return TONIC_HEX_BY_PITCH_CLASS[pitchClass];
+}
+
 /**
  * Signed accidental count for major key when the tonic is spelled with sharps (SHARPS column).
  * Positive = sharps, negative = flats (F major always has one flat in notation).

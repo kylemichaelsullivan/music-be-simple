@@ -43,7 +43,7 @@ function CircleOfFifthsRingsComponent({ segments }: CircleOfFifthsRingsProps) {
 					const scaleClass = s.inSelectedScale
 						? 'stroke-current stroke-[0.25] opacity-70'
 						: 'stroke-current stroke-[0.2] opacity-35';
-					const tonicBoundaryClass = 'stroke-sky-700 stroke-[0.5] opacity-95';
+					const tonicBoundaryClass = 'stroke-slate-900 stroke-[0.5] opacity-90';
 					return (
 						<line
 							className={isTonicBoundary ? tonicBoundaryClass : scaleClass}

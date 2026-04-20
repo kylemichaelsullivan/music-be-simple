@@ -9,10 +9,12 @@ type CircleOfFifthsLabelsProps = {
 function ringTextClass(s: CircleOfFifthsSegment, ring: 'interval' | 'signature' | 'note'): string {
 	const base = s.isCurrentTonic ? 'opacity-100' : s.inSelectedScale ? 'opacity-90' : 'opacity-30';
 	if (ring === 'note') {
-		return s.isCurrentTonic ? `${base} text-sky-950 font-bold` : `${base} font-semibold`;
+		return s.isCurrentTonic
+			? `${base} text-slate-950 font-bold`
+			: `${base} font-semibold text-slate-900`;
 	}
 	if (s.isCurrentTonic) {
-		return `${base} text-sky-900`;
+		return `${base} text-slate-900`;
 	}
 	return base;
 }
