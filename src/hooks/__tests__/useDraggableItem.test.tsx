@@ -9,7 +9,7 @@ function wrapper({ children }: { children: React.ReactNode }) {
 }
 
 describe('useDraggableItem', () => {
-	it('should return isDragging, isOver, and dragRef when used within DndProvider', () => {
+	it('should return isDragging, isOver and dragRef when used within DndProvider', () => {
 		const onReorder = () => {};
 		const { result } = renderHook(
 			() =>

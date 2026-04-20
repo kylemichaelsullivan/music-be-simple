@@ -119,7 +119,7 @@ describe('chords utilities', () => {
 	});
 
 	describe('getPianoVoicing', () => {
-		it('should return voicing, degreeToBorderStyle, and notes for C major-6-9 with b9 override', () => {
+		it('should return voicing, degreeToBorderStyle and notes for C major-6-9 with b9 override', () => {
 			const { voicingByKeyIndex, degreeToBorderStyle, notes } = getPianoVoicing(0, 'major-6-9');
 			// Override: C(1), Db(9), E(3), G(5), A(6) → note indices 0, 1, 4, 7, 9
 			expect(notes).toEqual(expect.arrayContaining([0, 1, 4, 7, 9]));

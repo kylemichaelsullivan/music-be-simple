@@ -2,17 +2,9 @@ import type { Chord_Tonic, Chord_Variant, NoteIndex, ScaleType } from '@/types';
 import { ALL_CHORD_VARIANTS, getChordVariantsForChordGroups } from './chords';
 import { getScaleTypesFromScaleGroups, randomNoteIndex, randomPick, SCALE_TYPES } from './notes';
 
-export type ScaleRandomTierId =
-	| 'all'
-	| 'tonic_only'
-	| 'tonic_variant_modes'
-	| 'variant_basic';
+export type ScaleRandomTierId = 'all' | 'tonic_only' | 'tonic_variant_modes' | 'variant_basic';
 
-export type ChordRandomTierId =
-	| 'all'
-	| 'tonic_only'
-	| 'tonic_variant_foundation'
-	| 'variant_basic';
+export type ChordRandomTierId = 'all' | 'tonic_only' | 'tonic_variant_foundation' | 'variant_basic';
 
 const SCALE_TYPES_BASIC: readonly ScaleType[] = ['major', 'minor'];
 
@@ -49,7 +41,7 @@ export const SCALE_RANDOM_TIER_OPTIONS: readonly RandomTierOption<ScaleRandomTie
 	{
 		id: 'tonic_variant_modes',
 		label: 'Random tonic + modes',
-		description: 'Root and type from major, minor, and the seven modes.',
+		description: 'Root and type from major, minor and the seven modes.',
 	},
 	{
 		id: 'all',
@@ -72,7 +64,7 @@ export const CHORD_RANDOM_TIER_OPTIONS: readonly RandomTierOption<ChordRandomTie
 	{
 		id: 'tonic_variant_foundation',
 		label: 'Random tonic + foundation chords',
-		description: 'Root and type from simple triads, other triads, and seventh chords.',
+		description: 'Root and type from simple triads, other triads and seventh chords.',
 	},
 	{
 		id: 'all',

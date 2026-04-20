@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { useButtonHandler } from '@/hooks';
 
 describe('useButtonHandler', () => {
-	it('should return handleClick, handleKeyDown, and handleKeyUp', () => {
+	it('should return handleClick, handleKeyDown and handleKeyUp', () => {
 		const mockOnFxn = vi.fn();
 		const { result } = renderHook(() => useButtonHandler(mockOnFxn));
 

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { useChordState } from '@/context';
 
 describe('useChordState', () => {
-	it('should return initial tonic, variant, and notes', () => {
+	it('should return initial tonic, variant and notes', () => {
 		const { result } = renderHook(() =>
 			useChordState({ initialTonic: 0, initialVariant: 'major' })
 		);

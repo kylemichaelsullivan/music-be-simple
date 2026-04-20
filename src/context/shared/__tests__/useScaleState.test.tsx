@@ -4,7 +4,7 @@ import { useScaleState } from '@/context';
 import type { ScaleType } from '@/types';
 
 describe('useScaleState', () => {
-	it('should return initial tonic, variant, and notes', () => {
+	it('should return initial tonic, variant and notes', () => {
 		const { result } = renderHook(() =>
 			useScaleState({ initialTonic: 0, initialVariant: 'major' })
 		);

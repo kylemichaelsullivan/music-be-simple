@@ -21,7 +21,7 @@ export default defineConfig({
 				// Keep barrel files and their re-exported modules in the same chunk
 				// so Rollup doesn't warn about circular dependencies between chunks.
 				// Do not put hooks in a separate chunk: the hooks chunk pulls in react-dnd,
-				// which uses React.createContext, and can see React as undefined at load time on Vercel.
+				// which uses React.createContext and can see React as undefined at load time on Vercel.
 				// If circular dependency warnings reappear (context ↔ hooks barrel), fix by having
 				// context providers import from specific hook files (e.g. @/hooks/useGlobals) instead of @/hooks.
 				manualChunks(id) {
