@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import type { NoteIndex } from '@/types';
 import {
 	CIRCLE_OF_FIFTHS_ORDER,
 	circleInnerKeySignatureLabel,
+	circleOfFifthsTonicHex,
 	keySignatureMajorTonicForVariant,
 	majorKeyAccidentalSigned,
 	majorKeySignatureLabel,
@@ -19,6 +21,26 @@ describe('circleOfFifths utilities', () => {
 			const current = CIRCLE_OF_FIFTHS_ORDER[i];
 			const next = CIRCLE_OF_FIFTHS_ORDER[i + 1];
 			expect((current + 7) % 12).toBe(next);
+		}
+	});
+
+	it('should map pitch classes to tonic wedge hex colors (chromatic hue wheel)', () => {
+		const expected: Record<number, string> = {
+			0: '#FF0000',
+			1: '#007FFF',
+			2: '#FFFF00',
+			3: '#7F00FF',
+			4: '#00FF00',
+			5: '#FF007F',
+			6: '#00FFFF',
+			7: '#FF7F00',
+			8: '#0000FF',
+			9: '#7FFF00',
+			10: '#FF00FF',
+			11: '#00FF7F',
+		};
+		for (let pc = 0; pc < 12; pc++) {
+			expect(circleOfFifthsTonicHex(pc as NoteIndex)).toBe(expected[pc]);
 		}
 	});
 
