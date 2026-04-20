@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { z } from 'zod';
 import { useEscapeReset, useLocalStorage } from '@/context/shared';
 import { useGlobals } from '@/hooks';
@@ -23,12 +23,7 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 	const { usingFlats } = useGlobals();
 	const { tonic, variant, setTonic, setVariant, reset: resetStore } = useScalesStore();
 
-	const [notes, setNotes] = useState<NoteIndex[]>(() => generateNotesFromIntervals(tonic, variant));
-
-	useEffect(() => {
-		const scaleNotes = generateNotesFromIntervals(tonic, variant);
-		setNotes(scaleNotes);
-	}, [tonic, variant]);
+	const notes = useMemo(() => generateNotesFromIntervals(tonic, variant), [tonic, variant]);
 
 	const handleTonicChange = useCallback(
 		(newTonic: NoteIndex) => {
@@ -44,19 +39,15 @@ export const ScalesContextProvider = ({ children }: ScalesContextProviderProps) 
 		[setVariant]
 	);
 
-	const makeScale = useCallback(
-		(scaleTonic: NoteIndex, scaleVariant: ScaleType) => {
-			setTonic(scaleTonic);
-			setVariant(scaleVariant);
-		},
-		[setTonic, setVariant]
-	);
+	const makeScale = useCallback((scaleTonic: NoteIndex, scaleVariant: ScaleType) => {
+		useScalesStore.setState({ tonic: scaleTonic, variant: scaleVariant });
+	}, []);
 
 	const reset = useCallback(() => {
 		resetStore();
 	}, [resetStore]);
 
-	const [showModes, setShowModes] = useLocalStorage('showModes', z.boolean(), initialShowModes);
+	const [showModes] = useLocalStorage('showModes', z.boolean(), initialShowModes);
 
 	const [showNoteLabels, setShowNoteLabels] = useLocalStorage(
 		'showNoteLabels',

@@ -30,6 +30,9 @@ export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps
 	const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
 	useEffect(() => {
+		if (import.meta.env.MODE === 'test') {
+			return;
+		}
 		const context = new AudioContext();
 		setAudioContext(context);
 		return () => {

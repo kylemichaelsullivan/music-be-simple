@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { z } from 'zod';
 import { useEscapeReset, useLocalStorage } from '@/context/shared';
 import { useGlobals } from '@/hooks';
@@ -30,11 +30,7 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 	const { usingFlats } = useGlobals();
 	const { tonic, variant, setTonic, setVariant, reset: resetStore } = useChordsStore();
 
-	const [notes, setNotes] = useState<NoteIndex[]>(() => generateChordNotes(tonic, variant));
-
-	useEffect(() => {
-		setNotes(generateChordNotes(tonic, variant));
-	}, [tonic, variant]);
+	const notes = useMemo(() => generateChordNotes(tonic, variant), [tonic, variant]);
 
 	const handleTonicChange = useCallback(
 		(newTonic: Chord_Tonic) => {
@@ -50,13 +46,9 @@ export const ChordsContextProvider = ({ children }: ChordsContextProviderProps) 
 		[setVariant]
 	);
 
-	const makeChord = useCallback(
-		(chordTonic: Chord_Tonic, chordVariant: Chord_Variant) => {
-			setTonic(chordTonic);
-			setVariant(chordVariant);
-		},
-		[setTonic, setVariant]
-	);
+	const makeChord = useCallback((chordTonic: Chord_Tonic, chordVariant: Chord_Variant) => {
+		useChordsStore.setState({ tonic: chordTonic, variant: chordVariant });
+	}, []);
 
 	const getBorderStyleFromState = useCallback(
 		(note: number, showNerdMode: boolean): border => {
