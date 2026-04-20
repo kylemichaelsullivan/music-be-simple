@@ -31,7 +31,7 @@ function CircleOfFifthsWheelComponent({
 				<CircleOfFifthsLabels segments={segments} />
 			</svg>
 			<div className='absolute flex justify-center items-center pointer-events-none inset-0 z-10'>
-				<div className='pointer-events-auto w-[32%] min-w-0 px-0.5'>{children}</div>
+				<div className='pointer-events-auto w-[32%] min-w-0 px-2'>{children}</div>
 			</div>
 		</div>
 	);
