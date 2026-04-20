@@ -57,7 +57,9 @@ function CircleOfFifthsTonicWedgesComponent({
 						onKeyDown={(e) => onKeyActivate(e, s.majorIndex)}
 						tabIndex={0}
 						key={`tonic-${s.majorIndex}`}
-					/>
+					>
+						<title>{s.majorLabel}</title>
+					</path>
 				);
 			})}
 		</>
