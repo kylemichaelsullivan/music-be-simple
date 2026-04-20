@@ -7,7 +7,6 @@ import {
 	useMemo,
 	useRef,
 	useState,
-	useTransition,
 } from 'react';
 import { Footer, Navbar } from '@/components';
 import { AppProviders } from '@/context';
@@ -70,8 +69,6 @@ export function App() {
 	const [activeTab, setActiveTab] = useState<TabType>(initialTab);
 	const [shouldPreloadOtherTabs, setShouldPreloadOtherTabs] = useState(false);
 	const hasPreloadedRef = useRef(false);
-	const [, startTransition] = useTransition();
-
 	useEffect(() => {
 		if (window.location.pathname === '/') {
 			updateUrlForTab('Scales', true);
@@ -81,9 +78,7 @@ export function App() {
 	useEffect(() => {
 		const handleBrowserNavigation = () => {
 			const tabFromUrl = getCurrentTabFromUrl();
-			startTransition(() => {
-				setActiveTab(tabFromUrl);
-			});
+			setActiveTab(tabFromUrl);
 		};
 
 		window.addEventListener('popstate', handleBrowserNavigation);
@@ -100,27 +95,22 @@ export function App() {
 		(newTab: TabType) => {
 			if (newTab === activeTab) return;
 
-			startTransition(() => {
-				setActiveTab(newTab);
-			});
+			setActiveTab(newTab);
+			updateUrlForTab(newTab);
+			window.scrollTo({ top: 0, behavior: 'instant' });
 
-			requestAnimationFrame(() => {
-				updateUrlForTab(newTab);
-				window.scrollTo({ top: 0, behavior: 'instant' });
-
-				const focusElement = () => {
-					const mainElement = document.querySelector<HTMLElement>(`main.${newTab}`);
-					if (mainElement) {
-						mainElement.focus();
-					}
-				};
-
-				if ('requestIdleCallback' in window) {
-					requestIdleCallback(focusElement);
-				} else {
-					setTimeout(focusElement, 0);
+			const focusElement = () => {
+				const mainElement = document.querySelector<HTMLElement>(`main.${newTab}`);
+				if (mainElement) {
+					mainElement.focus();
 				}
-			});
+			};
+
+			if ('requestIdleCallback' in window) {
+				requestIdleCallback(focusElement);
+			} else {
+				setTimeout(focusElement, 0);
+			}
 		},
 		[activeTab]
 	);
