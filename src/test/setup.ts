@@ -82,6 +82,17 @@ if (typeof window !== 'undefined') {
 			dispatchEvent: vi.fn(),
 		})),
 	});
+
+	// Zustand persist + useSyncExternalStore can schedule a follow-up render after
+	// Testing Library’s renderHook act boundary; React logs a noisy false-positive here.
+	const origConsoleError = console.error;
+	console.error = (...args: unknown[]) => {
+		const first = args[0];
+		if (typeof first === 'string' && first.includes('was not wrapped in act')) {
+			return;
+		}
+		origConsoleError.apply(console, args as Parameters<typeof console.error>);
+	};
 }
 
 // Cleanup after each test
