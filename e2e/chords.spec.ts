@@ -3,6 +3,10 @@ import { expect, test } from '@playwright/test';
 test.describe('Chords Page', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/chords');
+		// Chords route is lazy-loaded; networkidle can settle before Suspense paints main.Chords.
+		await expect(page.locator('main.Chords').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 	});
 
 	test('should display chords page', async ({ page }) => {
@@ -10,7 +14,7 @@ test.describe('Chords Page', () => {
 	});
 
 	test('should have tonic selector', async ({ page }) => {
-		const tonicSelector = page.getByLabel('Tonic Select');
+		const tonicSelector = page.locator('main.Chords').getByLabel('Tonic Select');
 		await expect(tonicSelector).toBeVisible();
 	});
 

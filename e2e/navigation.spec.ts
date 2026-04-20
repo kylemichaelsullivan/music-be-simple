@@ -4,11 +4,11 @@ test.describe('Navigation', () => {
 	test('should navigate between pages', async ({ page }) => {
 		await page.goto('/');
 
-		// Wait for navigation to be ready
-		await page.waitForLoadState('networkidle');
-
 		// Root route should forward to /scales
 		await expect(page).toHaveURL(/.*\/scales/);
+		await expect(page.locator('main.Scales').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 
 		// Check if navigation exists
 		const nav = page.locator('nav');
@@ -17,38 +17,56 @@ test.describe('Navigation', () => {
 		// Try to navigate to chords
 		await page.goto('/chords');
 		await expect(page).toHaveURL(/.*\/chords/);
-		await page.waitForLoadState('networkidle');
+		await expect(page.locator('main.Chords').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 
 		// Try to navigate to play
 		await page.goto('/play');
 		await expect(page).toHaveURL(/.*\/play/);
-		await page.waitForLoadState('networkidle');
+		await expect(page.getByRole('heading', { name: 'Coming Soon' })).toBeVisible({
+			timeout: 20_000,
+		});
 
 		// Try to navigate to scales
 		await page.goto('/scales');
 		await expect(page).toHaveURL(/.*\/scales/);
-		await page.waitForLoadState('networkidle');
+		await expect(page.locator('main.Scales').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 	});
 
 	test('should forward root route to /scales', async ({ page }) => {
 		await page.goto('/');
-		// Should forward to /scales
 		await expect(page).toHaveURL(/.*\/scales/);
+		await expect(page.locator('main.Scales').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 	});
 
 	test('should navigate using nav buttons', async ({ page }) => {
 		await page.goto('/scales');
-		await page.waitForLoadState('networkidle');
+		await expect(page.locator('main.Scales').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 
-		const nav = page.locator('nav');
-		// Match navbar tabs by explicit title (NavTab sets title={tab}); avoids a11y name ambiguity.
-		await nav.locator('button.NavTab[title="Chords"]').click();
+		const nav = page.getByRole('navigation');
+		await nav.getByRole('button', { name: 'Chords' }).click();
 		await expect(page).toHaveURL(/.*\/chords/);
+		await expect(page.locator('main.Chords').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 
-		await nav.locator('button.NavTab[title="Play"]').click();
+		await nav.getByRole('button', { name: 'Play' }).click();
 		await expect(page).toHaveURL(/.*\/play/);
+		await expect(page.getByRole('heading', { name: 'Coming Soon' })).toBeVisible({
+			timeout: 20_000,
+		});
 
-		await nav.locator('button.NavTab[title="Scales"]').click();
+		await nav.getByRole('button', { name: 'Scales' }).click();
 		await expect(page).toHaveURL(/.*\/scales/);
+		await expect(page.locator('main.Scales').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 	});
 });

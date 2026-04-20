@@ -3,6 +3,9 @@ import { expect, test } from '@playwright/test';
 test.describe('Scales Page', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/scales');
+		await expect(page.locator('main.Scales').getByLabel('Tonic Select')).toBeVisible({
+			timeout: 20_000,
+		});
 	});
 
 	test('should display scales page', async ({ page }) => {
@@ -10,7 +13,7 @@ test.describe('Scales Page', () => {
 	});
 
 	test('should have tonic selector', async ({ page }) => {
-		const tonicSelector = page.getByLabel('Tonic Select');
+		const tonicSelector = page.locator('main.Scales').getByLabel('Tonic Select');
 		await expect(tonicSelector).toBeVisible();
 	});
 
