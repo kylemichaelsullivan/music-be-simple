@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
+import { LAZY_ROUTE_CONTENT_TIMEOUT_MS } from './constants';
 
 test.describe('Chords Page', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/chords');
 		// Chords route is lazy-loaded; networkidle can settle before Suspense paints main.Chords.
 		await expect(page.locator('main.Chords').getByLabel('Tonic Select')).toBeVisible({
-			timeout: 20_000,
+			timeout: LAZY_ROUTE_CONTENT_TIMEOUT_MS,
 		});
 	});
 

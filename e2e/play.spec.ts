@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { LAZY_ROUTE_CONTENT_TIMEOUT_MS } from './constants';
 
 test.describe('Play Page', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/play');
 		await expect(page.getByRole('heading', { name: 'Coming Soon' })).toBeVisible({
-			timeout: 20_000,
+			timeout: LAZY_ROUTE_CONTENT_TIMEOUT_MS,
 		});
 	});
 
