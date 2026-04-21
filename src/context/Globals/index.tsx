@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
-import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import { GlobalsStorageSchema, IconTypeSchema, PositionTypeSchema } from '@/schemas';
 import type { GlobalsContextProviderProps, IconType, PositionType } from '@/types';
 import { FREQUENCIES } from '@/utils';
+import { initialDisplays as initialInstrumentDisplays } from '../defaults';
 import { useLocalStorage } from '../shared';
 import { GlobalsContext } from './GlobalsContext';
 
 export { GlobalsContext };
 
 const initialUsingFlats: boolean = true;
-const initialDisplays: IconType[] = [...INSTRUMENT_ORDER.map((instrument) => ICON_MAP[instrument]), 'circle'];
+const initialDisplays: IconType[] = [...initialInstrumentDisplays, 'circle'];
 
 export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps) => {
 	const [usingFlats, setUsingFlats] = useLocalStorage('usingFlats', z.boolean(), initialUsingFlats);
