@@ -10,7 +10,7 @@ import { GlobalsContext } from './GlobalsContext';
 export { GlobalsContext };
 
 const initialUsingFlats: boolean = true;
-const initialDisplays: IconType[] = INSTRUMENT_ORDER.map((instrument) => ICON_MAP[instrument]);
+const initialDisplays: IconType[] = [...INSTRUMENT_ORDER.map((instrument) => ICON_MAP[instrument]), 'circle'];
 
 export const GlobalsContextProvider = ({ children }: GlobalsContextProviderProps) => {
 	const [usingFlats, setUsingFlats] = useLocalStorage('usingFlats', z.boolean(), initialUsingFlats);
