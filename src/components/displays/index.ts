@@ -15,3 +15,4 @@ export {
 	Ukulele,
 } from './instruments';
 export { Modes } from './modes';
+export { TriadsPanel } from './TriadsPanel';

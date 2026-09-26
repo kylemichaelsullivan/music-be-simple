@@ -11,10 +11,12 @@ export type DisplaysProps = {
 	showModes?: boolean;
 	showNerdMode?: boolean;
 	showNoteLabels?: boolean;
+	showTriads?: boolean;
 };
 
 export type DisplaysSelectorProps = {
 	hideModesAndCircle?: boolean;
+	showTriads?: boolean;
 	onFxn: (icon: IconType) => void;
 	displays?: IconType[];
 };

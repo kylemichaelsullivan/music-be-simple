@@ -14,7 +14,7 @@ const MAIN_BODY_MD_FLEX: Record<PositionType, string> = {
 
 export function MainBody({ displaysProps, afterDisplaysSlot }: MainBodyProps) {
 	const { displays, handleDisplaysClick, displaysSelectorPosition } = useGlobals();
-	const { hideModesAndCircle } = displaysProps;
+	const { hideModesAndCircle, showTriads } = displaysProps;
 
 	return (
 		<>
@@ -28,6 +28,7 @@ export function MainBody({ displaysProps, afterDisplaysSlot }: MainBodyProps) {
 				<DisplaysSelectorContainer
 					displays={displays}
 					hideModesAndCircle={hideModesAndCircle}
+					showTriads={showTriads}
 					onFxn={handleDisplaysClick}
 				/>
 

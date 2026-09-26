@@ -64,6 +64,7 @@ export function Chords() {
 					getBorderStyle,
 					hideModesAndCircle: true,
 					showNerdMode,
+					showTriads: true,
 				}}
 				onTitleClick={openRandomModal}
 			/>

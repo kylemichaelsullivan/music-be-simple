@@ -8,6 +8,7 @@ import { DisplaySelector } from './DisplaySelector';
 export function DisplaysSelector({
 	displays = [],
 	hideModesAndCircle,
+	showTriads,
 	onFxn,
 }: DisplaysSelectorProps) {
 	const { displaysSelectorPosition } = useGlobals();
@@ -37,6 +38,10 @@ export function DisplaysSelector({
 
 	const handleCircleOfFifthsClick = useCallback(() => {
 		onFxn('circle');
+	}, [onFxn]);
+
+	const handleTriadsClick = useCallback(() => {
+		onFxn('stand');
 	}, [onFxn]);
 
 	return (
@@ -74,6 +79,16 @@ export function DisplaysSelector({
 							key='CircleOfFifths'
 						/>
 					</>
+				)}
+
+				{showTriads && (
+					<DisplaySelector
+						icon='Triads'
+						text='Triads'
+						isActive={displays.includes('stand')}
+						onFxn={handleTriadsClick}
+						key='Triads'
+					/>
 				)}
 			</div>
 		</div>

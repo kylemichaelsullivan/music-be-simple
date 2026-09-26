@@ -19,7 +19,7 @@ export type Chord_UsingFlats = boolean;
 
 // Instrument & Icon types
 export type ActionIconName = 'add' | 'pen' | 'save' | 'trash' | YDirectionType;
-export type IconName = InstrumentType | 'Modes' | 'Circle';
+export type IconName = InstrumentType | 'Modes' | 'Circle' | 'Triads';
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg';
 export type IconType = (typeof ICONS)[number];
 export type InstrumentType = (typeof INSTRUMENTS)[number];

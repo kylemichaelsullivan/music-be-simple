@@ -6,6 +6,7 @@ import { DisplaysSelectorMove } from './DisplaysSelectorMove';
 
 export function DisplaysSelectorContainer({
 	hideModesAndCircle,
+	showTriads,
 	onFxn,
 	displays = [],
 }: DisplaysSelectorProps) {
@@ -19,7 +20,12 @@ export function DisplaysSelectorContainer({
 				isTopOrBottom && 'md:flex-row md:items-center'
 			)}
 		>
-			<DisplaysSelector displays={displays} hideModesAndCircle={hideModesAndCircle} onFxn={onFxn} />
+			<DisplaysSelector
+				displays={displays}
+				hideModesAndCircle={hideModesAndCircle}
+				showTriads={showTriads}
+				onFxn={onFxn}
+			/>
 
 			<DisplaysSelectorMove />
 		</div>

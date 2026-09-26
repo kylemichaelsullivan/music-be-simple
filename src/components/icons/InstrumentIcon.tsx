@@ -15,6 +15,7 @@ const iconMap: Record<IconName, string> = {
 	Mandolin: mandolinIcon,
 	Modes: modesIcon,
 	Piano: pianoIcon,
+	Triads: modesIcon,
 	Ukulele: ukuleleIcon,
 } as const;
 

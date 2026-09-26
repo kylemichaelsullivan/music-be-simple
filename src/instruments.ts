@@ -26,5 +26,6 @@ export const ICON_MAP: Record<IconName, IconType> = {
 	Mandolin: 'mandolin',
 	Modes: 'stand',
 	Piano: 'keyboard',
+	Triads: 'stand',
 	Ukulele: 'ukulele',
 } as const;

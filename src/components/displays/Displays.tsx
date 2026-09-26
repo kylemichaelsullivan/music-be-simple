@@ -4,7 +4,17 @@ import { InstrumentNotesProvider } from '@/context';
 import { useGlobals } from '@/hooks';
 import { ICON_MAP, INSTRUMENT_ORDER } from '@/instruments';
 import type { DisplaysProps, InstrumentType } from '@/types';
-import { Banjo, CircleOfFifths, Guitar, Instrument, Mandolin, Modes, Piano, Ukulele } from '.';
+import {
+	Banjo,
+	CircleOfFifths,
+	Guitar,
+	Instrument,
+	Mandolin,
+	Modes,
+	Piano,
+	TriadsPanel,
+	Ukulele,
+} from '.';
 
 const INSTRUMENTS: Record<InstrumentType, () => ReactElement> = {
 	Banjo: () => <Banjo />,
@@ -23,6 +33,7 @@ function DisplaysComponent({
 	showModes = false,
 	showNerdMode,
 	showNoteLabels = true,
+	showTriads = false,
 	isPlayPage = false,
 }: DisplaysProps) {
 	const { displays } = useGlobals();
@@ -46,6 +57,7 @@ function DisplaysComponent({
 
 	const renderModes = showModes && !hideModesAndCircle && displays.includes('stand');
 	const renderCircle = showModes && !hideModesAndCircle && displays.includes('circle');
+	const renderTriads = showTriads && displays.includes('stand');
 	const hasNoSelection = displays.length === 0;
 
 	return (
@@ -85,6 +97,7 @@ function DisplaysComponent({
 
 						{renderModes && <Modes />}
 						{renderCircle && <CircleOfFifths />}
+						{renderTriads && <TriadsPanel />}
 					</>
 				)}
 			</div>
