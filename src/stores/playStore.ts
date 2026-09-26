@@ -46,7 +46,7 @@ export const usePlayStore = create<PlayStore>()(
 		{
 			name: 'play-store',
 			storage: createJSONStorage(() => playStorage),
-			partialize: (state) => ({
+			partialize: (_state) => ({
 				// Add state properties to persist here
 			}),
 		}

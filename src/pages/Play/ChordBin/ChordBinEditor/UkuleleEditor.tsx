@@ -4,6 +4,6 @@ type UkuleleEditorProps = {
 	item: ChordBinItemData;
 };
 
-export function UkuleleEditor({ item }: UkuleleEditorProps) {
+export function UkuleleEditor({ item: _item }: UkuleleEditorProps) {
 	return <div className='UkuleleEditor'>Ukulele Editor Content</div>;
 }

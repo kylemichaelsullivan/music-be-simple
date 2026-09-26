@@ -1,13 +1,5 @@
 import type { ComponentType, LazyExoticComponent, ReactElement } from 'react';
-import {
-	lazy,
-	Suspense,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Footer, Navbar } from '@/components';
 import { AppProviders } from '@/context';
 import { TABS } from '@/navigation';

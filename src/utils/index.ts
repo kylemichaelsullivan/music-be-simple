@@ -31,6 +31,15 @@ export {
 	majorKeySignatureLabel,
 	relativeMinorTonic,
 } from './circleOfFifths';
+export type { ChordRandomTierId, RandomTierOption, ScaleRandomTierId } from './musicRandomPicker';
+export {
+	applyChordRandomTier,
+	applyScaleRandomTier,
+	CHORD_RANDOM_TIER_OPTIONS,
+	DEFAULT_CHORD_RANDOM_TIER,
+	DEFAULT_SCALE_RANDOM_TIER,
+	SCALE_RANDOM_TIER_OPTIONS,
+} from './musicRandomPicker';
 export type { IntervalKey, Notes_Flats, Notes_Sharps, ScaleData, ScaleGroup } from './notes';
 export {
 	FLATS,
@@ -54,12 +63,3 @@ export {
 	getScaleTypeDisplay,
 	intervalShortNameFromTonic,
 } from './scales';
-export type { ChordRandomTierId, RandomTierOption, ScaleRandomTierId } from './musicRandomPicker';
-export {
-	applyChordRandomTier,
-	applyScaleRandomTier,
-	CHORD_RANDOM_TIER_OPTIONS,
-	DEFAULT_CHORD_RANDOM_TIER,
-	DEFAULT_SCALE_RANDOM_TIER,
-	SCALE_RANDOM_TIER_OPTIONS,
-} from './musicRandomPicker';

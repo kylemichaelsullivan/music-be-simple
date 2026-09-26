@@ -936,7 +936,9 @@ for (const group of Object.values(CHORDS)) {
 	}
 }
 
-export const ALL_CHORD_VARIANTS: readonly Chord_Variant[] = Array.from(chordVariantKeys) as Chord_Variant[];
+export const ALL_CHORD_VARIANTS: readonly Chord_Variant[] = Array.from(
+	chordVariantKeys
+) as Chord_Variant[];
 
 export function getChordVariantsForChordGroups(
 	groupNames: readonly (keyof typeof CHORDS)[]

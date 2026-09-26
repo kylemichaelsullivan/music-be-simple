@@ -33,6 +33,8 @@ function CircleOfFifthsVariantHubComponent() {
 	};
 
 	return (
+		// Hover expands the variant select; click/keyboard use CircleOfFifthsVariantHubTrigger.
+		// biome-ignore lint/a11y/noStaticElementInteractions: pointer hover only; activation is on the trigger/select
 		<div
 			className='CircleOfFifthsVariantHub w-full min-w-0'
 			onMouseEnter={() => setHovered(true)}

@@ -4,6 +4,6 @@ type GuitarEditorProps = {
 	item: ChordBinItemData;
 };
 
-export function GuitarEditor({ item }: GuitarEditorProps) {
+export function GuitarEditor({ item: _item }: GuitarEditorProps) {
 	return <div className='GuitarEditor'>Guitar Editor Content</div>;
 }
