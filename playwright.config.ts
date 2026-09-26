@@ -10,7 +10,13 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
+ *
+ * Under CI (or when PLAYWRIGHT_PORT is set), use a dedicated Vite port so E2E
+ * does not reuse a stale/unrelated server already bound to 5173.
  */
+const e2ePort = process.env.PLAYWRIGHT_PORT ?? (process.env.CI ? '5175' : '5173');
+const e2eOrigin = `http://localhost:${e2ePort}`;
+
 export default defineConfig({
 	testDir: './e2e',
 	/* Run tests in files in parallel */
@@ -26,7 +32,7 @@ export default defineConfig({
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		/* Base URL to use in actions like `await page.goto('/')`. */
-		baseURL: 'http://localhost:5173',
+		baseURL: e2eOrigin,
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
 		trace: 'on-first-retry',
 	},
@@ -61,9 +67,9 @@ export default defineConfig({
 
 	/* Run your local dev server before starting the tests */
 	webServer: {
-		command: 'bun dev',
-		url: 'http://localhost:5173',
-		reuseExistingServer: !process.env.CI,
+		command: `bunx vite --port ${e2ePort} --strictPort`,
+		url: e2eOrigin,
+		reuseExistingServer: !process.env.CI && !process.env.PLAYWRIGHT_PORT,
 		timeout: 120 * 1000,
 	},
 });

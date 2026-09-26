@@ -34,13 +34,14 @@ test.describe('Scales Page', () => {
 
 	test('should have variant selector', async ({ page }) => {
 		await page.waitForLoadState('networkidle');
-		const variantSelect = page.locator('main.Scales').getByLabel('Scale Variant');
+		// exact: avoid CircleOfFifthsVariantHubTrigger (“Change scale variant…”)
+		const variantSelect = page.locator('main.Scales').getByLabel('Scale Variant', { exact: true });
 		await expect(variantSelect).toBeVisible({ timeout: 5000 });
 	});
 
 	test('should change scale variant to Dorian', async ({ page }) => {
 		await page.waitForLoadState('networkidle');
-		const variantSelect = page.locator('main.Scales').getByLabel('Scale Variant');
+		const variantSelect = page.locator('main.Scales').getByLabel('Scale Variant', { exact: true });
 		await variantSelect.selectOption('dorian');
 		await expect(variantSelect).toHaveValue('dorian');
 	});
