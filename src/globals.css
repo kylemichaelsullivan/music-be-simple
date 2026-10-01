@@ -214,6 +214,92 @@ select {
 	transform: translateX(-50%);
 }
 
+.ChordLookupResults-wrap::after {
+	content: "";
+	pointer-events: none;
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0;
+	height: 1.75rem;
+	background: linear-gradient(to bottom, transparent, #e2e8f0);
+	opacity: 0;
+	transition: opacity 150ms ease;
+}
+
+.ChordLookupResults-wrap.has-scroll-more::after {
+	opacity: 1;
+}
+
+.ChordLookupKeyboard {
+	/* rem sizes — percentage widths collapse inside this flex context */
+	--width-white: 2.5rem;
+	--width-black: calc(var(--width-white) * 0.55);
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	width: 100%;
+	height: calc(var(--width-white) * 3.4);
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton {
+	position: relative;
+	flex-shrink: 0;
+	border: 1px solid black;
+	padding: 0;
+	cursor: pointer;
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton-label {
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0.2rem;
+	font-size: 0.65rem;
+	line-height: 1;
+	text-align: center;
+	pointer-events: none;
+	user-select: none;
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton.white {
+	width: var(--width-white);
+	height: calc(var(--width-white) * 3.4);
+	background-color: white;
+	color: black;
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton.black {
+	--margin: calc(var(--width-black) / -2);
+	z-index: 2;
+	width: var(--width-black);
+	height: calc(var(--width-black) * 3.5);
+	margin-right: var(--margin);
+	margin-left: var(--margin);
+	background-color: black;
+	color: white;
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton.black .ChordLookupPitchButton-label {
+	font-size: 0.55rem;
+	bottom: 0.15rem;
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton.is-selected {
+	background-color: #15803d;
+	color: white;
+}
+
+.ChordLookupKeyboard .ChordLookupPitchButton:focus-visible {
+	outline: 2px solid black;
+	outline-offset: 2px;
+	z-index: 3;
+}
+
+@media (width >= 40rem) {
+	.ChordLookupKeyboard {
+		--width-white: 2.85rem;
+	}
+}
+
 .Guitar {
 	--fretboard-color: var(--guitar-color);
 }

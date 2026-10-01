@@ -1,4 +1,5 @@
 export { Chord } from './Chord';
+export { ChordLookup } from './ChordLookup';
 export { ChordName } from './ChordName';
 export { ChordNote } from './ChordNote';
 export { ChordNotes } from './ChordNotes';
