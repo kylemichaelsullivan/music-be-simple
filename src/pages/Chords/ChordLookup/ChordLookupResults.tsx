@@ -19,6 +19,7 @@ function ChordLookupResultsComponent({
 }: ChordLookupResultsProps) {
 	const listRef = useRef<HTMLUListElement>(null);
 	const [canScrollMore, setCanScrollMore] = useState(false);
+	const hasMatches = matches.length > 0;
 
 	const updateScrollHint = useCallback(() => {
 		const el = listRef.current;
@@ -49,23 +50,34 @@ function ChordLookupResultsComponent({
 	}, [matches, updateScrollHint]);
 
 	return (
-		<div className={clsx('ChordLookupResults-wrap relative', canScrollMore && 'has-scroll-more')}>
-			<ul
-				ref={listRef}
-				className='ChordLookupResults flex h-[6.75rem] max-h-[6.75rem] list-none flex-col overflow-y-auto p-0'
-			>
-				{matches.map((match) => {
-					const isCurrent =
-						match.tonic === currentTonic &&
-						match.variant === currentVariant &&
-						match.bass === match.tonic;
-					return (
-						<li key={`${match.tonic}-${match.variant}`}>
-							<ChordLookupResult match={match} isCurrent={isCurrent} onSelect={onSelect} />
-						</li>
-					);
-				})}
-			</ul>
+		<div
+			className={clsx(
+				'ChordLookupResults-wrap relative',
+				hasMatches && canScrollMore && 'has-scroll-more'
+			)}
+		>
+			{hasMatches ? (
+				<ul
+					ref={listRef}
+					className='ChordLookupResults flex h-[6.75rem] max-h-[6.75rem] list-none flex-col overflow-y-auto p-0'
+				>
+					{matches.map((match) => {
+						const isCurrent =
+							match.tonic === currentTonic &&
+							match.variant === currentVariant &&
+							match.bass === match.tonic;
+						return (
+							<li key={`${match.tonic}-${match.variant}`}>
+								<ChordLookupResult match={match} isCurrent={isCurrent} onSelect={onSelect} />
+							</li>
+						);
+					})}
+				</ul>
+			) : (
+				<p className='ChordLookupResults flex h-[6.75rem] max-h-[6.75rem] items-center justify-center m-0 px-2 text-center text-sm text-slate-600'>
+					Select Notes to Find Chords
+				</p>
+			)}
 		</div>
 	);
 }
