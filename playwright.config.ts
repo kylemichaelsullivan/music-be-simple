@@ -25,8 +25,8 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	/* Retry: CI gets 2; local gets 1 to absorb flakes when multiple workers hit one Vite dev server */
 	retries: process.env.CI ? 2 : 1,
-	/* Opt out of parallel tests on CI. */
-	workers: process.env.CI ? 1 : undefined,
+	/* Cap workers — a single Vite webServer gets overwhelmed by WebKit under high parallelism. */
+	workers: process.env.CI ? 1 : 2,
 	/* Reporter to use. See https://playwright.dev/docs/test-reporters */
 	reporter: 'html',
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
