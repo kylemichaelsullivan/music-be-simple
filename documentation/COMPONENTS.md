@@ -429,7 +429,7 @@ Main scales page component.
 
 Main chords page component.
 
-**Location**: `@/pages/Chords` (Chords, Chord, ChordName, ChordNote, ChordNotes, Notes)
+**Location**: `@/pages/Chords` (Chords, Chord, ChordLookup, ChordName, ChordNote, ChordNotes, Notes)
 
 **Features**:
 - Tonic selection
@@ -437,6 +437,22 @@ Main chords page component.
 - Chord name display
 - Instrument displays
 - Note count selection
+- **Nerd Mode chord lookup** (`ChordLookup`) — shown under the notes row when Nerd Mode is on (see below)
+
+#### ChordLookup
+
+Reverse chord finder for Nerd Mode: pick pitch classes on a mini piano, then choose a ranked match to set the page tonic and quality.
+
+**Location**: `@/pages/Chords/ChordLookup` (`ChordLookup`, `ChordLookupPicker`, `ChordLookupPitchButton`, `ChordLookupResults`, `ChordLookupResult`)
+
+**Behavior**:
+- Mini piano toggles pitch classes (note names near the bottom of each key); Clear resets the selection
+- Results list ranked root-position matches (exact set first; from two or more pitches, subset “guesses” that contain the selection)
+- Scrollable results (~3 rows visible) with a bottom fade when more matches remain below
+- No slash / inversion names — applying a match sets root tonic + variant via `makeScale`
+- Skip links: skip keyboard → results; skip matches → displays selector
+
+**Lookup helpers**: `lookupChordsFromMask` / `lookupChordsFromNotes` and related mask helpers in `@/utils/chords`
 
 ### Play Page
 

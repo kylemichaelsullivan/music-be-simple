@@ -112,7 +112,7 @@ Chords-specific state and functionality.
 - `handleTonicChange(tonic: Chord_Tonic)` - Set the tonic note (updates store)
 - `handleVariantChange(variant: Chord_Variant)` - Set the chord variant (updates store)
 - `toggleNerdMode()` - Toggle nerd mode
-- `makeScale(tonic: Chord_Tonic, variant: Chord_Variant)` - Set both tonic and variant
+- `makeScale(tonic: Chord_Tonic, variant: Chord_Variant)` - Set both tonic and variant (also used when applying a `ChordLookup` match)
 - `getBorderStyle(note: NoteIndex)` - Get border style for a note
 - `reset()` - Reset tonic and variant to defaults
 
