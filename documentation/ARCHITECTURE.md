@@ -123,7 +123,7 @@ App
 │   ├── Navbar, NavTab (Scales, Chords, Play)
 │   ├── Active Page (lazy-loaded, based on activeTab)
 │   │   ├── Scales: Tonic, Variant, MainBody (DisplaysSelectorContainer, DisplaysRegion → Displays: Modes, CircleOfFifths, instruments)
-│   │   ├── Chords: Tonic, Variant, Chord name, Chord notes, MainBody (same display pipeline as Scales where applicable)
+│   │   ├── Chords: Tonic, Variant, Chord name, Chord notes, optional ChordLookup (Nerd Mode), MainBody (same display pipeline as Scales where applicable)
 │   │   └── Play: Instrument selector, Chord Bin, Notepad, SaveSection (Import/Export), Displays (instruments)
 │   └── Footer
 ```
@@ -176,6 +176,7 @@ Each instrument has its own display component in `src/components/displays/instru
 - Chord construction from intervals
 - Chord name generation
 - Chord data structures
+- **Pitch-class lookup** — module-scoped bitmask index over all tonic × variant pitch sets; `lookupChordsFromMask` / `lookupChordsFromNotes` rank exact and (for ≥2 pitches) subset matches; helpers `notesToMask`, `maskToNotes`, `togglePitchInMask`, `formatChordLookupName`, `getChordLookupVoicingNotes`
 
 ### Border Utilities (`utils/borders.ts`)
 

@@ -116,6 +116,8 @@ test('should navigate to scales page', async ({ page }) => {
 });
 ```
 
+`e2e/chords.spec.ts` seeds `localStorage.showNerdMode` to `true` so Nerd Mode chord lookup is available, and covers showing/hiding `ChordLookup` plus applying a match from selected pitches.
+
 ## Test Utilities
 
 ### `test-utils.tsx`

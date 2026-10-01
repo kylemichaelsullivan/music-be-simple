@@ -3,6 +3,9 @@ import { LAZY_ROUTE_CONTENT_TIMEOUT_MS } from './constants';
 
 test.describe('Chords Page', () => {
 	test.beforeEach(async ({ page }) => {
+		await page.addInitScript(() => {
+			window.localStorage.setItem('showNerdMode', 'true');
+		});
 		await page.goto('/chords');
 		// Chords route is lazy-loaded; networkidle can settle before Suspense paints main.Chords.
 		await expect(page.locator('main.Chords').getByLabel('Tonic Select')).toBeVisible({
@@ -45,10 +48,47 @@ test.describe('Chords Page', () => {
 			.getByTitle(/Show Jazz Notation\?|Show Nerd Notation\?/);
 		await expect(toggle).toBeVisible();
 		const titleBefore = await toggle.getAttribute('title');
-		await toggle.click();
+		await toggle.click({ force: true });
 		await expect(toggle).toHaveAttribute(
 			'title',
 			titleBefore === 'Show Jazz Notation?' ? 'Show Nerd Notation?' : 'Show Jazz Notation?'
 		);
+	});
+
+	test('should show chord lookup in Nerd Mode and hide it in Jazz Mode', async ({ page }) => {
+		const chords = page.locator('main.Chords');
+		const lookup = chords.locator('.ChordLookup');
+		await expect(lookup).toBeVisible();
+		await expect(lookup.getByRole('heading', { name: 'Chord lookup' })).toBeVisible();
+
+		await chords.getByTitle('Show Jazz Notation?').click({ force: true });
+		await expect(lookup).toHaveCount(0);
+	});
+
+	test('should apply a looked-up chord from selected notes', async ({ page }) => {
+		const chords = page.locator('main.Chords');
+		const lookup = chords.locator('.ChordLookup');
+		await expect(lookup).toBeVisible();
+
+		const keyboard = lookup.locator('.ChordLookupKeyboard');
+		// Click near the bottom of white keys so overlapping black keys don’t intercept.
+		for (const name of ['C', 'E', 'G'] as const) {
+			const key = keyboard.getByRole('button', { name, exact: true });
+			const box = await key.boundingBox();
+			if (!box) {
+				throw new Error(`Missing bounding box for pitch ${name}`);
+			}
+			await key.click({
+				force: true,
+				position: { x: box.width / 2, y: box.height - 8 },
+			});
+		}
+
+		const firstResult = lookup.locator('.ChordLookupResult').first();
+		await expect(firstResult).toBeVisible();
+		await firstResult.click();
+
+		await expect(chords.getByLabel('Tonic Select')).toHaveValue('0');
+		await expect(chords.getByLabel('Chord Variant')).toHaveValue('major');
 	});
 });

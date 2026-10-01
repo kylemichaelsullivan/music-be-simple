@@ -9,7 +9,7 @@ import {
 	CHORD_RANDOM_TIER_OPTIONS,
 	DEFAULT_CHORD_RANDOM_TIER,
 } from '@/utils';
-import { Chord, Notes } from '.';
+import { Chord, ChordLookup, Notes } from '.';
 
 export function Chords() {
 	const {
@@ -56,7 +56,12 @@ export function Chords() {
 					onFxn: toggleNerdMode,
 				}}
 				tonicVariantSlot={<Chord />}
-				notesSlot={<Notes />}
+				notesSlot={
+					<>
+						<Notes />
+						{showNerdMode ? <ChordLookup /> : null}
+					</>
+				}
 				displaysProps={{
 					pianoNotes,
 					notes,
