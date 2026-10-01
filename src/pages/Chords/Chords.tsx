@@ -57,10 +57,10 @@ export function Chords() {
 				}}
 				tonicVariantSlot={<Chord />}
 				notesSlot={
-					<>
+					<div className='flex w-full min-w-0 flex-col gap-2'>
 						<Notes />
 						{showNerdMode ? <ChordLookup /> : null}
-					</>
+					</div>
 				}
 				displaysProps={{
 					pianoNotes,

@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react';
 import { SkipLink } from '@/components';
+import { useEscapeReset } from '@/context/shared';
 import { useChords, useGlobals } from '@/hooks';
 import { NoteIndexSchema } from '@/schemas';
 import type { NoteIndex } from '@/types';
@@ -27,6 +28,8 @@ function ChordLookupComponent() {
 		setSelectionMask(0);
 	}, []);
 
+	useEscapeReset(handleClear);
+
 	const handleSelect = useCallback(
 		(match: ChordLookupMatch) => {
 			makeScale(match.tonic, match.variant);
@@ -36,7 +39,7 @@ function ChordLookupComponent() {
 
 	return (
 		<section
-			className='ChordLookup flex flex-col gap-2 border border-slate-500 bg-slate-200 p-2 shadow-md'
+			className='ChordLookup @container flex w-full min-w-0 flex-col gap-2 border border-slate-500 bg-slate-200 p-2 shadow-md'
 			aria-labelledby='chord-lookup-heading'
 		>
 			<h2 className='sr-only' id='chord-lookup-heading'>

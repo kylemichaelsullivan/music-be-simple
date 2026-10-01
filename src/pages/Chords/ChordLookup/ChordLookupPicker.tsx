@@ -33,9 +33,9 @@ function ChordLookupPickerComponent({
 	);
 
 	return (
-		<fieldset className='ChordLookupPicker border-0 p-0'>
+		<fieldset className='ChordLookupPicker min-w-0 border-0 p-0'>
 			<legend className='sr-only'>Pick pitches</legend>
-			<div className='flex items-start justify-center gap-1'>
+			<div className='relative flex w-full min-w-0 justify-center overflow-x-auto'>
 				<div className='ChordLookupKeyboard'>
 					{pitchNotes.map((note) => (
 						<ChordLookupPitchButton
@@ -50,7 +50,7 @@ function ChordLookupPickerComponent({
 				<button
 					type='button'
 					className={clsx(
-						'ChordLookupPicker-clear flex h-6 w-6 shrink-0 items-center justify-center border border-slate-500 bg-white text-base leading-none hover:bg-slate-100 hover:ring-1',
+						'ChordLookupPicker-clear absolute top-0 right-0 flex h-6 w-6 shrink-0 items-center justify-center border border-slate-500 bg-white text-base leading-none hover:bg-slate-100 hover:ring-1',
 						!hasSelection && 'invisible pointer-events-none'
 					)}
 					title='Clear'

@@ -231,13 +231,14 @@ select {
 }
 
 .ChordLookupKeyboard {
-	/* rem sizes — percentage widths collapse inside this flex context */
-	--width-white: 2.5rem;
+	/* Scale with ChordLookup container; 7 white keys ≈ 77cqi at the clamp mid */
+	--width-white: clamp(1.35rem, 11cqi, 2.85rem);
 	--width-black: calc(var(--width-white) * 0.55);
 	display: flex;
 	align-items: flex-start;
 	justify-content: center;
-	width: 100%;
+	width: max-content;
+	max-width: 100%;
 	height: calc(var(--width-white) * 3.4);
 }
 
@@ -252,8 +253,8 @@ select {
 .ChordLookupKeyboard .ChordLookupPitchButton-label {
 	position: absolute;
 	inset-inline: 0;
-	bottom: 0.2rem;
-	font-size: 0.65rem;
+	bottom: 0.15rem;
+	font-size: clamp(0.45rem, calc(var(--width-white) * 0.28), 0.7rem);
 	line-height: 1;
 	text-align: center;
 	pointer-events: none;
@@ -279,8 +280,8 @@ select {
 }
 
 .ChordLookupKeyboard .ChordLookupPitchButton.black .ChordLookupPitchButton-label {
-	font-size: 0.55rem;
-	bottom: 0.15rem;
+	font-size: clamp(0.4rem, calc(var(--width-white) * 0.22), 0.6rem);
+	bottom: 0.1rem;
 }
 
 .ChordLookupKeyboard .ChordLookupPitchButton.is-selected {
@@ -292,12 +293,6 @@ select {
 	outline: 2px solid black;
 	outline-offset: 2px;
 	z-index: 3;
-}
-
-@media (width >= 40rem) {
-	.ChordLookupKeyboard {
-		--width-white: 2.85rem;
-	}
 }
 
 .Guitar {
