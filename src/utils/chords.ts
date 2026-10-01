@@ -1,5 +1,5 @@
 import type { NoteIndex } from '@/types';
-import { FLATS, isValidNoteIndex, SHARPS } from './notes';
+import { FLATS, getNote, isValidNoteIndex, SHARPS } from './notes';
 
 export type ChordInfo = {
 	symbol: string;
@@ -1031,4 +1031,234 @@ export function parseChordName(input: string, usingFlats: boolean): ParsedChord 
 	}
 
 	return { tonic, variant };
+}
+
+const GROUP_PRIORITY_BY_NAME: Record<string, number> = {
+	'Simple Triads': 50,
+	'Other Triads': 40,
+	'Seventh Chords': 30,
+	'Sixth Chords': 25,
+	'Sixth Ninth Chords': 22,
+	'Suspended Chords': 20,
+	'Ninth Chords': 15,
+	'Eleventh Chords': 12,
+	'Thirteenth Chords': 10,
+	'Altered Chords': 5,
+};
+
+const TOP_CHORD_HITS = 12;
+const TOP_LOOKUP_RESULTS = 24;
+
+export type ChordLookupMatch = {
+	tonic: NoteIndex;
+	variant: Chord_Variant;
+	bass: NoteIndex;
+	inversionIndex: number;
+	score: number;
+};
+
+type ChordPitchEntry = {
+	tonic: NoteIndex;
+	variant: Chord_Variant;
+	notes: NoteIndex[];
+	mask: number;
+	size: number;
+	groupPriority: number;
+};
+
+type ChordPitchIndex = {
+	entries: ChordPitchEntry[];
+	exactByMask: Map<number, ChordPitchEntry[]>;
+};
+
+let chordPitchIndex: ChordPitchIndex | null = null;
+
+function popcount12(mask: number): number {
+	let count = 0;
+	let bits = mask & 0xfff;
+	while (bits) {
+		count += bits & 1;
+		bits >>= 1;
+	}
+	return count;
+}
+
+function buildVariantGroupPriority(): Map<string, number> {
+	const priorities = new Map<string, number>();
+	for (const [groupName, group] of Object.entries(CHORDS)) {
+		const priority = GROUP_PRIORITY_BY_NAME[groupName] ?? 0;
+		for (const variantKey of Object.keys(group)) {
+			priorities.set(variantKey, priority);
+		}
+	}
+	return priorities;
+}
+
+function buildChordPitchIndex(): ChordPitchIndex {
+	const variantPriority = buildVariantGroupPriority();
+	const entries: ChordPitchEntry[] = [];
+	const exactByMask = new Map<number, ChordPitchEntry[]>();
+
+	for (let tonic = 0; tonic < 12; tonic++) {
+		if (!isValidNoteIndex(tonic)) continue;
+		for (const variant of ALL_CHORD_VARIANTS) {
+			const notes = generateChordNotes(tonic, variant);
+			let mask = 0;
+			for (const note of notes) {
+				mask |= 1 << note;
+			}
+			const entry: ChordPitchEntry = {
+				tonic,
+				variant,
+				notes,
+				mask,
+				size: popcount12(mask),
+				groupPriority: variantPriority.get(variant) ?? 0,
+			};
+			entries.push(entry);
+			const bucket = exactByMask.get(mask);
+			if (bucket) {
+				bucket.push(entry);
+			} else {
+				exactByMask.set(mask, [entry]);
+			}
+		}
+	}
+
+	return { entries, exactByMask };
+}
+
+function getChordPitchIndex(): ChordPitchIndex {
+	if (!chordPitchIndex) {
+		chordPitchIndex = buildChordPitchIndex();
+	}
+	return chordPitchIndex;
+}
+
+export function notesToMask(notes: readonly NoteIndex[]): number {
+	let mask = 0;
+	for (const note of notes) {
+		if (isValidNoteIndex(note)) {
+			mask |= 1 << note;
+		}
+	}
+	return mask & 0xfff;
+}
+
+export function maskToNotes(mask: number): NoteIndex[] {
+	const notes: NoteIndex[] = [];
+	const bits = mask & 0xfff;
+	for (let i = 0; i < 12; i++) {
+		if ((bits & (1 << i)) !== 0 && isValidNoteIndex(i)) {
+			notes.push(i);
+		}
+	}
+	return notes;
+}
+
+export function togglePitchInMask(mask: number, note: NoteIndex): number {
+	if (!isValidNoteIndex(note)) {
+		return mask & 0xfff;
+	}
+	return (mask ^ (1 << note)) & 0xfff;
+}
+
+function scoreChordHit(entry: ChordPitchEntry, isExact: boolean, selectedSize: number): number {
+	const sizeBonus = 12 - entry.size;
+	if (isExact) {
+		return 1000 + sizeBonus + entry.groupPriority;
+	}
+	const missing = entry.size - selectedSize;
+	return 500 - 50 * missing + sizeBonus + entry.groupPriority;
+}
+
+function scoreMatchRow(
+	baseScore: number,
+	bass: NoteIndex,
+	tonic: NoteIndex,
+	inversionIndex: number
+): number {
+	const rootBonus = bass === tonic ? 20 : 0;
+	const inversionBonus = Math.max(0, 4 - inversionIndex);
+	return baseScore + rootBonus + inversionBonus;
+}
+
+type RankedChordHit = {
+	entry: ChordPitchEntry;
+	isExact: boolean;
+	score: number;
+};
+
+export function lookupChordsFromMask(selectedMask: number): ChordLookupMatch[] {
+	const mask = selectedMask & 0xfff;
+	const selectedSize = popcount12(mask);
+	if (selectedSize === 0) {
+		return [];
+	}
+
+	const { entries, exactByMask } = getChordPitchIndex();
+	const hitByKey = new Map<string, RankedChordHit>();
+
+	const exactEntries = exactByMask.get(mask) ?? [];
+	for (const entry of exactEntries) {
+		const score = scoreChordHit(entry, true, selectedSize);
+		const key = `${entry.tonic}:${entry.variant}`;
+		const existing = hitByKey.get(key);
+		if (!existing || score > existing.score) {
+			hitByKey.set(key, { entry, isExact: true, score });
+		}
+	}
+
+	if (selectedSize >= 2) {
+		for (const entry of entries) {
+			if (entry.size <= selectedSize) continue;
+			if ((entry.mask & mask) !== mask) continue;
+			const score = scoreChordHit(entry, false, selectedSize);
+			const key = `${entry.tonic}:${entry.variant}`;
+			const existing = hitByKey.get(key);
+			if (!existing || score > existing.score) {
+				hitByKey.set(key, { entry, isExact: false, score });
+			}
+		}
+	}
+
+	const topChords = Array.from(hitByKey.values())
+		.sort((a, b) => {
+			if (b.score !== a.score) return b.score - a.score;
+			if (a.entry.tonic !== b.entry.tonic) return a.entry.tonic - b.entry.tonic;
+			return a.entry.variant.localeCompare(b.entry.variant);
+		})
+		.slice(0, TOP_CHORD_HITS);
+
+	const matches: ChordLookupMatch[] = topChords.map(({ entry, score }) => ({
+		tonic: entry.tonic,
+		variant: entry.variant,
+		bass: entry.tonic,
+		inversionIndex: 0,
+		score: scoreMatchRow(score, entry.tonic, entry.tonic, 0),
+	}));
+
+	return matches
+		.sort((a, b) => {
+			if (b.score !== a.score) return b.score - a.score;
+			if (a.tonic !== b.tonic) return a.tonic - b.tonic;
+			return a.variant.localeCompare(b.variant);
+		})
+		.slice(0, TOP_LOOKUP_RESULTS);
+}
+
+export function lookupChordsFromNotes(selected: readonly NoteIndex[]): ChordLookupMatch[] {
+	return lookupChordsFromMask(notesToMask(selected));
+}
+
+export function formatChordLookupName(match: ChordLookupMatch, usingFlats: boolean): string {
+	const rootNote = getNote(match.tonic, usingFlats);
+	if (match.variant === 'major') {
+		return rootNote;
+	}
+	return `${rootNote}${getChordSymbol(match.variant, true)}`;
+}
+
+export function getChordLookupVoicingNotes(match: ChordLookupMatch): NoteIndex[] {
+	return generateChordNotes(match.tonic, match.variant);
 }

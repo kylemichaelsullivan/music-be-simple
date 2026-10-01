@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Chord_Variant } from '@/utils';
 import {
+	formatChordLookupName,
 	generateChordNotes,
 	getChordGroups,
 	getChordInfo,
@@ -9,7 +10,11 @@ import {
 	getPianoBorderStyle,
 	getPianoVoicing,
 	isValidChordVariant,
+	lookupChordsFromMask,
+	lookupChordsFromNotes,
+	notesToMask,
 	parseChordName,
+	togglePitchInMask,
 } from '@/utils';
 
 describe('chords utilities', () => {
@@ -210,6 +215,82 @@ describe('chords utilities', () => {
 		it('should return null when note cannot be parsed', () => {
 			expect(parseChordName('Z', true)).toEqual({ tonic: null, variant: null });
 			expect(parseChordName('Xm', false)).toEqual({ tonic: null, variant: null });
+		});
+	});
+
+	describe('lookupChordsFromNotes', () => {
+		it('should return no matches for empty selection', () => {
+			expect(lookupChordsFromNotes([])).toEqual([]);
+			expect(lookupChordsFromMask(0)).toEqual([]);
+		});
+
+		it('should rank C major above subset sevenths with no slash chords', () => {
+			const matches = lookupChordsFromNotes([0, 4, 7]);
+			expect(matches.length).toBeGreaterThan(0);
+			expect(matches.every((m) => m.bass === m.tonic)).toBe(true);
+
+			const cMajor = matches.find((m) => m.tonic === 0 && m.variant === 'major');
+			const cMaj7 = matches.find((m) => m.tonic === 0 && m.variant === 'major-7');
+			expect(cMajor).toBeDefined();
+			expect(cMaj7).toBeDefined();
+			if (!cMajor || !cMaj7) {
+				return;
+			}
+			expect(cMajor.score).toBeGreaterThan(cMaj7.score);
+		});
+
+		it('should guess chords from two notes', () => {
+			const matches = lookupChordsFromNotes([0, 4]);
+			expect(matches.length).toBeGreaterThan(0);
+			expect(matches.some((m) => m.tonic === 0 && m.variant === 'major')).toBe(true);
+			expect(matches.every((m) => m.bass === m.tonic)).toBe(true);
+		});
+
+		it('should include Am7 and C6 for A C E G without inversions', () => {
+			const matches = lookupChordsFromNotes([0, 4, 7, 9]);
+			const am7 = matches.find((m) => m.tonic === 9 && m.variant === 'minor-7');
+			const c6 = matches.find((m) => m.tonic === 0 && m.variant === 'major-6');
+			expect(am7).toBeDefined();
+			expect(c6).toBeDefined();
+			expect(matches.some((m) => m.bass !== m.tonic)).toBe(false);
+		});
+
+		it('should format root names with flats and sharps', () => {
+			const major = {
+				tonic: 0 as const,
+				variant: 'major' as const,
+				bass: 0 as const,
+				inversionIndex: 0,
+				score: 0,
+			};
+			expect(formatChordLookupName(major, false)).toBe('C');
+
+			const minor = {
+				tonic: 0 as const,
+				variant: 'minor' as const,
+				bass: 0 as const,
+				inversionIndex: 0,
+				score: 0,
+			};
+			expect(formatChordLookupName(minor, true)).toBe('Cm');
+
+			const ebMinor = {
+				tonic: 3 as const,
+				variant: 'minor' as const,
+				bass: 3 as const,
+				inversionIndex: 0,
+				score: 0,
+			};
+			expect(formatChordLookupName(ebMinor, true)).toBe('E♭m');
+			expect(formatChordLookupName(ebMinor, false)).toBe('D♯m');
+		});
+
+		it('should toggle pitch bits in a selection mask', () => {
+			let mask = notesToMask([0, 4]);
+			mask = togglePitchInMask(mask, 7);
+			expect(lookupChordsFromMask(mask)[0]?.variant).toBe('major');
+			mask = togglePitchInMask(mask, 4);
+			expect(mask).toBe(notesToMask([0, 7]));
 		});
 	});
 });
