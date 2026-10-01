@@ -447,8 +447,10 @@ Reverse chord finder for Nerd Mode: pick pitch classes on a mini piano, then cho
 
 **Behavior**:
 - Mini piano toggles pitch classes (note names near the bottom of each key); Clear resets the selection
+- Escape also clears the pitch selection (`useEscapeReset` while `ChordLookup` is mounted in Nerd Mode), alongside the usual Chords page reset
+- Empty results keep a fixed-height placeholder (“Select Notes to Find Chords”); with matches, a scrollable list (~3 rows) shows a bottom fade when more remain below
+- Keyboard is centered in the card; key size scales with a container query (`clamp` / `cqi`); Clear is absolutely positioned so it does not shift the keys
 - Results list ranked root-position matches (exact set first; from two or more pitches, subset “guesses” that contain the selection)
-- Scrollable results (~3 rows visible) with a bottom fade when more matches remain below
 - No slash / inversion names — applying a match sets root tonic + variant via `makeScale`
 - Skip links: skip keyboard → results; skip matches → displays selector
 

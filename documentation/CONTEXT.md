@@ -348,6 +348,8 @@ Hook for resetting state on Escape key press.
 
 **Location**: `@/context/shared/useEscapeReset`
 
+**Used by**: Scales and Chords context page reset; `ChordLookup` also registers Escape to clear its pitch selection when Nerd Mode lookup is shown.
+
 **Usage**:
 ```typescript
 import { useEscapeReset } from '@/context/shared/useEscapeReset';
